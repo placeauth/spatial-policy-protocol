@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spatial-policy.org/schema/request.schema.json",
+  "title": "SPP 0.1 Decision Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spp_version", "request_id", "actor", "space", "action", "context"],
+  "properties": {
+    "spp_version": {"const": "0.1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "type": {"type": "string", "minLength": 1, "maxLength": 128},
+        "attributes": {"type": "object"}
+      }
+    },
+    "space": {"type": "string", "minLength": 1, "maxLength": 512},
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "name"],
+      "properties": {
+        "family": {
+          "enum": ["movement", "sensing", "data", "manipulation", "infrastructure", "human_interaction"]
+        },
+        "name": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$", "maxLength": 128}
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "purpose": {"type": "string", "maxLength": 128},
+        "time": {"type": "string", "format": "date-time"},
+        "emergency": {"type": "boolean"},
+        "authorizations": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "attributes": {"type": "object"}
+      }
+    }
+  }
+}
+

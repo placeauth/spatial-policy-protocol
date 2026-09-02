@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spatial-policy.org/schema/decision.schema.json",
+  "title": "SPP 0.1 Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spp_version", "request_id", "decision_id", "decision", "policy_id",
+    "policy_version", "reason", "evaluated_at", "expires_in"
+  ],
+  "properties": {
+    "spp_version": {"const": "0.1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "decision_id": {"type": "string", "minLength": 1},
+    "decision": {"enum": ["permit", "deny", "conditional"]},
+    "policy_id": {"type": "string", "minLength": 1},
+    "policy_version": {"type": "integer", "minimum": 1},
+    "matched_space": {"type": ["string", "null"]},
+    "reason": {"type": "string", "minLength": 1},
+    "requires": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "obligations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/obligation"}
+    },
+    "expires_in": {"type": "integer", "minimum": 1, "maximum": 86400},
+    "evaluated_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+        "value": {}
+      }
+    }
+  }
+}
+

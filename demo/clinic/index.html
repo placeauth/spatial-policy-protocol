@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPP Clinic Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">SPATIAL POLICY PROTOCOL 0.1</p>
+      <h1>The clinic tells the robot what it may do.</h1>
+      <p class="lede">
+        Choose an intended action. The same delivery robot receives a different
+        decision based on the space, action, and supplied context.
+      </p>
+      <div id="status" class="status">Checking policy server…</div>
+    </header>
+
+    <section class="demo-grid">
+      <nav aria-label="Clinic scenarios">
+        <h2>Robot intents</h2>
+        <div id="scenarios"></div>
+      </nav>
+
+      <article class="decision-panel" aria-live="polite">
+        <div class="decision-heading">
+          <span id="decision-dot" class="decision-dot neutral"></span>
+          <div>
+            <p class="eyebrow">SPP DECISION</p>
+            <h2 id="decision">Choose an intent</h2>
+          </div>
+        </div>
+        <p id="reason">The request and policy result will appear here.</p>
+        <dl>
+          <div><dt>Matched space</dt><dd id="matched-space">—</dd></div>
+          <div><dt>Required</dt><dd id="requires">—</dd></div>
+          <div><dt>Obligations</dt><dd id="obligations">—</dd></div>
+        </dl>
+        <details>
+          <summary>Protocol exchange</summary>
+          <pre id="exchange"></pre>
+        </details>
+      </article>
+    </section>
+
+    <section class="route">
+      <h2>Policy inheritance</h2>
+      <div class="route-line" aria-label="Clinic space hierarchy">
+        <span>Clinic defaults</span><b>→</b><span>Child space override</span><b>→</b><span>Decision</span>
+      </div>
+      <p>
+        The evaluator starts at the requested space and walks toward the root.
+        The nearest applicable rule wins; no match means deny.
+      </p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,25 @@
+services:
+  opa:
+    image: openpolicyagent/opa:1.17.0-static
+    command:
+      - run
+      - --server
+      - --addr=0.0.0.0:8181
+      - /policy/spp.rego
+    ports:
+      - "8181:8181"
+    volumes:
+      - ./reference/policy-server/policy:/policy:ro
+
+  policy-server:
+    build:
+      context: .
+      dockerfile: reference/policy-server/Dockerfile
+    environment:
+      SPP_ENGINE: opa
+      SPP_OPA_URL: http://opa:8181
+      SPP_POLICY: /app/examples/hospital.yaml
+    depends_on:
+      - opa
+    ports:
+      - "8000:8000"

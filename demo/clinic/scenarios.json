@@ -1,0 +1,84 @@
+[
+  {
+    "id": "lobby",
+    "label": "Enter lobby",
+    "note": "The lobby inherits the clinic-wide movement permit.",
+    "request": {
+      "spp_version": "0.1",
+      "request_id": "clinic-lobby-001",
+      "actor": {"id": "robot:demo:delivery-01", "type": "delivery_robot"},
+      "space": "clinic/lobby",
+      "action": {"family": "movement", "name": "enter"},
+      "context": {"purpose": "package_delivery"}
+    }
+  },
+  {
+    "id": "staff-corridor",
+    "label": "Enter staff corridor",
+    "note": "The child space overrides the general movement permit.",
+    "request": {
+      "spp_version": "0.1",
+      "request_id": "clinic-corridor-001",
+      "actor": {"id": "robot:demo:delivery-01", "type": "delivery_robot"},
+      "space": "clinic/staff-corridor",
+      "action": {"family": "movement", "name": "enter"},
+      "context": {"purpose": "package_delivery"}
+    }
+  },
+  {
+    "id": "staff-corridor-authorized",
+    "label": "Add staff escort",
+    "note": "The same rule becomes permit when its required authorization is present.",
+    "request": {
+      "spp_version": "0.1",
+      "request_id": "clinic-corridor-002",
+      "actor": {"id": "robot:demo:delivery-01", "type": "delivery_robot"},
+      "space": "clinic/staff-corridor",
+      "action": {"family": "movement", "name": "enter"},
+      "context": {
+        "purpose": "package_delivery",
+        "authorizations": ["clinic.staff_escort"]
+      }
+    }
+  },
+  {
+    "id": "pharmacy",
+    "label": "Try pharmacy shortcut",
+    "note": "The pharmacy override denies entry, so a planner must choose another route.",
+    "request": {
+      "spp_version": "0.1",
+      "request_id": "clinic-pharmacy-001",
+      "actor": {"id": "robot:demo:delivery-01", "type": "delivery_robot"},
+      "space": "clinic/pharmacy",
+      "action": {"family": "movement", "name": "enter"},
+      "context": {"purpose": "package_delivery"}
+    }
+  },
+  {
+    "id": "patient-video",
+    "label": "Use camera in Room 312",
+    "note": "Capture is permitted for navigation, but the inherited obligation forbids retention.",
+    "request": {
+      "spp_version": "0.1",
+      "request_id": "clinic-camera-001",
+      "actor": {"id": "robot:demo:delivery-01", "type": "delivery_robot"},
+      "space": "clinic/patient-wing/room-312",
+      "action": {"family": "sensing", "name": "video_capture"},
+      "context": {"purpose": "navigation"}
+    }
+  },
+  {
+    "id": "patient-video-store",
+    "label": "Try storing camera video",
+    "note": "Data retention is a separate action and is denied.",
+    "request": {
+      "spp_version": "0.1",
+      "request_id": "clinic-video-store-001",
+      "actor": {"id": "robot:demo:delivery-01", "type": "delivery_robot"},
+      "space": "clinic/patient-wing/room-312",
+      "action": {"family": "data", "name": "video_store"},
+      "context": {"purpose": "navigation"}
+    }
+  }
+]
+

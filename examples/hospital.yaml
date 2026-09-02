@@ -1,0 +1,82 @@
+spp_version: "0.1"
+policy_id: "urn:spp:clinic:demo"
+policy_version: 1
+authority:
+  id: "did:web:clinic.example"
+  name: "SPP Clinic Demo"
+  policy_endpoint: "http://localhost:8000/v1/decision"
+root_space: "clinic"
+default_decision: deny
+spaces:
+  - id: "clinic"
+    parent: null
+    description: "Clinic-wide defaults"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: permit
+        reason: "Delivery robots may enter ordinary clinic areas."
+        expires_in: 30
+      - action: {family: movement, name: traverse}
+        decision: permit
+        reason: "Delivery robots may traverse ordinary clinic areas."
+        expires_in: 30
+      - action: {family: sensing, name: lidar}
+        decision: permit
+        reason: "Transient lidar is permitted for navigation."
+        obligations:
+          - {type: data.max_retention, value: "24h"}
+      - action: {family: sensing, name: video_capture}
+        decision: permit
+        reason: "Transient video is permitted for navigation."
+        obligations:
+          - {type: data.no_retention, value: true}
+      - action: {family: data, name: video_store}
+        decision: deny
+        reason: "Clinic video may not be retained."
+      - action: {family: manipulation, name: package_place}
+        decision: permit
+        reason: "Packages may be placed at designated delivery points."
+      - action: {family: infrastructure, name: elevator_use}
+        decision: permit
+        reason: "Elevator use is permitted for assigned deliveries."
+      - action: {family: human_interaction, name: request_attention}
+        decision: permit
+        reason: "A robot may request staff attention."
+
+  - id: "clinic/lobby"
+    parent: "clinic"
+    description: "Public lobby; inherits clinic defaults"
+    rules: []
+
+  - id: "clinic/staff-corridor"
+    parent: "clinic"
+    description: "Staff-only corridor"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: conditional
+        requires: ["clinic.staff_escort"]
+        reason: "A current staff escort authorization is required."
+        expires_in: 15
+
+  - id: "clinic/pharmacy"
+    parent: "clinic"
+    description: "Restricted pharmacy"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: deny
+        reason: "Autonomous delivery robots may not enter the pharmacy."
+
+  - id: "clinic/patient-wing"
+    parent: "clinic"
+    description: "Patient-care area"
+    rules:
+      - action: {family: human_interaction, name: approach}
+        decision: conditional
+        requires: ["clinic.patient_interaction"]
+        reason: "Patient approach requires an explicit interaction authorization."
+
+  - id: "clinic/patient-wing/room-312"
+    parent: "clinic/patient-wing"
+    description: "Demo delivery destination"
+    rules: []
+

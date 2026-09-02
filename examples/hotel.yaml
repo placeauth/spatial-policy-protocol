@@ -1,0 +1,49 @@
+spp_version: "0.1"
+policy_id: "urn:spp:hotel:example"
+policy_version: 1
+authority:
+  id: "did:web:hotel.example"
+  name: "Example Hotel"
+root_space: "hotel"
+default_decision: deny
+spaces:
+  - id: "hotel"
+    parent: null
+    rules:
+      - action: {family: movement, name: enter}
+        decision: permit
+        actor: {types: [delivery_robot, service_robot]}
+        reason: "Hotel service robots may enter common areas."
+      - action: {family: sensing, name: audio_record}
+        decision: deny
+        reason: "Audio recording is prohibited."
+      - action: {family: data, name: guest_identity_store}
+        decision: deny
+        reason: "Guest identity may not be retained by autonomous systems."
+      - action: {family: manipulation, name: package_place}
+        decision: permit
+        reason: "Packages may be placed at designated handoff points."
+      - action: {family: infrastructure, name: elevator_use}
+        decision: permit
+        reason: "Service robots may use elevators."
+      - action: {family: human_interaction, name: request_attention}
+        decision: permit
+        obligations:
+          - {type: interaction.max_volume, value: "quiet"}
+        reason: "Quiet attention requests are permitted."
+  - id: "hotel/guest-floor"
+    parent: "hotel"
+    rules: []
+  - id: "hotel/guest-floor/room-402"
+    parent: "hotel/guest-floor"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: conditional
+        requires: ["hotel.guest_invitation"]
+        reason: "Room entry requires a current guest invitation."
+  - id: "hotel/back-office"
+    parent: "hotel"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: deny
+        reason: "Autonomous systems may not enter the back office."

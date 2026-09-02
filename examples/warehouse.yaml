@@ -1,0 +1,47 @@
+spp_version: "0.1"
+policy_id: "urn:spp:warehouse:example"
+policy_version: 1
+authority:
+  id: "did:web:warehouse.example"
+  name: "Example Distribution Center"
+root_space: "warehouse"
+default_decision: deny
+spaces:
+  - id: "warehouse"
+    parent: null
+    rules:
+      - action: {family: movement, name: traverse}
+        decision: permit
+        actor: {types: [autonomous_forklift, inventory_robot]}
+        obligations:
+          - {type: movement.max_speed_mps, value: 1.8}
+          - {type: movement.yield_to_humans, value: true}
+        reason: "Approved warehouse robots may traverse marked lanes."
+      - action: {family: sensing, name: lidar}
+        decision: permit
+        reason: "Lidar is permitted for navigation."
+      - action: {family: data, name: inventory_transmit}
+        decision: conditional
+        requires: ["warehouse.wms_session"]
+        reason: "Inventory data requires an active WMS session."
+      - action: {family: infrastructure, name: dock_door_open}
+        decision: conditional
+        requires: ["warehouse.dock_assignment"]
+        reason: "Dock door operation requires a current assignment."
+      - action: {family: human_interaction, name: identify}
+        decision: deny
+        reason: "Biometric identification is prohibited."
+  - id: "warehouse/zone-a"
+    parent: "warehouse"
+    rules:
+      - action: {family: manipulation, name: inventory_pick}
+        decision: conditional
+        requires: ["warehouse.wms_pick_order"]
+        reason: "A WMS pick order is required."
+  - id: "warehouse/hazard-zone"
+    parent: "warehouse"
+    rules:
+      - action: {family: movement, name: traverse}
+        decision: deny
+        reason: "Autonomous traversal is prohibited in the hazard zone."
+

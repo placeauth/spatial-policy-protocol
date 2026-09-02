@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>spp_enforcer</name>
+  <version>0.1.0</version>
+  <description>PlaceAuth ROS 2 enforcement-point stub for Spatial Policy Protocol 0.1.</description>
+  <maintainer email="maintainers@placeauth.invalid">PlaceAuth SPP maintainers</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_python</buildtool_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

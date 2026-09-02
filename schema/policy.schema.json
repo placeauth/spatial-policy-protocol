@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spatial-policy.org/schema/policy.schema.json",
+  "title": "SPP 0.1 Policy Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spp_version", "policy_id", "policy_version", "authority", "root_space", "spaces"],
+  "properties": {
+    "spp_version": {"const": "0.1"},
+    "policy_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "policy_version": {"type": "integer", "minimum": 1},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string"},
+        "policy_endpoint": {"type": "string", "format": "uri"}
+      }
+    },
+    "root_space": {"type": "string", "minLength": 1},
+    "default_decision": {"const": "deny"},
+    "spaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/space"}
+    }
+  },
+  "$defs": {
+    "space": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "rules"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 512},
+        "parent": {"type": ["string", "null"]},
+        "description": {"type": "string"},
+        "rules": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/rule"}
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "decision"],
+      "properties": {
+        "action": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["family", "name"],
+          "properties": {
+            "family": {
+              "enum": ["movement", "sensing", "data", "manipulation", "infrastructure", "human_interaction"]
+            },
+            "name": {
+              "anyOf": [
+                {"const": "*"},
+                {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}
+              ]
+            }
+          }
+        },
+        "decision": {"enum": ["permit", "deny", "conditional"]},
+        "actor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "types": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "attributes": {"type": "object"}
+          }
+        },
+        "when": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "purpose": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+              ]
+            },
+            "emergency": {"type": "boolean"},
+            "attributes": {"type": "object"}
+          }
+        },
+        "requires": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "obligations": {
+          "type": "array",
+          "items": {"$ref": "decision.schema.json#/$defs/obligation"}
+        },
+        "reason": {"type": "string"},
+        "expires_in": {"type": "integer", "minimum": 1, "maximum": 86400}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"decision": {"const": "conditional"}}},
+          "then": {"required": ["requires"], "properties": {"requires": {"minItems": 1}}}
+        }
+      ]
+    }
+  }
+}

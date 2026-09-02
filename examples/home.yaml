@@ -1,0 +1,46 @@
+spp_version: "0.1"
+policy_id: "urn:spp:home:example"
+policy_version: 1
+authority:
+  id: "did:web:home.example"
+  name: "Example Household"
+root_space: "home"
+default_decision: deny
+spaces:
+  - id: "home"
+    parent: null
+    rules:
+      - action: {family: movement, name: enter}
+        decision: permit
+        actor: {types: [cleaning_robot]}
+        reason: "The household cleaning robot may enter shared areas."
+      - action: {family: sensing, name: video_capture}
+        decision: deny
+        reason: "Video capture is not permitted in the home."
+      - action: {family: data, name: spatial_map_store}
+        decision: conditional
+        requires: ["household.map_consent"]
+        obligations:
+          - {type: data.max_retention, value: "7d"}
+        reason: "Map retention requires household consent."
+      - action: {family: manipulation, name: clean_surface}
+        decision: permit
+        actor: {types: [cleaning_robot]}
+        reason: "Cleaning actions are permitted."
+      - action: {family: infrastructure, name: exterior_door_open}
+        decision: deny
+        reason: "Autonomous systems may not operate exterior doors."
+      - action: {family: human_interaction, name: approach}
+        decision: deny
+        reason: "Unrequested approach is not permitted."
+  - id: "home/bedroom"
+    parent: "home"
+    rules: []
+  - id: "home/child-bedroom"
+    parent: "home"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: conditional
+        requires: ["household.parental_approval"]
+        reason: "Parental approval is required."
+
