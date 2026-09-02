@@ -7,6 +7,8 @@ complete Nav2 or Open-RMF adapter.
 - Ask the configured SPP policy endpoint for a decision.
 - Publish every decision on \`spp/decision\`.
 - Forward only permitted intents to \`spp/action_allowed\`.
+- Forward conditional intents to \`spp/action_pending\` so a planner can pause
+  and request authorization.
 - Deny on malformed input, timeout, or policy-server failure.
 
 An intent uses this shape:

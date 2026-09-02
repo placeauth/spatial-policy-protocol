@@ -21,6 +21,7 @@ class SppEnforcer(Node):
             String, "spp/action_intent", self.on_intent, 10
         )
         self.allowed_publisher = self.create_publisher(String, "spp/action_allowed", 10)
+        self.pending_publisher = self.create_publisher(String, "spp/action_pending", 10)
         self.decision_publisher = self.create_publisher(String, "spp/decision", 10)
 
     def on_intent(self, message: String) -> None:
@@ -53,6 +54,12 @@ class SppEnforcer(Node):
         if decision.get("decision") == "permit":
             self.allowed_publisher.publish(message)
             self.get_logger().info(f"PERMIT {request['request_id']}")
+        elif decision.get("decision") == "conditional":
+            self.pending_publisher.publish(message)
+            self.get_logger().warning(
+                f"CONDITIONAL {decision.get('request_id', 'invalid')}: paused pending "
+                f"{decision.get('requires', [])}"
+            )
         else:
             self.get_logger().warning(
                 f"{decision.get('decision', 'deny').upper()} "
@@ -84,4 +91,3 @@ def main(args=None) -> None:
 
 if __name__ == "__main__":
     main()
-

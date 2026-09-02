@@ -10,6 +10,8 @@ from spp.evaluator import PolicyError, evaluate, load_policy
 
 ROOT = Path(__file__).resolve().parents[1]
 POLICY = load_policy(ROOT / "examples" / "hospital.yaml")
+POLICY_A = load_policy(ROOT / "demo" / "clinic" / "policy-a.yaml")
+POLICY_B = load_policy(ROOT / "demo" / "clinic" / "policy-b.yaml")
 
 
 def request(space: str, family: str, name: str, **context) -> dict:
@@ -93,3 +95,30 @@ def test_unknown_space_fails_closed() -> None:
     with pytest.raises(PolicyError, match="unknown space"):
         evaluate(POLICY, request("clinic/unknown", "movement", "enter"))
 
+
+def test_money_shot_policy_change_changes_behavior_without_robot_change() -> None:
+    denied = evaluate(
+        POLICY_A,
+        request("clinic/restricted-room", "movement", "enter", purpose="delivery"),
+    )
+    conditional = evaluate(
+        POLICY_B,
+        request("clinic/restricted-room", "movement", "enter", purpose="delivery"),
+    )
+    assert denied["decision"] == "deny"
+    assert conditional["decision"] == "conditional"
+    assert conditional["requires"] == ["delivery_authorization"]
+
+
+def test_money_shot_authorization_allows_policy_b() -> None:
+    result = evaluate(
+        POLICY_B,
+        request(
+            "clinic/restricted-room",
+            "movement",
+            "enter",
+            purpose="delivery",
+            authorizations=["delivery_authorization"],
+        ),
+    )
+    assert result["decision"] == "permit"

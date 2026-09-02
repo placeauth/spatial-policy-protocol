@@ -22,6 +22,8 @@ programming language.
 - A Python policy server with local and OPA/Rego modes
 - A fail-closed ROS 2 enforcement-point stub
 - A runnable clinic demo and automated tests
+- A deterministic policy A/B robot simulation: changing only the place policy
+  changes deny/replan into conditional/pause/authorize
 
 The action families in 0.1 are \`movement\`, \`sensing\`, \`data\`,
 \`manipulation\`, \`infrastructure\`, and \`human_interaction\`.
@@ -77,6 +79,37 @@ The hospital policy returns \`conditional\` and requires
 same request becomes \`permit\`. A request to enter \`clinic/pharmacy\` is
 denied by the nearer pharmacy rule.
 
+For a one-command local decision, use the installed CLI with a JSON request
+file:
+
+\`\`\`sh
+spp-evaluate examples/hospital.yaml demo/clinic/requests/staff-corridor.json
+\`\`\`
+
+The HTTP equivalent is:
+
+\`\`\`sh
+curl -X POST http://127.0.0.1:8000/v1/decision \
+  -H "content-type: application/json" \
+  --data @demo/clinic/requests/restricted-room.json
+\`\`\`
+
+## Money-shot demo
+
+The robot simulator is the same program in both runs. Only the place policy
+changes:
+
+\`\`\`sh
+python demo/clinic/simulate_robot.py demo/clinic/policy-a.yaml
+python demo/clinic/simulate_robot.py demo/clinic/policy-b.yaml
+\`\`\`
+
+Policy A denies entry to clinic/restricted-room, so the robot refuses and
+selects an alternate route. Policy B returns conditional, the robot pauses,
+then re-evaluates with delivery_authorization and proceeds. This is the first
+SPP vertical slice: the place policy changes robot behavior without changing
+robot application code.
+
 ## Run with OPA
 
 The Python service is the protocol adapter and the Rego module is the policy
@@ -99,7 +132,7 @@ spec/                        Protocol, security, and threat model
 examples/                    Four policy bundles
 reference/policy-server/     Python API and Rego policy
 reference/ros2-enforcer/     ROS 2 enforcement stub
-demo/clinic/                 CLI and browser demonstrations
+demo/clinic/                 CLI, browser, and policy A/B demonstrations
 tests/                       Schema and behavior tests
 \`\`\`
 

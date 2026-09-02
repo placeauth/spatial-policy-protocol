@@ -1,0 +1,8 @@
+{
+  "spp_version": "0.1",
+  "request_id": "cli-restricted-room-001",
+  "actor": {"id": "robot:demo:01", "type": "delivery_robot"},
+  "space": "clinic/restricted-room",
+  "action": {"family": "movement", "name": "enter"},
+  "context": {"purpose": "delivery"}
+}

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from spp.evaluator import load_policy, validate_document
+from spp.evaluator import PolicyError, load_policy, validate_document, validate_policy
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,3 +38,9 @@ def test_examples_cover_every_action_family() -> None:
             seen.update(rule["action"]["family"] for rule in space["rules"])
     assert seen == expected
 
+
+def test_malformed_policy_is_rejected() -> None:
+    policy = load_policy(ROOT / "examples" / "home.yaml")
+    policy["spaces"][0]["parent"] = "missing-parent"
+    with pytest.raises(PolicyError, match="root space parent must be null"):
+        validate_policy(policy)

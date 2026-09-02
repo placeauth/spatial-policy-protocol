@@ -1,0 +1,40 @@
+spp_version: "0.1"
+policy_id: "urn:spp:clinic:money-shot:b"
+policy_version: 2
+authority:
+  id: "did:web:clinic.example"
+  name: "SPP Clinic Demo — Policy B"
+  policy_endpoint: "http://127.0.0.1:8000/v1/decision"
+root_space: "clinic"
+default_decision: deny
+spaces:
+  - id: "clinic"
+    parent: null
+    rules:
+      - action: {family: movement, name: enter}
+        decision: permit
+        reason: "The clinic permits entry by delivery robots."
+      - action: {family: sensing, name: video}
+        decision: permit
+        reason: "Video is permitted for transient navigation."
+        obligations: [{type: data.no_retention, value: true}]
+      - action: {family: infrastructure, name: door}
+        decision: permit
+        reason: "Clinic doors may be operated for assigned deliveries."
+  - id: "clinic/lobby"
+    parent: "clinic"
+    rules: []
+  - id: "clinic/staff-corridor"
+    parent: "clinic"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: conditional
+        requires: ["staff_authorization"]
+        reason: "A staff authorization is required in the corridor."
+  - id: "clinic/restricted-room"
+    parent: "clinic"
+    rules:
+      - action: {family: movement, name: enter}
+        decision: conditional
+        requires: ["delivery_authorization"]
+        reason: "Restricted-room entry requires delivery authorization."
