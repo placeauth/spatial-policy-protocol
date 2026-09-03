@@ -1,0 +1,9 @@
+spp_version: "0.1"
+admission_version: "0.1-experimental"
+requirement_set_id: "urn:spp:clinic:lobby"
+place: "clinic"
+space: "clinic/lobby"
+policy_version: 2
+environment_digest: "sha256:site-model-clinic-v1"
+requirements:
+  - {id: movement.max_speed, action: movement.enter, operator: "<=", value: 0.8, unit: "m/s", essential: true}

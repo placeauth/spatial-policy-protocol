@@ -57,3 +57,23 @@ Logs can create a sensitive history of people, robots, facilities, restricted
 spaces, and denied behavior. Collect the minimum fields, restrict access, define
 retention, and avoid placing secrets or personal data in free-form identifiers.
 
+## Experimental evidence-based admission
+
+The Conformance and Admission extensions are EXPERIMENTAL / PRE-PUBLICATION.
+Evidence must be rejected when it is forged, modified, stale, replayed, bound to
+the wrong robot build or controller configuration, or associated with a changed
+policy or environment digest. A challenge prevents simple replay when the
+deployment verifies it.
+
+Evidence assurance ranges from E0 declaration through E4 trusted external
+observation. The demo implements E2 behavioral evidence only. A place should
+learn the demonstrated guarantee and a digest, not proprietary source code,
+model weights, or controller internals. Signed or hardware-attested evidence
+can strengthen the binding later; SPP does not define custom cryptography.
+
+Degraded admission must name its restrictions. Essential safety requirements
+must fail closed to DENIED; a degraded profile must never be treated as a full
+permit. Attestation hardware may be unavailable, and a compromised adapter or
+dishonest self-report can still produce misleading evidence. Enforcement points
+and robot runtimes must independently enforce the resulting operating profile.
+PlaceAuth does not magically force a malicious robot to comply.

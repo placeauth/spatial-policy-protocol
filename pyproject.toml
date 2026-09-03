@@ -25,10 +25,8 @@ spp-evaluate = "spp.evaluator:main"
 spp-server = "spp.server:main"
 
 [tool.setuptools]
-package-dir = {"" = "reference/policy-server/src"}
-
-[tool.setuptools.packages.find]
-where = ["reference/policy-server/src"]
+packages = ["spp", "spp_admission"]
+package-dir = { "spp" = "reference/policy-server/src/spp", "spp_admission" = "reference/admission/src/spp_admission" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

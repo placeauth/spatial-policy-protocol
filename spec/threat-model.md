@@ -38,6 +38,31 @@ make them trustworthy by itself.
 | Policy probing | Attacker maps restricted spaces from reasons | authorization, rate limits, minimal error disclosure |
 | Enforcement bypass | ROS node publishes directly to actuator topic | isolate actuator interface and make enforcer mandatory |
 
+## Evidence and admission threats
+
+Evidence-based admission adds these failure modes:
+
+- forged or modified test results;
+- stale or replayed bundles and challenges;
+- evidence from the wrong build, controller configuration, policy version, or
+  environment/site-model digest;
+- compromised embodiment adapters or dishonest self-declaration;
+- unavailable attestation hardware;
+- proprietary internals leaked through over-detailed evidence;
+- unsafe degraded profiles treated as full admission; and
+- a malicious robot ignoring the resulting operating profile.
+
+The reference implementation binds evidence to fingerprints, digests, a
+challenge, and a validity window, and fails closed on binding mismatch or stale
+evidence. E2 evidence is behavioral test evidence, not independent observation.
+Higher assurance levels require stronger external signing, attestation, or
+observation systems supplied by a deployment.
+
+SPP decisions and AdmissionProfiles are not enforcement. Actual compliance
+depends on the enforcement point, robot runtime, actuator isolation, external
+infrastructure, and hardware guarantees. A malicious robot can ignore a
+profile; the protocol cannot magically force it to comply.
+
 ## Out of scope for 0.1
 
 - compromise of the robot operating system or building controller;
@@ -57,4 +82,3 @@ An implementation is conformant only if these invariants hold:
 4. a child rule cannot silently erase unrelated parent rules;
 5. decisions expire and are not reused for a changed request; and
 6. safety controls can always override an SPP permit.
-

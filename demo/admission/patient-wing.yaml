@@ -1,0 +1,12 @@
+spp_version: "0.1"
+admission_version: "0.1-experimental"
+requirement_set_id: "urn:spp:clinic:patient-wing"
+place: "clinic"
+space: "clinic/patient-wing"
+policy_version: 3
+environment_digest: "sha256:site-model-clinic-v1"
+requirements:
+  - {id: movement.max_speed, action: movement.enter, operator: "<=", value: 0.8, unit: "m/s", essential: true}
+  - {id: human_separation, action: movement.enter, operator: ">=", value: 1.2, unit: "m", essential: true}
+  - {id: sensing.facial_recognition, action: sensing.video, operator: prohibited, value: true, essential: true}
+  - {id: data.video_retention, action: data.video, operator: "=", value: 0, unit: "seconds", essential: false, degraded_restriction: "sensing.video.capture=disabled"}

@@ -1,0 +1,16 @@
+{
+  "admission_version": "0.1-experimental",
+  "evidence_id": "urn:spp:evidence:invalid",
+  "actor_id": "robot:test:1",
+  "robot_build_fingerprint": "build:v1",
+  "controller_configuration_fingerprint": "controller:v1",
+  "embodiment": "demo_mobile_base",
+  "policy_version": 1,
+  "policy_digest": "sha256:policy",
+  "environment_digest": "sha256:environment",
+  "conformance_plan_digest": "sha256:plan",
+  "challenge": "nonce:test",
+  "test_results": [{"test_id": "test:one", "requirement_id": "movement.max_speed"}],
+  "evidence_assurance_level": "E2",
+  "binding": {}
+}

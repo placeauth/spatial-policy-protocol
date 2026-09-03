@@ -22,11 +22,36 @@ programming language.
 - A Python policy server with local and OPA/Rego modes
 - A fail-closed ROS 2 enforcement-point stub
 - A runnable clinic demo and automated tests
+- Experimental Conformance and Admission reference code with evidence binding
+- Deterministic admission scenarios A-D, including selective requalification
 - A deterministic policy A/B robot simulation: changing only the place policy
   changes deny/replan into conditional/pause/authorize
 
 The action families in 0.1 are \`movement\`, \`sensing\`, \`data\`,
 \`manipulation\`, \`infrastructure\`, and \`human_interaction\`.
+
+## Experimental evidence-based admission
+
+The repository also contains a pre-publication reference design layered above
+SPP Core:
+
+SPP Core -> SPP Conformance -> SPP Admission
+
+The admission demo derives tests from abstract patient-wing requirements,
+executes them against a declared robot state, hashes the resulting evidence,
+and produces ADMITTED, DEGRADED, or DENIED profiles. It is intentionally
+experimental and does not claim to be an adopted standard.
+
+Run all four deterministic scenarios:
+
+    python demo/admission/run_demo.py a
+    python demo/admission/run_demo.py b
+    python demo/admission/run_demo.py c
+    python demo/admission/run_demo.py d
+
+See spec/evidence-based-admission.md for the flow, assurance levels, and the
+distinction between open protocol elements and reference implementation
+details.
 
 ## Quick start
 
@@ -134,6 +159,8 @@ reference/policy-server/     Python API and Rego policy
 reference/ros2-enforcer/     ROS 2 enforcement stub
 demo/clinic/                 CLI, browser, and policy A/B demonstrations
 tests/                       Schema and behavior tests
+reference/admission/         Experimental typed admission implementation
+demo/admission/              Evidence-based admission scenarios
 \`\`\`
 
 ## Project identity

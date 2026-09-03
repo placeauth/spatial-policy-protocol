@@ -1,0 +1,12 @@
+{
+  "spp_version": "0.1",
+  "admission_version": "0.1-experimental",
+  "requirement_set_id": "urn:spp:fixture:patient-wing",
+  "place": "clinic",
+  "space": "clinic/patient-wing",
+  "policy_version": 1,
+  "environment_digest": "sha256:site-model",
+  "requirements": [
+    {"id": "movement.max_speed", "action": "movement.enter", "operator": "<=", "value": 0.8}
+  ]
+}
