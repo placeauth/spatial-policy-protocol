@@ -59,7 +59,7 @@ retention, and avoid placing secrets or personal data in free-form identifiers.
 
 ## Experimental evidence-based admission
 
-The Conformance and Admission extensions are EXPERIMENTAL / PRE-PUBLICATION.
+The Conformance and Admission extensions are EXPERIMENTAL and PRE-STANDARDIZATION.
 Evidence must be rejected when it is forged, modified, stale, replayed, bound to
 the wrong robot build or controller configuration, or associated with a changed
 policy or environment digest. A challenge prevents simple replay when the
@@ -76,4 +76,4 @@ must fail closed to DENIED; a degraded profile must never be treated as a full
 permit. Attestation hardware may be unavailable, and a compromised adapter or
 dishonest self-report can still produce misleading evidence. Enforcement points
 and robot runtimes must independently enforce the resulting operating profile.
-PlaceAuth does not magically force a malicious robot to comply.
+SPP does not itself force a malicious autonomous system to comply.

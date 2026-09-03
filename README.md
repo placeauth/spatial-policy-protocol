@@ -1,182 +1,187 @@
 # Spatial Policy Protocol (SPP)
 
-SPP is an experimental, vendor-neutral authorization contract for physical
-places and autonomous actors. It is an open-protocol project from **PlaceAuth**,
-the parent company behind the work.
+An **experimental open interoperability protocol** for establishing how autonomous systems may operate in physical environments.
+
+Physical environments increasingly need to communicate operating requirements to autonomous machines they do not own or control. Autonomous systems need a vendor-neutral way to understand those requirements and demonstrate conformance without necessarily exposing proprietary internals.
+
+SPP defines a machine-readable exchange for that interaction:
+
+1. The **place defines requirements** for a space.
+2. The **machine demonstrates conformance** using an appropriate proof mechanism.
+3. SPP establishes a **spatially scoped operating profile**.
+4. When requirements change, sufficient evidence can be reused and only unresolved guarantees need requalification.
+
+The core question is:
 
 > May Actor X perform Action Y in Space Z under Context C?
 
-Version 0.1 defines policy, request, and decision documents; inherited policy
-for hierarchical spaces; six initial action families; and permit, deny, and
-conditional outcomes. It deliberately does not define robot identity,
-navigation, mapping, transport security, policy discovery, or a new policy
-programming language.
+SPP is developed under the **PlaceAuth** project, an effort to create open interoperability infrastructure between autonomous systems and physical environments. PlaceAuth is the umbrella project; SPP is the protocol and specification family. PlaceAuth is not a formal standards body.
 
-## What works
+## What SPP is
 
-- JSON Schemas for policy bundles, decision requests, and decisions
-- Human-readable YAML policies for a home, hospital, warehouse, and hotel
-- Deterministic inheritance: nearest matching space rule wins
-- Deny-by-default evaluation
-- Conditional decisions with named authorizations and obligations
-- A Python policy server with local and OPA/Rego modes
-- A fail-closed ROS 2 enforcement-point stub
-- A runnable clinic demo and automated tests
-- Experimental Conformance and Admission reference code with evidence binding
-- Deterministic admission scenarios A-D, including selective requalification
-- A deterministic policy A/B robot simulation: changing only the place policy
-  changes deny/replan into conditional/pause/authorize
+- A place-centered policy and decision contract.
+- A way to express requirements for movement, sensing, data, manipulation, infrastructure, and human interaction.
+- A hierarchy-aware model in which child spaces inherit applicable parent requirements.
+- A conformance and evidence model for a reference implementation.
+- A protocol surface intended for independent implementations and technical review.
 
-The action families in 0.1 are \`movement\`, \`sensing\`, \`data\`,
-\`manipulation\`, \`infrastructure\`, and \`human_interaction\`.
+## What SPP is not
 
-## Experimental evidence-based admission
+- Not merely a robot-permissions product or a geofencing service.
+- Not an access-control company, attestation product, or identity system.
+- Not an adopted industry standard.
+- Not a substitute for safety controls, hardware guarantees, enforcement, or trusted identity.
+- Not production-ready security infrastructure.
 
-The repository also contains a pre-publication reference design layered above
-SPP Core:
+## Public architecture
 
-SPP Core -> SPP Conformance -> SPP Admission
+```text
+PlaceAuth
+└── Spatial Policy Protocol (SPP)
+    ├── SPP Core
+    ├── SPP Conformance       (experimental)
+    └── SPP Admission         (experimental)
+```
 
-The admission demo derives tests from abstract patient-wing requirements,
-executes them against a declared robot state, hashes the resulting evidence,
-and produces ADMITTED, DEGRADED, or DENIED profiles. It is intentionally
-experimental and does not claim to be an adopted standard.
+### SPP Core
 
-Run all four deterministic scenarios:
+SPP Core defines place requirements, spatial policy semantics, hierarchical inheritance, and the `permit`, `deny`, and `conditional` decision outcomes. The initial action families are `movement`, `sensing`, `data`, `manipulation`, `infrastructure`, and `human_interaction`.
 
-    python demo/admission/run_demo.py a
-    python demo/admission/run_demo.py b
-    python demo/admission/run_demo.py c
-    python demo/admission/run_demo.py d
+### SPP Conformance
 
-See spec/evidence-based-admission.md for the flow, assurance levels, and the
-distinction between open protocol elements and reference implementation
-details.
+The experimental Conformance layer turns requirements into a `ConformancePlan`, selects requirement-to-proof mappings appropriate to an embodiment, and records evidence with assurance levels. It supports deterministic reference checks without requiring a particular robot vendor, middleware, or transport.
+
+### SPP Admission
+
+The experimental Admission layer verifies evidence and derives `ADMITTED`, `DEGRADED`, or `DENIED` operating profiles. It models `RequirementDelta` across spatial transitions so that sufficient guarantees can be reused and unresolved guarantees selectively requalified.
 
 ## Quick start
 
 Python 3.11 or newer is required.
 
-\`\`\`sh
+```sh
 python -m venv .venv
-.venv/Scripts/activate
+# Windows PowerShell: .\.venv\Scripts\Activate.ps1
+# macOS/Linux:       source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
 pytest
+```
+
+Run the zero-service clinic demo:
+
+```sh
 python demo/clinic/run_demo.py
-\`\`\`
+```
 
-On macOS or Linux, activate the environment with
-\`source .venv/bin/activate\`.
+Start the reference API:
 
-To run the HTTP server and browser demo:
-
-\`\`\`sh
+```sh
 python -m uvicorn --app-dir reference/policy-server/src spp.server:app
-# In a second terminal:
+```
+
+The API exposes `GET /health` and `POST /v1/decision`. A browser demo can be served in a second terminal:
+
+```sh
 python -m http.server 8080 -d demo/clinic
-\`\`\`
+```
 
 Open <http://127.0.0.1:8080>.
 
-## One request
+The Docker Compose reference stack starts the API and OPA together:
 
-\`\`\`json
-{
-  "spp_version": "0.1",
-  "request_id": "delivery-42",
-  "actor": {
-    "id": "robot:demo:delivery-01",
-    "type": "delivery_robot"
-  },
-  "space": "clinic/staff-corridor",
-  "action": {
-    "family": "movement",
-    "name": "enter"
-  },
-  "context": {
-    "purpose": "package_delivery"
-  }
-}
-\`\`\`
-
-The hospital policy returns \`conditional\` and requires
-\`clinic.staff_escort\`. Add that value to \`context.authorizations\` and the
-same request becomes \`permit\`. A request to enter \`clinic/pharmacy\` is
-denied by the nearer pharmacy rule.
-
-For a one-command local decision, use the installed CLI with a JSON request
-file:
-
-\`\`\`sh
-spp-evaluate examples/hospital.yaml demo/clinic/requests/staff-corridor.json
-\`\`\`
-
-The HTTP equivalent is:
-
-\`\`\`sh
-curl -X POST http://127.0.0.1:8000/v1/decision \
-  -H "content-type: application/json" \
-  --data @demo/clinic/requests/restricted-room.json
-\`\`\`
-
-## Money-shot demo
-
-The robot simulator is the same program in both runs. Only the place policy
-changes:
-
-\`\`\`sh
-python demo/clinic/simulate_robot.py demo/clinic/policy-a.yaml
-python demo/clinic/simulate_robot.py demo/clinic/policy-b.yaml
-\`\`\`
-
-Policy A denies entry to clinic/restricted-room, so the robot refuses and
-selects an alternate route. Policy B returns conditional, the robot pauses,
-then re-evaluates with delivery_authorization and proceeds. This is the first
-SPP vertical slice: the place policy changes robot behavior without changing
-robot application code.
-
-## Run with OPA
-
-The Python service is the protocol adapter and the Rego module is the policy
-decision point:
-
-\`\`\`sh
+```sh
 docker compose up --build
-\`\`\`
+```
 
-This starts OPA on port 8181 and the SPP API on port 8000. The server resolves
-the requested space into a leaf-to-root policy chain, then asks Rego to select
-and evaluate the first applicable rule. The default local evaluator uses the
-same semantics and keeps development and tests lightweight.
+## Evidence-based admission demo
 
-## Repository map
+Run the four deterministic scenarios:
 
-\`\`\`text
-schema/                      JSON Schemas
-spec/                        Protocol, security, and threat model
-examples/                    Four policy bundles
-reference/policy-server/     Python API and Rego policy
-reference/ros2-enforcer/     ROS 2 enforcement stub
-demo/clinic/                 CLI, browser, and policy A/B demonstrations
-tests/                       Schema and behavior tests
-reference/admission/         Experimental typed admission implementation
-demo/admission/              Evidence-based admission scenarios
-\`\`\`
+```sh
+python demo/admission/run_demo.py a  # full conformance -> ADMITTED
+python demo/admission/run_demo.py b  # video-retention failure -> DEGRADED
+python demo/admission/run_demo.py c  # essential safety failure -> DENIED
+python demo/admission/run_demo.py d  # spatial transition and requalification
+```
 
-## Project identity
+Scenario D demonstrates the central interoperability point: the robot application remains unchanged while the destination place supplies different requirements. Existing sufficient evidence is reused and only unresolved guarantees are tested again. See [the admission demo guide](demo/admission/README.md).
 
-PlaceAuth is the project steward; SPP itself is designed to remain vendor
-neutral so that a place can publish policy for robots and other autonomous
-actors from any manufacturer. The name PlaceAuth describes the broader company
-direction, while SPP names this protocol and its reference implementation.
+## Money-shot example: the place changes
+
+The same robot can arrive at two spaces with different requirements:
+
+```yaml
+Lobby:
+  movement.max_speed: <= 0.8
+
+Patient Wing:
+  movement.max_speed: <= 0.8
+  human_separation: >= 1.2
+  sensing.facial_recognition: prohibited
+  data.video_retention: = 0
+```
+
+On transition, SPP classifies:
+
+```text
+movement.max_speed          -> REUSED
+human_separation            -> NEW
+sensing.facial_recognition  -> NEW
+data.video_retention        -> NEW
+```
+
+The reduced plan runs only the three unresolved tests. If they pass, the destination profile is `ADMITTED`. The robot program did not change; the place requirements did.
+
+## Security and trust boundaries
+
+SPP does **not** itself force a malicious autonomous system to obey an operating profile. Trust depends on evidence assurance, the enforcement point, robot/runtime integrity, site infrastructure, hardware guarantees, and any attestation or independent observation mechanisms used by a deployment.
+
+The reference implementation is intentionally limited. It does not standardize production identity, PKI, discovery, signatures, distributed replay protection, physical enforcement, or certification. Conditional decisions must remain blocked until their requirements are satisfied, and safety systems remain independently authoritative. Read [security considerations](spec/security.md) and the [threat model](spec/threat-model.md) before connecting SPP to physical systems.
 
 ## Status
 
-SPP 0.1 is a working discussion draft, not a security standard. Signatures,
-discovery, identity federation, audit exchange, geometry, conflict sets, and
-standard action registries are intentionally deferred. See
-[the specification](spec/SPP-0.1.md), [security considerations](spec/security.md),
-and [threat model](spec/threat-model.md).
+> **Status: Experimental Preview**
 
-Licensed under Apache-2.0. Contributions and independent implementations are
-welcome.
+The current reference implementation demonstrates:
+
+- machine-readable place requirements and hierarchical inheritance;
+- deterministic conformance planning and requirement-to-proof mapping;
+- evidence generation, binding, integrity, freshness, and replay checks;
+- `ADMITTED`, `DEGRADED`, and `DENIED` admission profiles;
+- degraded operation with explicit restrictions;
+- essential-safety denial;
+- spatial transition deltas and selective requalification; and
+- local and OPA/Rego policy evaluation.
+
+Not yet production-ready:
+
+- hardware attestation and certification infrastructure;
+- distributed replay protection;
+- production ROS 2/Nav2 or Open-RMF integration;
+- discovery and production identity/PKI;
+- physical enforcement guarantees; and
+- broad vendor interoperability testing.
+
+SPP 0.1.0 is a draft reference implementation for pre-standardization experimentation. Certain technologies described in this project are patent pending.
+
+## Repository map
+
+```text
+schema/                    JSON Schemas
+spec/                      protocol, security, and threat model
+examples/                  home, hospital, warehouse, and hotel policies
+reference/policy-server/   Python API and OPA/Rego adapter
+reference/ros2-enforcer/   ROS 2 enforcement-point stub
+reference/admission/       experimental conformance/admission implementation
+demo/clinic/               CLI, browser, and policy A/B demonstrations
+demo/admission/            evidence-based admission scenarios A-D
+tests/                     schema, API, policy, and admission tests
+```
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and [SECURITY.md](SECURITY.md). Protocol feedback, reproducible implementation bugs, and interoperability proposals are welcome. All contributions should include focused tests or examples where practical.
+
+## License
+
+SPP is licensed under the [Apache License 2.0](LICENSE).

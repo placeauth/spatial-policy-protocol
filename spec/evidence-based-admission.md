@@ -1,7 +1,7 @@
 # Evidence-Based Spatial Admission
 
-Status: EXPERIMENTAL / PRE-PUBLICATION. This is a reference design, not an
-adopted standard.
+Status: EXPERIMENTAL / PRE-STANDARDIZATION. This is a reference design, not an
+adopted standard or production security system.
 
 SPP Core answers whether an actor may perform an action in a space. The
 Conformance and Admission extensions answer what operating guarantees this
@@ -36,7 +36,7 @@ disabled, and zero video retention. A Nav2 speed filter, humanoid locomotion
 controller, forklift safety PLC, or drone flight controller could implement the
 same place-facing requirements through a different adapter.
 
-Evidence is hashed with SHA-256. The first implementation demonstrates E2
+Evidence is hashed with SHA-256. The reference implementation demonstrates E2
 behavioral test evidence; the schema reserves E0 through E4. Signed or
 hardware-attested binding can be added later.
 
@@ -63,6 +63,6 @@ classifications. YAML serialization, SHA-256 digests, the fixed demo nonce,
 Python dataclasses, and the mobile-base adapter are reference implementation
 details.
 
-PlaceAuth does not force a malicious robot to comply. Enforcement strength
-depends on evidence assurance, the enforcement point, robot runtime, external
-infrastructure, and hardware guarantees.
+SPP does not itself force a malicious autonomous system to comply. Enforcement
+strength depends on evidence assurance, the enforcement point, robot runtime,
+external infrastructure, and hardware guarantees.

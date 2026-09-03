@@ -5,3 +5,11 @@ __pycache__/
 dist/
 *.egg-info/
 
+# Private filing drafts and local release artifacts are never public.
+docs-private/
+filing-package/
+
+# Local credentials and environment configuration.
+.env
+.env.*
+!.env.example

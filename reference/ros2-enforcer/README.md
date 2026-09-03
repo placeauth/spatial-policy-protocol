@@ -1,5 +1,8 @@
 # PlaceAuth SPP ROS 2 enforcer stub
 
+This package is an experimental enforcement-point stub for integration
+exploration. It is not a production ROS 2 safety or security layer.
+
 This small \`ament_python\` package demonstrates an enforcement point, not a
 complete Nav2 or Open-RMF adapter.
 

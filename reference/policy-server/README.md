@@ -1,5 +1,8 @@
 # PlaceAuth SPP reference policy server
 
+This is an experimental reference implementation of the SPP Core decision
+surface, not a production authorization service or security boundary.
+
 The server validates SPP requests and returns schema-valid decisions. Its
 default local evaluator is intentionally dependency-light and deterministic.
 Set \`SPP_ENGINE=opa\` to route the same prepared policy chain through the Rego
