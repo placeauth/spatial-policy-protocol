@@ -12,14 +12,20 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "reference" / "admission" / "src"))
 
 from spp_admission.engine import (  # noqa: E402
-    admit, build_evidence, compute_requirement_delta, derive_plan,
-    execute_plan, load_requirement_set,
+    ReplayRegistry, admit, build_evidence, compute_requirement_delta,
+    derive_plan, digest, execute_plan, load_requirement_set,
+    reset_replay_registry,
 )
 from spp_admission.models import RobotState  # noqa: E402
 from spp.evaluator import validate_document  # noqa: E402
 
 
 REQ = load_requirement_set(ROOT / "demo" / "admission" / "patient-wing.yaml")
+
+
+@pytest.fixture(autouse=True)
+def clean_replay_registry() -> None:
+    reset_replay_registry()
 
 
 def state(**changes: object) -> RobotState:
@@ -79,6 +85,36 @@ def test_wrong_policy_version_denies() -> None:
     assert admit(altered, plan, evidence, state()).status == "DENIED"
 
 
+def test_wrong_policy_digest_denies() -> None:
+    plan, evidence, _ = issue(state())
+    altered = copy.deepcopy(evidence)
+    altered["binding"]["policy_digest"] = "sha256:wrong-policy"
+    digest_input = dict(altered)
+    digest_input.pop("evidence_digest")
+    altered["evidence_digest"] = digest(digest_input)
+    profile = admit(REQ, plan, altered, state())
+    assert profile.status == "DENIED"
+    assert profile.reason_codes == ["evidence_binding_mismatch"]
+
+
+def test_tampered_test_result_is_rejected_by_digest() -> None:
+    plan, evidence, _ = issue(state())
+    altered = copy.deepcopy(evidence)
+    altered["test_results"][0]["passed"] = False
+    profile = admit(REQ, plan, altered, state())
+    assert profile.status == "DENIED"
+    assert profile.reason_codes == ["evidence_digest_mismatch"]
+
+
+def test_tampered_evidence_field_is_rejected_by_digest() -> None:
+    plan, evidence, _ = issue(state())
+    altered = copy.deepcopy(evidence)
+    altered["embodiment"] = "wrong_adapter"
+    profile = admit(REQ, plan, altered, state())
+    assert profile.status == "DENIED"
+    assert profile.reason_codes == ["evidence_digest_mismatch"]
+
+
 def test_malformed_and_stale_evidence_deny() -> None:
     plan, evidence, _ = issue(state())
     malformed = copy.deepcopy(evidence)
@@ -86,13 +122,19 @@ def test_malformed_and_stale_evidence_deny() -> None:
     assert admit(REQ, plan, malformed, state()).status == "DENIED"
     stale = copy.deepcopy(evidence)
     stale["valid_until"] = "2000-01-01T00:00:00Z"
-    assert admit(REQ, plan, stale, state()).status == "DENIED"
+    stale_input = dict(stale)
+    stale_input.pop("evidence_digest")
+    stale["evidence_digest"] = digest(stale_input)
+    stale_profile = admit(REQ, plan, stale, state())
+    assert stale_profile.status == "DENIED"
+    assert stale_profile.reason_codes == ["stale_evidence"]
 
 
 def test_replayed_challenge_denies() -> None:
     plan, evidence, _ = issue(state())
-    plan["challenge"] = "nonce:other"
-    assert admit(REQ, plan, evidence, state()).status == "DENIED"
+    registry = ReplayRegistry()
+    assert admit(REQ, plan, evidence, state(), replay_registry=registry).status == "ADMITTED"
+    assert admit(REQ, plan, evidence, state(), replay_registry=registry).reason_codes == ["replayed_challenge"]
 
 
 def test_delta_reuses_proven_and_selects_only_new_tests() -> None:

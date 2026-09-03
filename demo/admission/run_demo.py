@@ -33,8 +33,8 @@ def robot(**overrides: object) -> RobotState:
                       "sha256:site-model-clinic-v1", capabilities)
 
 
-def run_admission(requirement_set: dict, state: RobotState, proven=None) -> tuple[dict, dict]:
-    plan = derive_plan(requirement_set, state, proven_guarantees=proven, challenge="nonce:demo-fixed")
+def run_admission(requirement_set: dict, state: RobotState, proven=None, challenge="nonce:demo-fixed") -> tuple[dict, dict]:
+    plan = derive_plan(requirement_set, state, proven_guarantees=proven, challenge=challenge)
     results = execute_plan(plan, state, requirement_set)
     evidence = build_evidence(requirement_set, plan, state, results)
     profile = admit(requirement_set, plan, evidence, state)
@@ -69,7 +69,7 @@ def scenario(name: str) -> None:
         prior, _ = run_admission(lobby, robot())
         print(f"delta:        {compute_requirement_delta(prior, requirements)}")
         print("patient wing:")
-        run_admission(requirements, robot(), proven=prior["operating_profile"]["guarantees"])
+        run_admission(requirements, robot(), proven=prior["operating_profile"]["guarantees"], challenge="nonce:demo-patient-wing")
 
 
 def main() -> None:

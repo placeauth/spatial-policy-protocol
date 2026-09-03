@@ -12,6 +12,29 @@ import yaml
 from .models import AdmissionProfile, EvidenceBinding, RobotState
 
 
+class ReplayRegistry:
+    """Small in-memory reference registry; not a distributed replay service."""
+
+    def __init__(self) -> None:
+        self._accepted: set[str] = set()
+
+    def claim(self, challenge: str) -> bool:
+        if challenge in self._accepted:
+            return False
+        self._accepted.add(challenge)
+        return True
+
+    def clear(self) -> None:
+        self._accepted.clear()
+
+
+DEFAULT_REPLAY_REGISTRY = ReplayRegistry()
+
+
+def reset_replay_registry() -> None:
+    DEFAULT_REPLAY_REGISTRY.clear()
+
+
 def _canonical(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
@@ -151,8 +174,17 @@ def build_evidence(
 
 
 def admit(
-    requirement_set: dict[str, Any], plan: dict[str, Any], evidence: dict[str, Any], robot: RobotState
+    requirement_set: dict[str, Any],
+    plan: dict[str, Any],
+    evidence: dict[str, Any],
+    robot: RobotState,
+    replay_registry: ReplayRegistry | None = None,
 ) -> AdmissionProfile:
+    stored_digest = evidence.get("evidence_digest")
+    digest_input = dict(evidence)
+    digest_input.pop("evidence_digest", None)
+    if not stored_digest or digest(digest_input) != stored_digest:
+        return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], stored_digest or "", _binding(evidence), {}, [], [], ["evidence_digest_mismatch"])
     binding = evidence.get("binding", {})
     binding_ok = (
         binding.get("actor_id") == robot.actor_id
@@ -170,6 +202,11 @@ def admit(
             return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence.get("evidence_digest", ""), _binding(evidence), {}, [], [], ["stale_evidence"])
     except ValueError:
         return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence.get("evidence_digest", ""), _binding(evidence), {}, [], [], ["malformed_evidence"])
+    if not binding_ok:
+        return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence.get("evidence_digest", ""), _binding(evidence), {}, [], [], ["evidence_binding_mismatch"])
+    registry = replay_registry or DEFAULT_REPLAY_REGISTRY
+    if not registry.claim(plan["challenge"]):
+        return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence["evidence_digest"], _binding(evidence), {}, [], [], ["replayed_challenge"])
     failures = {r["requirement_id"] for r in evidence.get("test_results", []) if not r["passed"]}
     unresolved = set(plan.get("unresolved_guarantees", [])) - {
         r["requirement_id"] for r in evidence.get("test_results", [])
@@ -189,8 +226,6 @@ def admit(
                 reasons.append(f"failed:{rid}")
         else:
             guarantees.append({"id": rid, "operator": requirement["operator"], "value": requirement["value"], "environment_digest": robot.environment_digest, "capabilities": robot.capabilities})
-    if not binding_ok:
-        return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence.get("evidence_digest", ""), _binding(evidence), {}, [], [], ["evidence_binding_mismatch"])
     status = "DENIED" if essential_failure else ("DEGRADED" if restrictions else "ADMITTED")
     profile = {"guarantees": guarantees, "restrictions": restrictions}
     return AdmissionProfile(status, robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence["evidence_digest"], _binding(evidence), profile, restrictions, sorted(unresolved | failures), reasons)
