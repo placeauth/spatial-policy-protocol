@@ -2,7 +2,6 @@
 name: Protocol feedback
 about: Suggest a focused change to SPP semantics, schemas, or terminology
 title: "[Protocol] "
-labels: protocol, discussion
 ---
 
 ## Context

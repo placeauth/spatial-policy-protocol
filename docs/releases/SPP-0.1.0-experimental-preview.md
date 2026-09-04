@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This release candidate presents the Spatial Policy Protocol (SPP) as an experimental open interoperability layer between autonomous systems and physical environments. A place publishes machine-readable requirements, a machine demonstrates conformance, and the resulting evidence supports a spatially scoped operating profile.
+This experimental preview presents the Spatial Policy Protocol (SPP) as an open interoperability layer between autonomous systems and physical environments. A place publishes machine-readable requirements, a machine demonstrates conformance, and the resulting evidence supports a spatially scoped operating profile.
 
 SPP is developed under the PlaceAuth project. The robot application remains unchanged while the place requirements determine which actions are permitted, conditional, or denied.
 
@@ -45,6 +45,6 @@ Not production-ready: hardware attestation, distributed replay protection, produ
 
 ## Contributing
 
-See [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md), and [ROADMAP.md](../../ROADMAP.md). Reproduce the demos, review the schemas, report implementation bugs, and propose interoperability improvements with focused tests where possible.
+See [CONTRIBUTING.md](https://github.com/placeauth/spatial-policy-protocol/blob/main/CONTRIBUTING.md), [SECURITY.md](https://github.com/placeauth/spatial-policy-protocol/blob/main/SECURITY.md), and [ROADMAP.md](https://github.com/placeauth/spatial-policy-protocol/blob/main/ROADMAP.md). Reproduce the demos, review the schemas, report implementation bugs, and propose interoperability improvements with focused tests where possible.
 
 Licensed under Apache-2.0. Certain technologies described in this project are patent pending.

@@ -1,21 +1,64 @@
-# Spatial Policy Protocol (SPP)
+# PlaceAuth / Spatial Policy Protocol (SPP)
 
-An **experimental open interoperability protocol** for establishing how autonomous systems may operate in physical environments.
+An experimental, open interoperability protocol for establishing how autonomous systems may operate in physical environments.
 
-Physical environments increasingly need to communicate operating requirements to autonomous machines they do not own or control. Autonomous systems need a vendor-neutral way to understand those requirements and demonstrate conformance without necessarily exposing proprietary internals.
+[![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](docs/releases/SPP-0.1.0-experimental-preview.md)
+[![SPP 0.1.0 Experimental Preview](https://img.shields.io/badge/SPP-0.1.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.1.0-experimental-preview.md)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-SPP defines a machine-readable exchange for that interaction:
-
-1. The **place defines requirements** for a space.
-2. The **machine demonstrates conformance** using an appropriate proof mechanism.
-3. SPP establishes a **spatially scoped operating profile**.
-4. When requirements change, sufficient evidence can be reused and only unresolved guarantees need requalification.
-
-The core question is:
+## The core question
 
 > May Actor X perform Action Y in Space Z under Context C?
 
-SPP is developed under the **PlaceAuth** project, an effort to create open interoperability infrastructure between autonomous systems and physical environments. PlaceAuth is the umbrella project; SPP is the protocol and specification family. PlaceAuth is not a formal standards body.
+SPP gives a place a machine-readable way to publish requirements and gives an autonomous system a vendor-neutral way to demonstrate conformance. The result is a spatially scoped operating profile that can be evaluated again when the system enters a different space.
+
+PlaceAuth is the umbrella project; SPP is the protocol and specification family. PlaceAuth is not a formal standards body.
+
+## Example: the place changes
+
+The same robot application moves from a lobby into a patient wing. The destination publishes stricter requirements; sufficient movement evidence is reused, while new or unresolved guarantees are tested before the profile is updated.
+
+```text
+Same robot + new space
+        │
+        ├─ reuse sufficient movement evidence
+        ├─ test new human-separation guarantee
+        ├─ test new sensing and data restrictions
+        └─ issue an updated ADMITTED / DEGRADED / DENIED profile
+```
+
+```yaml
+Lobby:
+  movement.max_speed: <= 0.8
+
+Patient Wing:
+  movement.max_speed: <= 0.8
+  human_separation: >= 1.2
+  sensing.facial_recognition: prohibited
+  data.video_retention: = 0
+```
+
+The protocol lifecycle is:
+
+```text
+Place requirements → Conformance plan → Evidence → Admission profile → Spatial transition
+```
+
+For the technical overview, read the [white paper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md).
+
+## Where SPP fits
+
+SPP is a place-centered decision and evidence contract. It complements, rather than replaces:
+
+- authorization and identity systems, which establish who an actor is and what it may request;
+- geofencing and navigation, which constrain where a system can travel;
+- policy engines such as OPA/Rego, which can evaluate a policy decision;
+- evidence and attestation systems, which provide assurance about a capability or test result;
+- ROS 2, Nav2, and Open-RMF, which integrate robot behavior and facility resources;
+- fleet managers and building-automation systems, which operate deployed robots and infrastructure.
+
+SPP connects these surfaces around a physical place and a specific action under context. It is not itself an access-control product, attestation service, navigation stack, fleet manager, or building-automation system.
 
 ## What SPP is
 
@@ -28,7 +71,6 @@ SPP is developed under the **PlaceAuth** project, an effort to create open inter
 ## What SPP is not
 
 - Not merely a robot-permissions product or a geofencing service.
-- Not an access-control company, attestation product, or identity system.
 - Not an adopted industry standard.
 - Not a substitute for safety controls, hardware guarantees, enforcement, or trusted identity.
 - Not production-ready security infrastructure.
@@ -106,41 +148,9 @@ python demo/admission/run_demo.py d  # spatial transition and requalification
 
 Scenario D demonstrates the central interoperability point: the robot application remains unchanged while the destination place supplies different requirements. Existing sufficient evidence is reused and only unresolved guarantees are tested again. See [the admission demo guide](demo/admission/README.md).
 
-## Money-shot example: the place changes
+## Security and status
 
-The same robot can arrive at two spaces with different requirements:
-
-```yaml
-Lobby:
-  movement.max_speed: <= 0.8
-
-Patient Wing:
-  movement.max_speed: <= 0.8
-  human_separation: >= 1.2
-  sensing.facial_recognition: prohibited
-  data.video_retention: = 0
-```
-
-On transition, SPP classifies:
-
-```text
-movement.max_speed          -> REUSED
-human_separation            -> NEW
-sensing.facial_recognition  -> NEW
-data.video_retention        -> NEW
-```
-
-The reduced plan runs only the three unresolved tests. If they pass, the destination profile is `ADMITTED`. The robot program did not change; the place requirements did.
-
-## Security and trust boundaries
-
-SPP does **not** itself force a malicious autonomous system to obey an operating profile. Trust depends on evidence assurance, the enforcement point, robot/runtime integrity, site infrastructure, hardware guarantees, and any attestation or independent observation mechanisms used by a deployment.
-
-The reference implementation is intentionally limited. It does not standardize production identity, PKI, discovery, signatures, distributed replay protection, physical enforcement, or certification. Conditional decisions must remain blocked until their requirements are satisfied, and safety systems remain independently authoritative. Read [security considerations](spec/security.md) and the [threat model](spec/threat-model.md) before connecting SPP to physical systems.
-
-## Status
-
-> **Status: Experimental Preview**
+> **Status: SPP 0.1.0 Experimental Preview**
 
 The current reference implementation demonstrates:
 
@@ -162,6 +172,8 @@ Not yet production-ready:
 - physical enforcement guarantees; and
 - broad vendor interoperability testing.
 
+SPP does not itself force a malicious autonomous system to obey an operating profile. Trust depends on evidence assurance, the enforcement point, robot/runtime integrity, site infrastructure, hardware guarantees, and any attestation or independent observation mechanisms used by a deployment. Conditional decisions must remain blocked until their requirements are satisfied, and safety systems remain independently authoritative. Read [security considerations](spec/security.md) and the [threat model](spec/threat-model.md) before connecting SPP to physical systems.
+
 SPP 0.1.0 is a draft reference implementation for pre-standardization experimentation. Certain technologies described in this project are patent pending.
 
 ## Repository map
@@ -175,14 +187,14 @@ reference/ros2-enforcer/   ROS 2 enforcement-point stub
 reference/admission/       experimental conformance/admission implementation
 demo/clinic/               CLI, browser, and policy A/B demonstrations
 demo/admission/            evidence-based admission scenarios A-D
+docs/                      specifications, guides, white paper, and release notes
+.github/                   issue templates and test workflow
 tests/                     schema, API, policy, and admission tests
 ```
 
-## Documentation / White Paper
+## Documentation
 
-Read [From Permission to Admission](docs/whitepaper.md), the public technical
-white paper describing the PlaceAuth project and the SPP 0.1.0 Experimental
-Preview.
+Use the [documentation index](docs/README.md) for the core specification, evidence and admission model, schemas, security and threat model, demos, roadmap, release notes, and white paper.
 
 ## Contributing
 

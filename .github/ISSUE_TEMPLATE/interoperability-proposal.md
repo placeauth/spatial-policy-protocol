@@ -2,7 +2,6 @@
 name: Interoperability proposal
 about: Propose an adapter, fixture, or cross-implementation test
 title: "[Interop] "
-labels: interoperability, discussion
 ---
 
 ## Proposal

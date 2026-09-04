@@ -1,0 +1,25 @@
+# Documentation
+
+This index collects the public specifications, implementation notes, examples, and project guidance for PlaceAuth and the Spatial Policy Protocol (SPP).
+
+## Protocol and implementation
+
+- [SPP 0.1 core specification](../spec/SPP-0.1.md)
+- [Evidence-based spatial admission](../spec/evidence-based-admission.md)
+- [JSON Schemas](../schema/)
+- [Security considerations](../spec/security.md)
+- [Threat model](../spec/threat-model.md)
+
+## Examples and demos
+
+- [Policy examples](../examples/)
+- [Clinic demo](../demo/clinic/README.md)
+- [Evidence-based admission demo](../demo/admission/README.md)
+
+## Project guidance
+
+- [Roadmap](../ROADMAP.md)
+- [Release notes](releases/SPP-0.1.0-experimental-preview.md)
+- [White paper — From Permission to Admission](whitepaper.md)
+- [Contributing guide](../CONTRIBUTING.md)
+- [Security reporting](../SECURITY.md)
