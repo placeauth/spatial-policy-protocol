@@ -21,6 +21,7 @@ This index collects the public specifications, implementation notes, examples, a
 
 - [Roadmap](../ROADMAP.md)
 - [Release notes](releases/SPP-0.1.0-experimental-preview.md)
-- [White paper — From Permission to Admission](whitepaper.md)
+- [Markdown White Paper — From Permission to Admission](whitepaper.md)
+- [PDF White Paper — From Permission to Admission](whitepaper/PlaceAuth-SPP-White-Paper.pdf)
 - [Contributing guide](../CONTRIBUTING.md)
 - [Security reporting](../SECURITY.md)

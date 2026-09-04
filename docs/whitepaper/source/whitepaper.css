@@ -1,0 +1,28 @@
+@page { size: Letter; margin: 0.76in 0.68in 0.72in; }
+* { box-sizing: border-box; }
+body { background: #fff; color: #182838; font-family: Arial, Helvetica, sans-serif; font-size: 10.4pt; line-height: 1.58; margin: 0; }
+a { border-bottom: 1px solid #a8c0d0; color: #234f75; text-decoration: none; }
+strong { color: #102d47; } code { color: #233f56; font-family: "Courier New", Courier, monospace; font-size: .88em; }
+.title-page, .publication-page, .toc-page { min-height: 9.45in; page-break-after: always; position: relative; }
+.title-page { padding: .22in .18in .24in; } .title-rule { background: #466985; height: 5px; margin-bottom: .42in; width: 1.2in; }
+.brand { color: #102d47; font-size: 26pt; font-weight: 700; letter-spacing: -.8px; } .tagline { color: #607385; font-size: 10pt; letter-spacing: .2px; margin-top: 2px; }
+.title-content { margin-top: 1.4in; max-width: 6.4in; } .kicker { color: #466985; font-size: 9pt; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
+.title-page h1 { color: #102d47; font-size: 39pt; letter-spacing: -1.4px; line-height: 1.02; margin: 14px 0 18px; }
+.subtitle { color: #40596d; font-family: Georgia, "Times New Roman", serif; font-size: 16pt; line-height: 1.38; max-width: 5.8in; }
+.title-meta { border-left: 3px solid #466985; color: #40596d; font-size: 10pt; line-height: 1.75; margin-top: 1.05in; padding-left: 14px; }
+.patent { bottom: .12in; color: #687985; font-size: 8pt; left: .18in; position: absolute; }
+.publication-page, .toc-page { padding: .46in .3in; } .publication-page h1, .toc-page h1 { color: #102d47; font-size: 28pt; letter-spacing: -.7px; margin: 10px 0 28px; }
+.publication-table { border-collapse: collapse; width: 100%; } .publication-table th, .publication-table td { border-bottom: 1px solid #d6e0e6; padding: 10px 4px; text-align: left; vertical-align: top; }
+.publication-table th { color: #40596d; font-size: 9pt; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; width: 34%; }
+.status-note, .callout { background: #edf3f6; border-left: 4px solid #466985; color: #29475f; margin: 28px 0 0; padding: 15px 18px; } .status-note { font-size: 10pt; }
+.toc-page ol { column-gap: .55in; columns: 2; list-style: none; margin: 0; padding: 0; } .toc-page li { border-bottom: 1px solid #d6e0e6; break-inside: avoid; font-size: 10pt; margin: 0; padding: 9px 0; } .toc-page a { border: 0; color: #263f53; }
+.paper { padding-top: .08in; } .paper section { margin: 0 0 .34in; } h2 { break-after: avoid-page; color: #102d47; font-size: 19pt; letter-spacing: -.3px; line-height: 1.18; margin: .46in 0 .18in; } h2 span { color: #466985; display: inline-block; font-size: 10pt; letter-spacing: 1px; margin-right: 10px; vertical-align: 3px; }
+#section-14-reference-implementation { break-before: page; }
+p { margin: 0 0 .16in; orphans: 3; widows: 3; } ul { margin: .06in 0 .2in .23in; padding-left: .17in; } li { margin-bottom: .08in; }
+blockquote { border-left: 3px solid #90aabb; color: #29475f; font-family: Georgia, "Times New Roman", serif; font-size: 13pt; line-height: 1.4; margin: .24in 0; padding: .06in .22in; }
+.code-block { background: #f3f6f8; border: 1px solid #d5e0e6; break-inside: avoid; color: #233f56; font-size: 8.3pt; line-height: 1.42; margin: .22in 0; overflow-wrap: anywhere; padding: 13px 15px; white-space: pre-wrap; }
+.diagram, .concept-table { break-inside: avoid; margin: .26in 0; } .diagram { background: #f7fafb; border: 1px solid #cbd9e1; padding: 17px 18px 15px; text-align: center; } .diagram figcaption, .concept-table caption { caption-side: top; color: #40596d; font-size: 8.5pt; font-weight: 700; letter-spacing: .5px; margin-bottom: 11px; text-align: left; text-transform: uppercase; }
+.diagram-box { background: #fff; border: 1.3px solid #466985; color: #19364f; display: inline-block; font-size: 9pt; font-weight: 700; line-height: 1.3; max-width: 4.7in; min-width: 2.45in; padding: 9px 14px; } .diagram-box.wide { min-width: 4.55in; } .diagram-arrow { height: 17px; margin: 2px auto; position: relative; width: 16px; } .diagram-arrow::before { background: #466985; content: ""; height: 11px; left: 7px; position: absolute; top: 0; width: 1px; } .diagram-arrow::after { border-bottom: 1px solid #466985; border-right: 1px solid #466985; content: ""; height: 5px; left: 4px; position: absolute; top: 6px; transform: rotate(45deg); width: 5px; }
+.transition-inputs, .transition-output { align-items: center; display: flex; gap: 9px; justify-content: center; } .transition-inputs .diagram-box, .transition-output .diagram-box { flex: 1; min-width: 0; } .diagram-plus { color: #466985; font-size: 17pt; font-weight: 700; }
+.concept-table { border-collapse: collapse; width: 100%; } .concept-table th { background: #27445c; color: #fff; font-size: 9pt; letter-spacing: .3px; text-align: left; } .concept-table td, .concept-table th { border: 1px solid #c9d7df; padding: 9px 11px; vertical-align: top; } .concept-table td:first-child { color: #19364f; width: 28%; }
+.callout { break-inside: avoid; font-family: Georgia, "Times New Roman", serif; font-size: 13pt; line-height: 1.4; } .callout.caution { background: #f4f5f4; border-left-color: #677785; color: #223847; }
