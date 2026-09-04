@@ -7,7 +7,7 @@ An experimental, open interoperability protocol for establishing how autonomous 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-[Quickstart](docs/quickstart.md) · [White Paper](docs/whitepaper.md) · [PDF White Paper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Release notes](docs/releases/SPP-0.1.0-experimental-preview.md)
+[Quickstart](docs/quickstart.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Release notes](docs/releases/SPP-0.1.0-experimental-preview.md)
 
 ## The core question
 
@@ -47,7 +47,7 @@ The protocol lifecycle is:
 Place requirements → Conformance plan → Evidence → Admission profile → Spatial transition
 ```
 
-For the technical overview, read the [white paper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md).
+For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md).
 
 ## Where SPP fits
 
@@ -189,14 +189,14 @@ reference/ros2-enforcer/   ROS 2 enforcement-point stub
 reference/admission/       experimental conformance/admission implementation
 demo/clinic/               CLI, browser, and policy A/B demonstrations
 demo/admission/            evidence-based admission scenarios A-D
-docs/                      specifications, guides, white paper, and release notes
+docs/                      specifications, guides, whitepaper, and release notes
 .github/                   issue templates and test workflow
 tests/                     schema, API, policy, and admission tests
 ```
 
 ## Documentation
 
-Use the [documentation index](docs/README.md) for the core specification, evidence and admission model, schemas, security and threat model, demos, roadmap, release notes, and white paper.
+Use the [documentation index](docs/README.md) for the core specification, evidence and admission model, schemas, security and threat model, demos, roadmap, release notes, and whitepaper.
 
 ## Contributing
 

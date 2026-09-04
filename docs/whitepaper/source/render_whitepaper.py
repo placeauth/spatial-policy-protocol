@@ -1,4 +1,4 @@
-"""Render the canonical PlaceAuth white paper as a print-ready PDF.
+"""Render the canonical PlaceAuth whitepaper as a print-ready PDF.
 
 The Markdown paper remains the source of truth. This renderer creates a styled
 HTML intermediate, prints it through locally installed Chrome/Chromium, then
@@ -199,7 +199,7 @@ def render_html(markdown: str) -> str:
 <meta name="description" content="An Open Interoperability Model for Autonomous Systems in Physical Environments">
 <title>From Permission to Admission | PlaceAuth</title><style>{css}</style></head><body><main>
 <section class="title-page"><div class="title-rule"></div><div class="brand">PlaceAuth</div><div class="tagline">A common language for machines and places.</div>
-<div class="title-content"><div class="kicker">White paper</div><h1>From Permission<br>to Admission</h1><p class="subtitle">An Open Interoperability Model for Autonomous Systems in Physical Environments</p></div>
+<div class="title-content"><div class="kicker">Whitepaper</div><h1>From Permission<br>to Admission</h1><p class="subtitle">An Open Interoperability Model for Autonomous Systems in Physical Environments</p></div>
 <div class="author-attribution"><div class="author-name">Braden Russell Glasgow</div><div>Project Lead, PlaceAuth</div></div>
 <div class="title-meta"><div>Revision 0.1&nbsp;&nbsp;|&nbsp;&nbsp;September 2026</div><div>SPP 0.1.0 Experimental Preview</div><div>Experimental / Pre-standardization</div><div>placeauth.org</div></div>
 <p class="patent">Certain technologies described by PlaceAuth are patent pending.</p></section>
@@ -243,7 +243,7 @@ def add_pdf_finish(chrome_pdf: Path, output_pdf: Path, bookmarks: list[tuple[str
         if page_number is None:
             raise RuntimeError(f"Could not create a bookmark for {label}.")
         writer.add_outline_item(label, page_number)
-    writer.add_metadata({"/Title": "From Permission to Admission", "/Author": "Braden Russell Glasgow", "/Subject": "Spatial Policy Protocol", "/Keywords": "PlaceAuth, SPP, robotics, autonomous systems, interoperability, spatial policy, conformance, evidence, admission", "/Creator": "PlaceAuth white paper renderer"})
+    writer.add_metadata({"/Title": "From Permission to Admission", "/Author": "Braden Russell Glasgow", "/Subject": "Spatial Policy Protocol", "/Keywords": "PlaceAuth, SPP, robotics, autonomous systems, interoperability, spatial policy, conformance, evidence, admission", "/Creator": "PlaceAuth whitepaper renderer"})
     with output_pdf.open("wb") as destination:
         writer.write(destination)
     final = PdfReader(output_pdf)

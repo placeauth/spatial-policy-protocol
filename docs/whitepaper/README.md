@@ -1,6 +1,6 @@
 # PDF edition
 
-`PlaceAuth-SPP-White-Paper.pdf` is the print-ready edition of the canonical Markdown white paper at [`../whitepaper.md`](../whitepaper.md). The Markdown document remains the content source of truth.
+`PlaceAuth-SPP-White-Paper.pdf` is the print-ready edition of the canonical Markdown whitepaper at [`../whitepaper.md`](../whitepaper.md). The Markdown document remains the content source of truth.
 
 ## Regenerate
 
@@ -16,4 +16,4 @@ The renderer needs Python 3.11 or newer, Google Chrome or Chromium, and the `pyp
 
 - `source/render_whitepaper.py` — Markdown-to-HTML and PDF rendering pipeline.
 - `source/whitepaper.css` — print layout, typography, diagrams, tables, and callouts.
-- `../whitepaper.md` — canonical white-paper content.
+- `../whitepaper.md` — canonical whitepaper content.

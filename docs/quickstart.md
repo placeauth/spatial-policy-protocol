@@ -78,7 +78,7 @@ For a transition, SPP compares existing evidence with the destination requiremen
 ## Next steps
 
 - [Repository overview](../README.md)
-- [White paper — From Permission to Admission](whitepaper.md)
+- [Whitepaper — From Permission to Admission](whitepaper.md)
 - [SPP 0.1 core specification](../spec/SPP-0.1.md)
 - [Evidence-based spatial admission specification](../spec/evidence-based-admission.md)
 - [Admission demo details](../demo/admission/README.md)
