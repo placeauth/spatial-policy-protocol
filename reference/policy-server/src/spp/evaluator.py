@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import argparse
 import json
 from datetime import datetime, timezone
@@ -13,7 +14,7 @@ from referencing import Registry, Resource
 
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-SCHEMA_DIR = REPO_ROOT / "schema"
+SCHEMA_DIR = Path(os.getenv("SPP_SCHEMA_DIR", REPO_ROOT / "schema"))
 
 
 class PolicyError(ValueError):
