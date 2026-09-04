@@ -14,6 +14,8 @@ September 2026
 **Protocol:** Spatial Policy Protocol (SPP)  
 **Current release:** SPP 0.1.0 Experimental Preview  
 **Repository:** [https://github.com/placeauth/spatial-policy-protocol](https://github.com/placeauth/spatial-policy-protocol)  
+**Author:** Braden Russell Glasgow  
+**Role:** Project Lead, PlaceAuth  
 **Security:** security@placeauth.org  
 **License:** Apache-2.0
 
