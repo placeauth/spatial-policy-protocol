@@ -7,6 +7,8 @@ An experimental, open interoperability protocol for establishing how autonomous 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
+[Quickstart](docs/quickstart.md) · [White Paper](docs/whitepaper.md) · [Specification](spec/SPP-0.1.md) · [Release notes](docs/releases/SPP-0.1.0-experimental-preview.md)
+
 ## The core question
 
 > May Actor X perform Action Y in Space Z under Context C?
