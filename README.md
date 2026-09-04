@@ -178,6 +178,12 @@ demo/admission/            evidence-based admission scenarios A-D
 tests/                     schema, API, policy, and admission tests
 ```
 
+## Documentation / White Paper
+
+Read [From Permission to Admission](docs/whitepaper.md), the public technical
+white paper describing the PlaceAuth project and the SPP 0.1.0 Experimental
+Preview.
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and [SECURITY.md](SECURITY.md). Protocol feedback, reproducible implementation bugs, and interoperability proposals are welcome. All contributions should include focused tests or examples where practical.
