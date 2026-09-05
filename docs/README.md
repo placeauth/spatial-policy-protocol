@@ -24,7 +24,8 @@ This index collects the public specifications, implementation notes, examples, a
 
 - [Roadmap](../ROADMAP.md)
 - [Current main changes](../CHANGELOG.md)
-- [Release notes](releases/SPP-0.1.0-experimental-preview.md)
+- [Prepared SPP 0.2 release notes (not yet released)](releases/SPP-0.2.0-experimental-preview.md)
+- [Latest published release notes — SPP 0.1](releases/SPP-0.1.0-experimental-preview.md)
 - [Markdown Whitepaper — From Permission to Admission](whitepaper.md)
 - [PDF Whitepaper — From Permission to Admission](whitepaper/PlaceAuth-SPP-White-Paper.pdf)
 - [Contributing guide](../CONTRIBUTING.md)

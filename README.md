@@ -2,12 +2,12 @@
 
 An experimental, open interoperability protocol for establishing how autonomous systems may operate in physical environments.
 
-[![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](docs/releases/SPP-0.1.0-experimental-preview.md)
-[![SPP 0.1.0 Experimental Preview](https://img.shields.io/badge/SPP-0.1.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.1.0-experimental-preview.md)
+[![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](CHANGELOG.md)
+[![SPP 0.2.0 release preparation](https://img.shields.io/badge/SPP-0.2.0%20release%20preparation-blue.svg)](docs/releases/SPP-0.2.0-experimental-preview.md)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-[Quickstart](docs/quickstart.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Current main changes](CHANGELOG.md) · [Release notes](docs/releases/SPP-0.1.0-experimental-preview.md)
+[Quickstart](docs/quickstart.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Prepared 0.2 notes](docs/releases/SPP-0.2.0-experimental-preview.md) · [Latest release: 0.1](docs/releases/SPP-0.1.0-experimental-preview.md)
 
 ## The core question
 
@@ -47,7 +47,7 @@ The protocol lifecycle is:
 Place requirements → Conformance plan → Evidence → Admission profile → Spatial transition
 ```
 
-For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and the [current-main changelog](CHANGELOG.md). The [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md) document the existing public tag.
+For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and the [current-main changelog](CHANGELOG.md). The [prepared SPP 0.2 notes](docs/releases/SPP-0.2.0-experimental-preview.md) are not a published release; the [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md) document the latest public tag.
 
 ## Where SPP fits
 
@@ -162,7 +162,7 @@ python demo/requalification/run_demo.py
 The [evidence sufficiency guide](docs/evidence-sufficiency.md) covers integrity,
 freshness, scope and configuration checks, plus tamper and expiry demo variants.
 
-> **Status: SPP 0.1.0 Experimental Preview**
+> **Current main:** prepared for SPP 0.2.0 Experimental Preview. The `v0.2.0-experimental-preview` tag and GitHub release have not been created; SPP 0.1.0 Experimental Preview remains the latest published release.
 
 The current reference implementation demonstrates:
 
@@ -187,7 +187,7 @@ Not yet production-ready:
 
 SPP does not itself force a malicious autonomous system to obey an operating profile. Trust depends on evidence assurance, the enforcement point, robot/runtime integrity, site infrastructure, hardware guarantees, and any attestation or independent observation mechanisms used by a deployment. Conditional decisions must remain blocked until their requirements are satisfied, and safety systems remain independently authoritative. Read [security considerations](spec/security.md) and the [threat model](spec/threat-model.md) before connecting SPP to physical systems.
 
-SPP 0.1.0 is a draft reference implementation for pre-standardization experimentation. Certain technologies described in this project are patent pending.
+The SPP 0.1 protocol is implemented by an experimental reference implementation for pre-standardization experimentation. Certain technologies described in this project are patent pending.
 
 ## ROS 2 / Nav2 integration
 

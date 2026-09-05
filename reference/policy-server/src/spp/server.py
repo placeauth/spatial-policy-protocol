@@ -24,7 +24,7 @@ ENGINE = os.getenv("SPP_ENGINE", "local").lower()
 OPA_URL = os.getenv("SPP_OPA_URL", "http://localhost:8181")
 
 policy = load_policy(POLICY_PATH)
-app = FastAPI(title="PlaceAuth SPP 0.1 Reference Policy Server", version="0.1.0")
+app = FastAPI(title="PlaceAuth SPP 0.1 Reference Policy Server", version="0.2.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:8080", "http://127.0.0.1:8080"],

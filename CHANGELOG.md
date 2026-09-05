@@ -2,21 +2,13 @@
 
 ## Unreleased
 
-- Validated a live stock Nav2 Regulated Pure Pursuit controller changing command speed from 1.0 to 0.5 m/s through SPP profiles while one FollowPath goal remains active (Tier 3, fixed-pose fixture; no physical motion or safety claim).
+## 0.2.0 — Experimental Preview (prepared; not yet released)
 
-- Added a concise technical-review guide for external feedback and clarified the historical scope of the v0.1.0 release record.
-
-- Validated SPP-derived speed limits through real Humble ControllerServer to a pluginlib-loaded test controller's `setSpeedLimit()` boundary (Tier 2a); no stock-controller motion or physical enforcement claim.
-
-- Validated the existing Nav2 adapter using real ROS 2 Humble pub/sub (three runtime cases); added a separate binary-package ROS CI job. This proves message transport, not Nav2 controller consumption or physical stopping.
-
-- Replaced the ROS 2 intent-forwarding stub with an optional Nav2 `SpeedLimit` adapter and ROS-free AdmissionProfile mapping, focused tests and a three-profile demo. Physical stopping remains deployment-specific.
-
-- Added `admit_evidence_backed` to independently enforce source-evidence sufficiency, freshness, binding, assurance and coverage at admission time; retained trusted legacy `admit` for compatibility.
-- Added a planning-to-admission controller-change demo and adversarial boundary tests.
-
-- Added conservative source-evidence sufficiency assessment and reduced conformance planning with explicit reuse/retest reasons.
-- Added a four-space transition demo with tampering, expiry and controller-change variants, and adversarial reuse tests.
+- Added evidence-sufficiency assessment, provenance, freshness, and state-binding validation; strengthened selective requalification and admission-boundary revalidation, including explicit TOCTOU rejection.
+- Added the experimental ROS 2/Nav2 enforcement adapter and real runtime validation of `SpeedLimit` transport, ControllerServer-to-plugin-boundary delivery, and stock Nav2 Regulated Pure Pursuit motion behavior.
+- Demonstrated a speed-command change from 1.0 m/s to 0.5 m/s under the same active `FollowPath` goal using a fixed-pose runtime fixture.
+- Expanded the normal reference suite to 149 passing tests with 4 environment-dependent skips, plus 5 passing dedicated ROS runtime tests in the Humble validation environment.
+- Remains experimental and pre-standardization: this work makes no physical-robot safety claim, does not guarantee stopping, does not yet provide issuer authentication, and is not a production deployment certification.
 
 ## 0.1.0 — Experimental Preview
 
