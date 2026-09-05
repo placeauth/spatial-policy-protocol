@@ -12,7 +12,7 @@ SPP is an experimental protocol project. This roadmap describes validation work,
 ## Phase 2 — implementation validation
 
 - Add a second embodiment adapter.
-- Explore ROS 2/Nav2 integration.
+- Validate stock Nav2-controller behavior beyond the existing ControllerServer-to-controller-plugin boundary test.
 - Explore Open-RMF interoperability.
 - Define an attestation and evidence-provider interface.
 - Build an interoperability test suite.

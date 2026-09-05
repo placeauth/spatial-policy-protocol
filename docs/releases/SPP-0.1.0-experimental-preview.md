@@ -1,5 +1,7 @@
 # SPP 0.1.0 Experimental Preview
 
+> **Historical release record.** This page describes the `v0.1.0-experimental-preview` tag. `main` has advanced with evidence-sufficiency assessment, admission-time revalidation and TOCTOU handling, plus experimental ROS 2/Nav2 adapter and runtime validation work. See the [Unreleased changelog](../../CHANGELOG.md) for current-main changes.
+
 ## Purpose
 
 This experimental preview presents the Spatial Policy Protocol (SPP) as an open interoperability layer between autonomous systems and physical environments. A place publishes machine-readable requirements, a machine demonstrates conformance, and the resulting evidence supports a spatially scoped operating profile.
@@ -35,7 +37,7 @@ Scenario D reuses the lobby movement guarantee and runs only the three unresolve
 
 ## Test status
 
-The reference environment reports **35 passed, 1 skipped, 0 failed** with the full pytest suite.
+At this release, the reference environment reported **35 passed, 1 skipped, 0 failed** with the full pytest suite.
 
 ## Limitations and security disclaimer
 

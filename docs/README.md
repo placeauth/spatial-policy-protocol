@@ -9,6 +9,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [Evidence-based spatial admission](../spec/evidence-based-admission.md)
 - [Evidence sufficiency and selective requalification](evidence-sufficiency.md)
 - [ROS 2 / Nav2 admission enforcement](../reference/ros2-enforcer/README.md)
+- [Technical review](technical-review.md)
 - [JSON Schemas](../schema/)
 - [Security considerations](../spec/security.md)
 - [Threat model](../spec/threat-model.md)
@@ -22,6 +23,7 @@ This index collects the public specifications, implementation notes, examples, a
 ## Project guidance
 
 - [Roadmap](../ROADMAP.md)
+- [Current main changes](../CHANGELOG.md)
 - [Release notes](releases/SPP-0.1.0-experimental-preview.md)
 - [Markdown Whitepaper — From Permission to Admission](whitepaper.md)
 - [PDF Whitepaper — From Permission to Admission](whitepaper/PlaceAuth-SPP-White-Paper.pdf)

@@ -7,7 +7,7 @@ An experimental, open interoperability protocol for establishing how autonomous 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-[Quickstart](docs/quickstart.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Release notes](docs/releases/SPP-0.1.0-experimental-preview.md)
+[Quickstart](docs/quickstart.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Current main changes](CHANGELOG.md) · [Release notes](docs/releases/SPP-0.1.0-experimental-preview.md)
 
 ## The core question
 
@@ -47,7 +47,7 @@ The protocol lifecycle is:
 Place requirements → Conformance plan → Evidence → Admission profile → Spatial transition
 ```
 
-For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md).
+For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and the [current-main changelog](CHANGELOG.md). The [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md) document the existing public tag.
 
 ## Where SPP fits
 
@@ -169,6 +169,7 @@ The current reference implementation demonstrates:
 - machine-readable place requirements and hierarchical inheritance;
 - deterministic conformance planning and requirement-to-proof mapping;
 - evidence generation, binding, integrity, freshness, and replay checks;
+- admission-time evidence sufficiency and provenance revalidation, including TOCTOU rejection;
 - `ADMITTED`, `DEGRADED`, and `DENIED` admission profiles;
 - degraded operation with explicit restrictions;
 - essential-safety denial;
@@ -179,7 +180,7 @@ Not yet production-ready:
 
 - hardware attestation and certification infrastructure;
 - distributed replay protection;
-- production ROS 2/Nav2 or Open-RMF integration;
+- production-grade ROS 2/Nav2 or Open-RMF deployment integration;
 - discovery and production identity/PKI;
 - physical enforcement guarantees; and
 - broad vendor interoperability testing.
@@ -217,7 +218,7 @@ demo/clinic/               CLI, browser, and policy A/B demonstrations
 demo/admission/            evidence-based admission scenarios A-D
 docs/                      specifications, guides, whitepaper, and release notes
 .github/                   issue templates and test workflow
-tests/                     schema, API, policy, and admission tests
+tests/                     schema, API, policy, admission, and ROS runtime tests
 ```
 
 ## Documentation

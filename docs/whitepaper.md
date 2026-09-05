@@ -29,7 +29,7 @@ PlaceAuth is the umbrella project for an open interoperability effort in this ar
 
 SPP separates four concerns that are often coupled in deployments: place-defined requirements, machine conformance, evidence, and the operating profile that results. The place publishes requirements for a hierarchy of spaces. A machine, through an embodiment-appropriate adapter, maps those requirements to tests or other proof mechanisms. Evidence is bound to relevant machine, controller, policy, environment, and plan state, with freshness and assurance information. The admission layer then expresses an operating profile as `ADMITTED`, `DEGRADED`, or `DENIED`.
 
-The SPP 0.1.0 Experimental Preview is a reference implementation for technical review and interoperability experimentation. It includes machine-readable schemas, YAML examples, deterministic conformance and admission scenarios, an HTTP reference server with local and OPA/Rego evaluation, and a ROS 2 enforcement-point stub. These components demonstrate a coherent model; they do not constitute certification, production security infrastructure, or evidence of industry adoption.
+The SPP 0.1.0 Experimental Preview is a reference implementation for technical review and interoperability experimentation. It includes machine-readable schemas, YAML examples, deterministic conformance and admission scenarios, an HTTP reference server with local and OPA/Rego evaluation, and an experimental ROS 2/Nav2 speed-limit adapter with runtime and ControllerServer-to-plugin-boundary validation. These components demonstrate a coherent model; they do not constitute certification, production security infrastructure, or evidence of industry adoption.
 
 ## 2. Introduction
 
@@ -234,7 +234,7 @@ The layers are protocol surfaces, not necessarily separate network services. A d
 
 ## 14. Reference Implementation
 
-The SPP 0.1.0 Experimental Preview currently demonstrates:
+The current reference implementation demonstrates:
 
 - JSON Schemas for policy, request, and decision data;
 - YAML examples for home, hospital, warehouse, and hotel spaces;
@@ -247,10 +247,10 @@ The SPP 0.1.0 Experimental Preview currently demonstrates:
 - spatial transition deltas and selective requalification;
 - local policy evaluation and OPA/Rego integration;
 - a FastAPI reference server exposing health and decision endpoints;
-- a ROS 2 enforcement-point stub; and
+- an experimental ROS 2/Nav2 speed-limit adapter with runtime and ControllerServer-to-plugin-boundary validation; and
 - deterministic clinic and admission demonstrations.
 
-The full reference test suite reports **35 passed, 1 skipped, 0 failed** in the documented environment. The four admission scenarios are:
+The dependency-free reference test suite reports **149 passed, 3 skipped, 0 failed** in the documented environment. The four admission scenarios are:
 
 ```text
 A  full conformance              -> ADMITTED
@@ -259,7 +259,7 @@ C  essential safety failure      -> DENIED
 D  transition and requalification-> updated profile
 ```
 
-The count describes the state of the reference test suite. It is not a measure of adoption, certification, interoperability across independent vendors, or production readiness. The ROS 2 component is an enforcement integration stub, and the OPA/Rego path is a reference adapter. Deployments must supply their own identity, transport, enforcement, safety, availability, and trust mechanisms.
+The count describes the state of the reference test suite. It is not a measure of adoption, certification, interoperability across independent vendors, or production readiness. The ROS 2 component is an experimental speed-limit adapter; its runtime and ControllerServer-to-plugin boundary validation do not demonstrate stock-controller motion or physical enforcement. The OPA/Rego path is a reference adapter. Deployments must supply their own identity, transport, enforcement, safety, availability, and trust mechanisms.
 
 ## 15. Security and Trust Model
 
@@ -289,7 +289,7 @@ SPP is intended to complement existing systems rather than replace them. A deplo
 
 SPP contributes the place-facing vocabulary and exchange: requirements, applicable spaces, decision semantics, proof references, evidence bindings, and operating profiles. A ROS 2 node or fleet adapter can act as an enforcement point. An OPA/Rego policy engine can evaluate a policy representation. A building system can remain authoritative for an actuator. A localization service can provide context that the decision point treats as trusted only to the degree the deployment supports.
 
-This composability is deliberate. SPP does not assume one middleware, transport, robot form, policy engine, or building vendor. Nor does it claim that an integration exists merely because a system is named as compatible. The current ROS 2 integration is a stub, and the preview contains no formal affiliation or endorsement by the projects mentioned here.
+This composability is deliberate. SPP does not assume one middleware, transport, robot form, policy engine, or building vendor. Nor does it claim that an integration exists merely because a system is named as compatible. The current ROS 2 integration is an experimental speed-limit adapter with runtime and ControllerServer-to-plugin-boundary validation; it does not demonstrate stock-controller motion or physical enforcement. The preview contains no formal affiliation or endorsement by the projects mentioned here.
 
 ## 17. Open Questions
 
@@ -308,9 +308,9 @@ These questions are intentionally open. The preview provides a concrete vocabula
 
 ## 18. Current Status
 
-SPP 0.1.0 is an **Experimental Preview** developed under PlaceAuth. It is available in a public repository under the Apache-2.0 license and is positioned for pre-standardization technical review. The repository includes specifications, schemas, examples, reference services, integration stubs, demos, tests, security guidance, and release notes.
+SPP 0.1.0 is an **Experimental Preview** developed under PlaceAuth. It is available in a public repository under the Apache-2.0 license and is positioned for pre-standardization technical review. The repository includes specifications, schemas, examples, reference services, an experimental runtime enforcement adapter, demos, tests, security guidance, and release notes.
 
-The preview is usable as a reference and experimentation surface, but it is not production-ready security infrastructure. In particular, it does not provide production identity or PKI, distributed replay protection, hardware attestation, certification, production ROS 2/Nav2 or Open-RMF integration, physical enforcement guarantees, discovery, or broad vendor interoperability testing.
+The preview is usable as a reference and experimentation surface, but it is not production-ready security infrastructure. In particular, it does not provide production identity or PKI, distributed replay protection, hardware attestation, certification, production-grade ROS 2/Nav2 or Open-RMF deployment integration, physical enforcement guarantees, discovery, or broad vendor interoperability testing.
 
 Technical feedback is welcome when it is specific and reproducible: a schema ambiguity, an evaluation discrepancy, a security concern, an interoperability proposal, or a failing test is more useful than an assumption that the preview already represents a finished standard.
 
