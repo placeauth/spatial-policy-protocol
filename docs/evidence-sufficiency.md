@@ -11,6 +11,7 @@ python demo/requalification/run_demo.py
 python demo/requalification/run_demo.py --scenario tamper
 python demo/requalification/run_demo.py --scenario stale
 python demo/requalification/run_demo.py --scenario controller-change
+python demo/requalification/run_demo.py --scenario toctou
 python demo/requalification/run_demo.py --json
 ```
 
@@ -29,7 +30,8 @@ PlaceRequirementSet, ConformancePlan and EvidenceBundle. Supply records from
 your trusted local test runner, in preferred selection order. Do not accept
 arbitrary remote records as authenticated evidence: SHA-256 is not a signature.
 
-`assess_sufficiency(destination, robot, records, *, now=None)` returns one
+`assess_sufficiency(destination, robot, records, *, now=None,
+required_assurance_level="E2")` returns one
 `Sufficiency(requirement_id, sufficient, reason, evidence_id)` per requirement,
 in destination order. The first sufficient record wins. If none is sufficient,
 the result explains a relevant rejection (or `missing_evidence`). A record with
@@ -39,7 +41,8 @@ Explicit `now` must be timezone-aware and supports reproducible clock tests.
 `derive_requalification_plan(destination, robot, records, *, challenge=None,
 now=None)` returns `(plan, assessments)`. Execute the selected tests with
 `execute_plan`, collect a new bundle with `build_evidence`, and evaluate through
-`admit` with the deployment's ReplayRegistry. Unknown mappings remain unresolved
+`admit_evidence_backed` with original source records and the deployment's
+ReplayRegistry. Unknown mappings remain unresolved
 with no invented test. The existing admission evaluator denies unresolved
 requirements without a configured degraded restriction.
 
@@ -72,20 +75,84 @@ Retain the originals across transitions. A bundle whose guarantee was only
 reused has no direct test for that guarantee and cannot refresh its expiry.
 The original can still support another transition until its own expiry.
 
+## Admission boundary
+
+Planning determines which evidence appears reusable. Admission independently
+verifies that reused evidence is still sufficient:
+
+```python
+profile = admit_evidence_backed(
+    current_requirements, plan, fresh_evidence, current_robot,
+    source_records=original_records, replay_registry=registry,
+)
+```
+
+`admit_evidence_backed` accepts the existing objects and an optional list of
+`EvidenceRecord` originals. Omitting records cannot authorize planned reuse.
+It snapshots the input data, reads admission time (or a trusted `now` override),
+and validates both fresh and historical evidence. It calls the same record
+validator and `assess_sufficiency`; it never accepts prior assessment verdicts
+or guarantee dictionaries in lieu of source records.
+
+The current plan must be bound to the actual admission-time requirement set.
+Any policy change, even relaxation, requires a new current plan and fresh
+challenge/bundle. Original evidence may still be reused under the updated
+plan if it proves the relaxed requirement. A recomputed plan that falsely
+claims weaker evidence proves a stricter bound is rejected by sufficiency.
+
+The boundary also checks exact coverage: reused IDs and unresolved IDs must
+partition the destination requirements; selected tests must be unresolved;
+test and reuse sets cannot overlap; fresh results must exactly cover selected
+tests. Missing evidence, inconsistent coverage, invalid provenance or failed
+validation produces DENIED with no partial guarantees. Essential failures
+cannot be downgraded using a degraded restriction. Non-essential fresh failures
+retain the existing DEGRADED behavior with explicit restrictions.
+
+Reused evidence must satisfy at least E2, its source plan's assurance floor,
+and the destination plan's assurance floor. Existing reason codes are reused:
+`missing_evidence`, `stale_evidence`, `evidence_digest_mismatch`,
+`plan_digest_mismatch`, `policy_digest_mismatch`, `evidence_binding_mismatch`,
+`scope_mismatch`, `insufficient_proven_bound`, `insufficient_assurance`,
+`result_coverage_mismatch`, and `malformed_source_record`, among others.
+Rejected requirement IDs are available in `AdmissionProfile.unresolved` when
+the failure can be assigned to specific guarantees.
+
+In `--scenario toctou`, the corridor planner accepts the lobby proof. The
+controller then changes. Fresh destination evidence reflects the current
+controller, but admission rejects the original proof with
+`evidence_binding_mismatch`, returning DENIED and stopping at the corridor.
+
 ## Boundaries and compatibility
 
 Existing `derive_plan(..., proven_guarantees=...)` remains a low-level trusted
-caller API. It does not perform these checks. Existing A-D demos, schemas and
-Core evaluation retain their behavior. The new helper is a local planner, not
-an authorization endpoint or a replacement for `admit`.
+caller API. It does not perform these checks. Similarly, `admit` is the trusted
+legacy entry point, retained for existing callers and A-D demos. It must not
+serve as a provenance-enforced endpoint. Migrate evidence-backed integrations
+to `admit_evidence_backed`; the requalification demo now uses it for every
+boundary. Schemas and Core evaluation retain their behavior. `build_evidence`
+and legacy `admit` accept optional keyword-only `now` for deterministic testing;
+existing positional calls are unchanged.
 
-Assess and execute within a trusted synchronous boundary. If state, time or
-source evidence changes between planning and action, assess again. The helper
-does not extend the admission profile with provenance or expiry, consume replay
-nonces, authenticate the issuer, verify hardware, or enforce physical behavior.
-Do not persist a plan as an indefinitely valid authorization. Replay protection
-remains at `admit`; historical proof reuse is not a second admission using the
-old challenge. Current source checks use the four existing reference mappings.
+Admission evaluates a snapshot of current state and time. The service must
+provide authenticated current requirements, robot state and trusted time, and
+serialize admission with relevant runtime state updates. Changes after profile
+issuance require another evaluation; a returned profile is not an indefinitely
+valid authorization. No profile schema or external locking protocol is added.
+
+The enforced entry point delegates to the existing replay registry only after
+validation. Invalid reuse does not consume the destination nonce. Accepted
+nonces remain single-use, including across legacy/enforced callers sharing the
+registry. Historical proof reuse does not claim the original source challenge
+again. Registry persistence, concurrency and distribution remain deployment
+concerns. Current source checks use the four existing reference mappings.
+
+This is structural provenance and sufficiency, not issuer authentication.
+A malicious issuer can fabricate a passing result and recompute SHA-256.
+`AdmissionProfile` remains a constructible Python dataclass: downstream systems
+must trust the service that issued it, not arbitrary profile dictionaries or
+the mere presence of a status field. The enforced entry point is not exposed as
+a network endpoint. Keep records and issuer channels authenticated; do not expose
+the legacy API or the `now` override as user-selectable security modes.
 
 Opaque manually supplied `policy_digest` identifiers are rejected for reuse:
 the evaluator requires a digest derived from the actual source requirement set.

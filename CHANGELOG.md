@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added `admit_evidence_backed` to independently enforce source-evidence sufficiency, freshness, binding, assurance and coverage at admission time; retained trusted legacy `admit` for compatibility.
+- Added a planning-to-admission controller-change demo and adversarial boundary tests.
+
 - Added conservative source-evidence sufficiency assessment and reduced conformance planning with explicit reuse/retest reasons.
 - Added a four-space transition demo with tampering, expiry and controller-change variants, and adversarial reuse tests.
 

@@ -17,6 +17,7 @@ __all__ = [
     "assess_sufficiency",
     "derive_requalification_plan",
     "admit",
+    "admit_evidence_backed",
     "ReplayRegistry",
     "build_evidence",
     "compute_requirement_delta",
@@ -27,3 +28,4 @@ __all__ = [
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
+from .boundary import admit_evidence_backed

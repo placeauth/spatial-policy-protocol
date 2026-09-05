@@ -64,7 +64,8 @@ def _entails(source: dict, target: dict) -> bool:
     return type(old) is type(new) and old == new
 
 
-def _record_error(record: EvidenceRecord, robot: RobotState, now: datetime) -> str | None:
+def _record_error(record: EvidenceRecord, robot: RobotState, now: datetime,
+                  required_assurance_level: str = "E2") -> str | None:
     req, plan, evidence = record.requirements, record.plan, record.evidence
     try:
         for document, schema in ((req, "place-requirement-set"),
@@ -106,7 +107,7 @@ def _record_error(record: EvidenceRecord, robot: RobotState, now: datetime) -> s
         if expires <= now:
             return "stale_evidence"
         levels = ["E0", "E1", "E2", "E3", "E4"]
-        if levels.index(evidence["evidence_assurance_level"]) < max(2, levels.index(plan["required_assurance_level"])):
+        if levels.index(evidence["evidence_assurance_level"]) < max(2, levels.index(plan["required_assurance_level"]), levels.index(required_assurance_level)):
             return "insufficient_assurance"
         requirements = {r["id"]: r for r in req["requirements"]}
         tests = {t["requirement_id"]: t for t in plan["selected_tests"]}
@@ -124,7 +125,8 @@ def _record_error(record: EvidenceRecord, robot: RobotState, now: datetime) -> s
 
 
 def assess_sufficiency(destination: dict[str, Any], robot: RobotState,
-                       records: list[EvidenceRecord], *, now: datetime | None = None) -> list[Sufficiency]:
+                       records: list[EvidenceRecord], *, now: datetime | None = None,
+                       required_assurance_level: str = "E2") -> list[Sufficiency]:
     """Return one ordered reuse/retest explanation per destination requirement.
 
     Invalid source evidence causes retesting, never a reused guarantee. An
@@ -137,7 +139,9 @@ def assess_sufficiency(destination: dict[str, Any], robot: RobotState,
     now = now or datetime.now(timezone.utc)
     if now.tzinfo is None:
         raise ValueError("now must be timezone-aware")
-    checked = [(record, _record_error(record, robot, now)) for record in records]
+    if required_assurance_level not in ("E0", "E1", "E2", "E3", "E4"):
+        raise ValueError("unknown assurance level")
+    checked = [(record, _record_error(record, robot, now, required_assurance_level)) for record in records]
     decisions = []
     for target in destination["requirements"]:
         rid = target["id"]

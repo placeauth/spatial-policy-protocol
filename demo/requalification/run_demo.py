@@ -12,8 +12,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / "reference/admission/src"), str(ROOT / "reference/policy-server/src")]
 
-from spp_admission import EvidenceRecord, ReplayRegistry, derive_requalification_plan
-from spp_admission.engine import admit, build_evidence, compute_requirement_delta, execute_plan, load_requirement_set
+from spp_admission import EvidenceRecord, ReplayRegistry, derive_requalification_plan, admit_evidence_backed
+from spp_admission.engine import build_evidence, compute_requirement_delta, execute_plan, load_requirement_set
 from spp_admission.models import RobotState
 
 
@@ -39,19 +39,23 @@ def run(scenario: str = "normal") -> list[dict]:
     trace = []
     for index, destination in enumerate([lobby, corridor, wing, room]):
         now = datetime.now(timezone.utc)
+        if scenario == "stale" and index >= 1:
+            now += timedelta(minutes=16)
         if index == 1:
             if scenario == "tamper":
                 history[0].evidence["test_results"][0]["passed"] = False
-            elif scenario == "stale":
-                # Advance the evaluator clock, rather than editing the bundle.
-                now += timedelta(minutes=16)
             elif scenario == "controller-change":
                 robot = replace(robot, controller_fingerprint="controller:2")
         plan, decisions = derive_requalification_plan(destination, robot, history,
                                                       challenge=f"nonce:boundary:{index}", now=now)
+        planning_controller = robot.controller_fingerprint
+        if scenario == "toctou" and index == 1:
+            # The planner already chose reuse. New evidence uses current state,
+            # isolating the stale source-record binding at the admission boundary.
+            robot = replace(robot, controller_fingerprint="controller:2")
         results = execute_plan(plan, robot, destination)
-        evidence = build_evidence(destination, plan, robot, results)
-        profile = admit(destination, plan, evidence, robot, registry)
+        evidence = build_evidence(destination, plan, robot, results, now=now)
+        profile = admit_evidence_backed(destination, plan, evidence, robot, history, registry, now=now)
         trace.append({
             "space": destination["space"],
             "delta": compute_requirement_delta(previous, destination),
@@ -60,6 +64,8 @@ def run(scenario: str = "normal") -> list[dict]:
             "tests": [r["requirement_id"] for r in results],
             "results": results, "status": profile.status,
             "restrictions": profile.restrictions, "reasons": profile.reason_codes,
+            "planning_controller": planning_controller,
+            "admission_controller": robot.controller_fingerprint,
         })
         # Records stay original. No copied guarantee gains a new test timestamp.
         history.append(EvidenceRecord(deepcopy(destination), plan, evidence))
@@ -71,7 +77,7 @@ def run(scenario: str = "normal") -> list[dict]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", choices=["normal", "tamper", "stale", "controller-change"], default="normal")
+    parser.add_argument("--scenario", choices=["normal", "tamper", "stale", "controller-change", "toctou"], default="normal")
     parser.add_argument("--json", action="store_true", help="Emit the actual trace for inspection")
     args = parser.parse_args()
     trace = run(args.scenario)
@@ -83,9 +89,13 @@ def main() -> None:
         for decision in step["assessment"]:
             action = "REUSE" if decision["sufficient"] else "TEST"
             print(f"  {action:5} {decision['requirement_id']:28} {decision['reason']}")
-        print(f"  Tests executed: {len(step['tests'])}; evidence reused: {len(step['reused'])}")
+        print(f"  Tests executed: {len(step['tests'])}; planned reuse: {len(step['reused'])}")
+        if step["planning_controller"] != step["admission_controller"]:
+            print(f"  Controller changed after planning: {step['planning_controller']} -> {step['admission_controller']}")
+        if step["reasons"]:
+            print(f"  Admission reasons: {', '.join(step['reasons'])}")
         print(f"  RESULT: {step['status']}")
-    print("\nMission stopped at restricted room. No physical runtime is connected.")
+    print(f"\nMission stopped at {trace[-1]['space']}. No physical runtime is connected.")
 
 
 if __name__ == "__main__":

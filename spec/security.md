@@ -77,3 +77,15 @@ permit. Attestation hardware may be unavailable, and a compromised adapter or
 dishonest self-report can still produce misleading evidence. Enforcement points
 and robot runtimes must independently enforce the resulting operating profile.
 SPP does not itself force a malicious autonomous system to comply.
+
+### Reference admission entry points
+
+Evidence-backed integrations should use `admit_evidence_backed`, which validates
+source provenance, current bindings, coverage, assurance and sufficiency again
+at admission time. `admit` is retained as a trusted legacy API and does not
+validate reused source records. Do not expose legacy selection to untrusted
+callers. See the [boundary and migration guidance](../docs/evidence-sufficiency.md#admission-boundary).
+
+The admission service must authenticate evidence issuers, current machine state,
+destination requirements and time. Hash consistency does not establish issuer
+identity. A caller-constructed AdmissionProfile is not proof of admission.

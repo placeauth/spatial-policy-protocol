@@ -140,8 +140,10 @@ def execute_plan(plan: dict[str, Any], robot: RobotState, requirement_set: dict[
 
 
 def build_evidence(
-    requirement_set: dict[str, Any], plan: dict[str, Any], robot: RobotState, results: list[dict[str, Any]]
+    requirement_set: dict[str, Any], plan: dict[str, Any], robot: RobotState, results: list[dict[str, Any]],
+    *, now: datetime | None = None,
 ) -> dict[str, Any]:
+    now = now or datetime.now(timezone.utc)
     evidence = {
         "admission_version": "0.1-experimental",
         "evidence_id": "urn:spp:evidence:" + uuid4().hex,
@@ -156,7 +158,7 @@ def build_evidence(
         "challenge": plan["challenge"],
         "test_results": results,
         "evidence_assurance_level": "E2",
-        "issued_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "issued_at": now.isoformat().replace("+00:00", "Z"),
     }
     evidence["binding"] = {
         "actor_id": robot.actor_id,
@@ -167,7 +169,7 @@ def build_evidence(
         "plan_digest": plan["plan_digest"],
     }
     evidence["valid_until"] = (
-        datetime.now(timezone.utc) + timedelta(minutes=15)
+        now + timedelta(minutes=15)
     ).isoformat().replace("+00:00", "Z")
     evidence["evidence_digest"] = digest(evidence)
     return evidence
@@ -179,7 +181,14 @@ def admit(
     evidence: dict[str, Any],
     robot: RobotState,
     replay_registry: ReplayRegistry | None = None,
+    *, now: datetime | None = None,
 ) -> AdmissionProfile:
+    """Trusted legacy admission; use admit_evidence_backed for provenance checks.
+
+    Kept for compatibility with existing callers and A-D reference demos.
+    This API trusts planner coverage and does not validate reused source records.
+    """
+    now = now or datetime.now(timezone.utc)
     stored_digest = evidence.get("evidence_digest")
     digest_input = dict(evidence)
     digest_input.pop("evidence_digest", None)
@@ -198,7 +207,7 @@ def admit(
     )
     try:
         valid_until = evidence.get("valid_until")
-        if valid_until and datetime.fromisoformat(valid_until.replace("Z", "+00:00")) <= datetime.now(timezone.utc):
+        if valid_until and datetime.fromisoformat(valid_until.replace("Z", "+00:00")) <= now:
             return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence.get("evidence_digest", ""), _binding(evidence), {}, [], [], ["stale_evidence"])
     except ValueError:
         return AdmissionProfile("DENIED", robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence.get("evidence_digest", ""), _binding(evidence), {}, [], [], ["malformed_evidence"])
