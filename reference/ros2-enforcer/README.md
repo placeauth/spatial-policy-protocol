@@ -83,3 +83,31 @@ does not revalidate evidence or actor bindings; use the enforced admission
 boundary and bind it to the correct robot. ROS imports are deferred until runtime
 construction; missing dependencies produce a clear `RuntimeError`. Pure tests
 include transport test doubles, which are not a claim of live ROS validation.
+
+## Runtime validation status — Tier 1
+
+ROS 2 runtime publication using the real `nav2_msgs/SpeedLimit` interface is
+validated in a Linux Docker container running ROS 2 Humble on Ubuntu 22.04
+(`ros:humble-ros-base-jammy`, `ros-humble-nav2-msgs` 1.1.20).
+`tests/ros2/test_nav2_runtime.py` uses actual rclpy nodes, DDS discovery and a
+real subscriber: ADMITTED delivers 1.0 m/s, DEGRADED delivers 0.5 m/s, both with
+`percentage=False`. DENIED returns navigation disallowed and emits no message
+over a 0.75-second observation window, with a positive-control publication
+verifying the observer works. All three runtime cases passed.
+
+The separate `ROS 2 Nav2 runtime` workflow installs binary packages and runs:
+
+```sh
+source /opt/ros/humble/setup.bash
+ROS_LOCALHOST_ONLY=1 SPP_REQUIRE_ROS=1 python3 -m pytest -v -s tests/ros2/test_nav2_runtime.py
+```
+
+The environment needs rclpy, nav2_msgs, pytest, PyYAML and jsonschema >=4.23.
+Normal pytest skips this module only when ROS packages are absent; the dedicated
+job requires ROS and treats missing dependencies as errors. Normal CI is unchanged.
+
+This proves ROS message transport, **not consumption by a Nav2 controller or
+physical speed enforcement**. No controller or simulation was already available
+in the validation environment; Tier 2 and Tier 3 were not attempted. The
+subscriber is an actual ROS test node, not a Nav2 controller. Active stopping,
+controller acknowledgment, motion measurement and restart behavior remain unproven.

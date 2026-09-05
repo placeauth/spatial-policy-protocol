@@ -1,0 +1,40 @@
+name: ROS 2 Nav2 runtime
+
+on:
+  push:
+    paths:
+      - 'reference/ros2-enforcer/**'
+      - 'reference/admission/**'
+      - 'tests/ros2/**'
+      - '.github/workflows/ros2-nav2.yml'
+  pull_request:
+    paths:
+      - 'reference/ros2-enforcer/**'
+      - 'reference/admission/**'
+      - 'tests/ros2/**'
+      - '.github/workflows/ros2-nav2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-ros-pubsub:
+    runs-on: ubuntu-22.04
+    container: ros:humble-ros-base-jammy
+    timeout-minutes: 15
+    env:
+      ROS_LOCALHOST_ONLY: '1'
+      SPP_REQUIRE_ROS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install binary runtime and test dependencies
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends ros-humble-nav2-msgs python3-pytest python3-yaml python3-pip
+          python3 -m pip install 'jsonschema>=4.23,<5'
+      - name: Test actual ROS publication (no mocks, no allowed skips)
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          python3 -m pytest -v -s tests/ros2/test_nav2_runtime.py

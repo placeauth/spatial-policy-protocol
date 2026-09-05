@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Validated the existing Nav2 adapter using real ROS 2 Humble pub/sub (three runtime cases); added a separate binary-package ROS CI job. This proves message transport, not Nav2 controller consumption or physical stopping.
+
 - Replaced the ROS 2 intent-forwarding stub with an optional Nav2 `SpeedLimit` adapter and ROS-free AdmissionProfile mapping, focused tests and a three-profile demo. Physical stopping remains deployment-specific.
 
 - Added `admit_evidence_backed` to independently enforce source-evidence sufficiency, freshness, binding, assurance and coverage at admission time; retained trusted legacy `admit` for compatibility.
