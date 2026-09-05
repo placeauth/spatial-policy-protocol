@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Validated SPP-derived speed limits through real Humble ControllerServer to a pluginlib-loaded test controller's `setSpeedLimit()` boundary (Tier 2a); no stock-controller motion or physical enforcement claim.
+
 - Validated the existing Nav2 adapter using real ROS 2 Humble pub/sub (three runtime cases); added a separate binary-package ROS CI job. This proves message transport, not Nav2 controller consumption or physical stopping.
 
 - Replaced the ROS 2 intent-forwarding stub with an optional Nav2 `SpeedLimit` adapter and ROS-free AdmissionProfile mapping, focused tests and a three-profile demo. Physical stopping remains deployment-specific.

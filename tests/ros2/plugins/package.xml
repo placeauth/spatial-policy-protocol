@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>spp_boundary_observer</name>
+  <version>0.0.1</version>
+  <description>TEST ONLY: observes the official Nav2 controller speed-limit boundary.</description>
+  <maintainer email="maintainers@placeauth.invalid">PlaceAuth maintainers</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>nav2_core</depend>
+  <depend>nav2_msgs</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

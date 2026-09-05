@@ -1,0 +1,5 @@
+<library path="spp_boundary_observer">
+  <class type="spp_test::BoundaryObserver" base_class_type="nav2_core::Controller">
+    <description>TEST ONLY; reports setSpeedLimit arguments, never follows paths.</description>
+  </class>
+</library>

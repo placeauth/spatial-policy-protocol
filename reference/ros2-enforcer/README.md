@@ -106,8 +106,47 @@ The environment needs rclpy, nav2_msgs, pytest, PyYAML and jsonschema >=4.23.
 Normal pytest skips this module only when ROS packages are absent; the dedicated
 job requires ROS and treats missing dependencies as errors. Normal CI is unchanged.
 
-This proves ROS message transport, **not consumption by a Nav2 controller or
-physical speed enforcement**. No controller or simulation was already available
-in the validation environment; Tier 2 and Tier 3 were not attempted. The
-subscriber is an actual ROS test node, not a Nav2 controller. Active stopping,
-controller acknowledgment, motion measurement and restart behavior remain unproven.
+Tier 1 proves ROS message transport; its subscriber is an actual ROS test node,
+not a Nav2 controller. See the separately bounded Tier 2a result below.
+
+## Controller-plugin boundary validation — Tier 2a
+
+SPP-derived speed limits have been validated through ROS 2 and Nav2
+ControllerServer to the Nav2 controller-plugin enforcement boundary.
+
+`tests/ros2/test_nav2_controller_boundary.py` launches the unmodified binary
+`nav2_controller::ControllerServer` from `ros-humble-nav2-controller`
+1.1.20-1jammy.20260804.211701 on Humble. Normal pluginlib loading installs the
+test-only `spp_test::BoundaryObserver` from `tests/ros2/plugins/`. Its official
+`setSpeedLimit()` method publishes the received arguments on
+`spp_boundary_observed`; it does not subscribe to the SPP input topic itself.
+The real ControllerServer is therefore the link between the adapter's
+publication and the asserted plugin observation: **0.5 m/s, percentage=False**
+from a DEGRADED AdmissionProfile.
+
+Only the configure transition is needed. ControllerServer configures its
+required empty rolling costmap with an inflation layer; no static map, sensors,
+localization, navigation goal, activation or simulator is used. The observation
+publisher is diagnostic, not a navigation/lifecycle authorization. The plugin
+refuses path-following and velocity-generation calls and must never be deployed
+as a production controller.
+
+The existing ROS workflow builds only this small test plugin against apt-installed
+Nav2 binaries; it does not compile or patch Nav2. In the sourced Humble environment:
+
+```sh
+cmake -S tests/ros2/plugins -B /tmp/spp-boundary-build -DCMAKE_INSTALL_PREFIX=/tmp/spp-boundary-install
+cmake --build /tmp/spp-boundary-build -j2
+cmake --install /tmp/spp-boundary-build
+source /tmp/spp-boundary-install/share/spp_boundary_observer/local_setup.bash
+ROS_LOCALHOST_ONLY=1 SPP_REQUIRE_ROS=1 python3 -m pytest -v -s tests/ros2/test_nav2_runtime.py tests/ros2/test_nav2_controller_boundary.py
+```
+
+Additional binary/build dependencies are `ros-humble-nav2-controller`,
+`build-essential` and `cmake`. When ROS exists, missing ControllerServer or the
+test plugin is a test failure, not a skip. On non-ROS machines the new module
+skips cleanly. No production adapter, admission or mapping semantics changed.
+
+This is **not stock-controller motion enforcement**: only the test plugin's
+official interface was observed. Physical speed enforcement, safety, stopping,
+motion measurement and controller restart behavior remain unproven.

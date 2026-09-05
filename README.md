@@ -202,8 +202,7 @@ python demo/ros2_enforcement/run_demo.py
 
 See [Nav2 integration and limitations](reference/ros2-enforcer/README.md).
 
-Real ROS 2 Humble `SpeedLimit` publication is validated; Nav2 controller
-consumption and physical motion enforcement are not yet validated.
+SPP-derived speed limits have been validated through ROS 2 and Nav2 ControllerServer to the Nav2 controller-plugin enforcement boundary; stock-controller motion and physical enforcement remain unproven.
 
 ## Repository map
 

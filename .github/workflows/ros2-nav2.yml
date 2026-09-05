@@ -31,10 +31,18 @@ jobs:
       - name: Install binary runtime and test dependencies
         run: |
           apt-get update -qq
-          apt-get install -y --no-install-recommends ros-humble-nav2-msgs python3-pytest python3-yaml python3-pip
+          apt-get install -y --no-install-recommends ros-humble-nav2-msgs ros-humble-nav2-controller build-essential cmake python3-pytest python3-yaml python3-pip
           python3 -m pip install 'jsonschema>=4.23,<5'
-      - name: Test actual ROS publication (no mocks, no allowed skips)
+      - name: Build test-only controller observation plugin (not Nav2)
         shell: bash
         run: |
           source /opt/ros/humble/setup.bash
-          python3 -m pytest -v -s tests/ros2/test_nav2_runtime.py
+          cmake -S tests/ros2/plugins -B /tmp/spp-boundary-build -DCMAKE_INSTALL_PREFIX=/tmp/spp-boundary-install
+          cmake --build /tmp/spp-boundary-build -j2
+          cmake --install /tmp/spp-boundary-build
+      - name: Test ROS publication and real ControllerServer boundary
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          source /tmp/spp-boundary-install/share/spp_boundary_observer/local_setup.bash
+          python3 -m pytest -v -s tests/ros2/test_nav2_runtime.py tests/ros2/test_nav2_controller_boundary.py

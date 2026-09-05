@@ -1,0 +1,14 @@
+# TEST ONLY: no static map, sensors, navigation goal or activation.
+/**:
+  ros__parameters:
+    controller_plugins: [BoundaryObserver]
+    BoundaryObserver.plugin: spp_test::BoundaryObserver
+    speed_limit_topic: speed_limit
+    global_frame: odom
+    robot_base_frame: base_link
+    rolling_window: true
+    width: 1
+    height: 1
+    resolution: 0.1
+    plugins: [inflation_layer]
+    inflation_layer.plugin: nav2_costmap_2d::InflationLayer
