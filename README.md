@@ -188,6 +188,20 @@ SPP does not itself force a malicious autonomous system to obey an operating pro
 
 SPP 0.1.0 is a draft reference implementation for pre-standardization experimentation. Certain technologies described in this project are patent pending.
 
+## ROS 2 / Nav2 integration
+
+The experimental adapter maps a trusted `AdmissionProfile` to a deterministic
+Nav2 enforcement plan, then publishes `movement.max_speed` through an optional
+ROS runtime adapter. Denied navigation is represented fail-closed; actual stop
+enforcement and navigation gating depend on the surrounding robot deployment.
+No ROS installation is needed for the mapping demo:
+
+```sh
+python demo/ros2_enforcement/run_demo.py
+```
+
+See [Nav2 integration and limitations](reference/ros2-enforcer/README.md).
+
 ## Repository map
 
 ```text
@@ -195,7 +209,7 @@ schema/                    JSON Schemas
 spec/                      protocol, security, and threat model
 examples/                  home, hospital, warehouse, and hotel policies
 reference/policy-server/   Python API and OPA/Rego adapter
-reference/ros2-enforcer/   ROS 2 enforcement-point stub
+reference/ros2-enforcer/   experimental admission-to-Nav2 speed adapter
 reference/admission/       experimental conformance/admission implementation
 demo/clinic/               CLI, browser, and policy A/B demonstrations
 demo/admission/            evidence-based admission scenarios A-D

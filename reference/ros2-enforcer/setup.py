@@ -12,10 +12,4 @@ setup(
     ],
     install_requires=["setuptools"],
     zip_safe=True,
-    entry_points={
-        "console_scripts": [
-            "enforcer = spp_enforcer.node:main",
-        ],
-    },
 )
-

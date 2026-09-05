@@ -1,29 +1,85 @@
-# PlaceAuth SPP ROS 2 enforcer stub
+# Experimental SPP ROS 2 / Nav2 adapter
 
-This package is an experimental enforcement-point stub for integration
-exploration. It is not a production ROS 2 safety or security layer.
+`AdmissionProfile` → `map_profile()` → `Nav2EnforcementPlan` → `Nav2Enforcer.apply()`.
 
-This small \`ament_python\` package demonstrates an enforcement point, not a
-complete Nav2 or Open-RMF adapter.
+This replaces the old HTTP intent-forwarding node and its `enforcer` executable.
+It is a library boundary for the trusted admission service, not a new network
+endpoint. Admission/core logic and wire formats are unchanged.
 
-- Subscribe to \`spp/action_intent\` for JSON action intents.
-- Ask the configured SPP policy endpoint for a decision.
-- Publish every decision on \`spp/decision\`.
-- Forward only permitted intents to \`spp/action_allowed\`.
-- Forward conditional intents to \`spp/action_pending\` so a planner can pause
-  and request authorization.
-- Deny on malformed input, timeout, or policy-server failure.
+## Mapping without ROS
 
-An intent uses this shape:
+From the repository root, with the normal Python dependencies installed:
 
-\`\`\`json
-{
-  "request_id": "nav-42",
-  "space": "clinic/pharmacy",
-  "action": {"family": "movement", "name": "enter"},
-  "context": {"purpose": "package_delivery"}
-}
-\`\`\`
+```sh
+python demo/ros2_enforcement/run_demo.py
+```
 
-Build in a ROS 2 workspace by copying or linking this directory into \`src/\`,
-then run \`colcon build --packages-select spp_enforcer\`.
+The demo uses illustrative real `AdmissionProfile` objects, not newly measured
+robot evidence. It prints 1.0 m/s for ADMITTED, 0.5 m/s for DEGRADED and no action
+for DENIED. The mapper reads `operating_profile.guarantees` entries with
+`id: movement.max_speed`, `operator: <=` and a finite numeric `value` in m/s.
+It does not infer speed from capabilities or unrelated guarantees.
+
+Both profile restriction lists are checked. The sole supported textual
+restriction is `movement.max_speed<=NUMBER`, optionally with whitespace around
+`<=`, in m/s. Multiple bounds choose the minimum. Unsupported restrictions deny
+the enforcement plan instead of silently discarding obligations. This is an
+adapter convention for the existing text field, not a new protocol schema.
+
+Malformed, negative, non-finite or boolean bounds fail closed. Zero also refuses
+navigation: **Nav2 uses zero to remove a speed limit, not to stop a robot**.
+No speed restriction maps to `max_speed_mps=None` and publishes nothing; it does
+not clear any previously applied limit. Explicit clearance and arbitration with
+other limit publishers belong to the deployment. Other guarantees are not
+enforced by this speed-only adapter and require their own enforcement points.
+
+## Optional ROS runtime
+
+Target interface: ROS 2 Humble / Nav2's
+[`nav2_msgs/msg/SpeedLimit`](https://github.com/ros-navigation/navigation2/blob/humble/nav2_msgs/msg/SpeedLimit.msg).
+Publish with `percentage=False`, `speed_limit=<m/s>` and the node clock timestamp.
+The [controller server](https://github.com/ros-navigation/navigation2/blob/humble/nav2_controller/src/controller_server.cpp)
+subscribes to its `speed_limit_topic` parameter (default `speed_limit`, QoS depth
+10) and forwards the limit to controller plugins. Configure the adapter topic
+and namespace to match that server and verify the selected plugin honors it.
+
+Use an existing sourced ROS/Nav2 environment with `rclpy` and `nav2_msgs`.
+No ROS distribution is installed by this project. Copy/link this directory into
+a ROS workspace's `src/`, then run `colcon build --packages-select spp_enforcer`
+and source its install setup. Also make the repository admission package
+available to that Python environment, using the normal repository dependencies:
+
+```sh
+# Run from the SPP repository root in the sourced ROS shell.
+export PYTHONPATH="$PWD/reference/admission/src:$PYTHONPATH"
+```
+
+In the trusted service, using its already initialized and spinning rclpy node:
+
+```python
+from spp_enforcer.node import Nav2Enforcer
+
+enforcer = Nav2Enforcer(node, speed_limit_topic="speed_limit")
+# profile must come from trusted admit_evidence_backed(), for this robot/state.
+plan = enforcer.apply(profile)
+if not plan.navigation_allowed:
+    # Refuse new navigation; invoke the deployment's stop/cancel path if active.
+    return
+# Continue only after deployment-specific controller readiness/enforcement checks.
+```
+
+Keep the enforcer/publisher alive. Apply after subscriber discovery; lack of a
+subscriber or a publication exception returns a denied plan. Subscriber count
+does not prove that Nav2 applied the limit. Publishing has no application-level
+acknowledgment. Controller restarts/reconfiguration require reapplication and
+readiness checks; this adapter does not manage lifecycle, retries or persistence.
+
+DENIED issues no enabling message. It **does not stop an already moving robot**
+or cancel a Nav2 action. The caller must gate navigation, handle active stopping,
+and serialize admission with runtime changes. No safety certification is implied.
+
+Profiles are trusted inputs, not authenticated by their Python type. The adapter
+does not revalidate evidence or actor bindings; use the enforced admission
+boundary and bind it to the correct robot. ROS imports are deferred until runtime
+construction; missing dependencies produce a clear `RuntimeError`. Pure tests
+include transport test doubles, which are not a claim of live ROS validation.
