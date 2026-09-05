@@ -152,6 +152,16 @@ Scenario D demonstrates the central interoperability point: the robot applicatio
 
 ## Security and status
 
+Inspect evidence sufficiency across a four-space route, including a stricter
+bound and a denied destination:
+
+```sh
+python demo/requalification/run_demo.py
+```
+
+The [evidence sufficiency guide](docs/evidence-sufficiency.md) covers integrity,
+freshness, scope and configuration checks, plus tamper and expiry demo variants.
+
 > **Status: SPP 0.1.0 Experimental Preview**
 
 The current reference implementation demonstrates:

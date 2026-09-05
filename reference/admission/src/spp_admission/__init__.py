@@ -12,6 +12,10 @@ from .engine import (
 )
 
 __all__ = [
+    "EvidenceRecord",
+    "Sufficiency",
+    "assess_sufficiency",
+    "derive_requalification_plan",
     "admit",
     "ReplayRegistry",
     "build_evidence",
@@ -21,3 +25,5 @@ __all__ = [
     "load_requirement_set",
     "reset_replay_registry",
 ]
+
+from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan

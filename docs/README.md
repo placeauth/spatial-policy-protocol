@@ -7,6 +7,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [Try SPP in 5 Minutes](quickstart.md)
 - [SPP 0.1 core specification](../spec/SPP-0.1.md)
 - [Evidence-based spatial admission](../spec/evidence-based-admission.md)
+- [Evidence sufficiency and selective requalification](evidence-sufficiency.md)
 - [JSON Schemas](../schema/)
 - [Security considerations](../spec/security.md)
 - [Threat model](../spec/threat-model.md)

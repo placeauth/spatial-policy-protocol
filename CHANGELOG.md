@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Added conservative source-evidence sufficiency assessment and reduced conformance planning with explicit reuse/retest reasons.
+- Added a four-space transition demo with tampering, expiry and controller-change variants, and adversarial reuse tests.
+
 ## 0.1.0 — Experimental Preview
 
 - Initial public release candidate for the Spatial Policy Protocol.
