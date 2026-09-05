@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Validated a live stock Nav2 Regulated Pure Pursuit controller changing command speed from 1.0 to 0.5 m/s through SPP profiles while one FollowPath goal remains active (Tier 3, fixed-pose fixture; no physical motion or safety claim).
+
 - Added a concise technical-review guide for external feedback and clarified the historical scope of the v0.1.0 release record.
 
 - Validated SPP-derived speed limits through real Humble ControllerServer to a pluginlib-loaded test controller's `setSpeedLimit()` boundary (Tier 2a); no stock-controller motion or physical enforcement claim.

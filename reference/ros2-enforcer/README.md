@@ -147,6 +147,48 @@ Additional binary/build dependencies are `ros-humble-nav2-controller`,
 test plugin is a test failure, not a skip. On non-ROS machines the new module
 skips cleanly. No production adapter, admission or mapping semantics changed.
 
-This is **not stock-controller motion enforcement**: only the test plugin's
-official interface was observed. Physical speed enforcement, safety, stopping,
-motion measurement and controller restart behavior remain unproven.
+Tier 2a observes only the test plugin's official interface. The separate Tier 3
+test below measures stock-controller command output. Physical speed enforcement,
+safety, stopping and controller restart behavior remain unproven.
+
+## Running controller command-speed validation — Tier 3
+
+SPP has been validated changing the speed behavior of a running Nav2 runtime
+from a higher operating limit to an SPP-imposed 0.5 m/s limit.
+
+`tests/ros2/test_nav2_motion_limit.py` runs the apt-installed Humble
+`nav2_controller::ControllerServer` with the stock
+`nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController`.
+Validated binaries: `ros-humble-nav2-controller` 1.1.20-1jammy.20260804.211701 and
+`ros-humble-nav2-regulated-pure-pursuit-controller` 1.1.20-1jammy.20260804.211511,
+in the existing Ubuntu 22.04/Humble container.
+
+The test configures and activates ControllerServer, submits one straight
+FollowPath goal, and measures the linear magnitude of its real `cmd_vel` Twist
+messages. The existing mapper and Nav2Enforcer apply trusted AdmissionProfile
+fixtures for the lobby (1.0 m/s) and patient wing (0.5 m/s). The same goal stays
+active throughout; no path replacement or controller parameter update occurs.
+The fixture supplies a fixed pose, static TF and zero odometry in an empty
+rolling costmap. It does not simulate robot dynamics or physical travel.
+
+Observed: **10 commands at 1.000000 m/s**, then **20 commands at 0.500000 m/s**.
+After allowing 0.3 seconds for message/callback scheduling, all sampled commands
+must be between 0.45 and 0.5 m/s (upper tolerance 0.000001 m/s). Requiring positive
+commands and an unfinished goal prevents a stopped or failed controller from
+passing. This tests command behavior, not an instantaneous response deadline.
+
+In the sourced Humble environment, install the additional binary package
+`ros-humble-nav2-regulated-pure-pursuit-controller` and run:
+
+```sh
+ROS_LOCALHOST_ONLY=1 SPP_REQUIRE_ROS=1 python3 -m pytest -v -s tests/ros2/test_nav2_motion_limit.py
+```
+
+The existing ROS workflow includes this test. On machines without ROS it skips;
+when ROS exists, missing controller packages and runtime failures are errors.
+The motion fixture uses no test controller plugin and builds no Nav2 source.
+It disables collision/cost/curvature speed regulation to isolate the received
+limit; `tests/ros2/motion_controller.yaml` is not deployment configuration.
+The profiles are trusted test inputs; evidence generation/authentication is not
+retested here. Physical robot safety, stopping, production enforcement, other
+controller configurations and general Nav2 certification are not established.

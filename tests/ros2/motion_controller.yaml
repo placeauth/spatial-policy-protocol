@@ -1,0 +1,24 @@
+# Test fixture: stock controller, empty local costmap, fixed pose, one straight path.
+/**:
+  ros__parameters:
+    controller_frequency: 20.0
+    controller_plugins: [FollowPath]
+    FollowPath.plugin: nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController
+    FollowPath.desired_linear_vel: 1.0
+    FollowPath.use_velocity_scaled_lookahead_dist: false
+    FollowPath.lookahead_dist: 0.6
+    FollowPath.use_regulated_linear_velocity_scaling: false
+    FollowPath.use_cost_regulated_linear_velocity_scaling: false
+    FollowPath.use_collision_detection: false
+    FollowPath.use_rotate_to_heading: false
+    progress_checker.movement_time_allowance: 30.0
+    speed_limit_topic: speed_limit
+    global_frame: odom
+    robot_base_frame: base_link
+    rolling_window: true
+    width: 3
+    height: 3
+    resolution: 0.1
+    update_frequency: 20.0
+    plugins: [inflation_layer]
+    inflation_layer.plugin: nav2_costmap_2d::InflationLayer

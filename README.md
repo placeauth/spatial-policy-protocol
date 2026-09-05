@@ -203,7 +203,7 @@ python demo/ros2_enforcement/run_demo.py
 
 See [Nav2 integration and limitations](reference/ros2-enforcer/README.md).
 
-SPP-derived speed limits have been validated through ROS 2 and Nav2 ControllerServer to the Nav2 controller-plugin enforcement boundary; stock-controller motion and physical enforcement remain unproven.
+SPP has been validated changing the speed behavior of a running Nav2 runtime from a higher operating limit to an SPP-imposed 0.5 m/s limit, measured in stock-controller command output with a fixed-pose test fixture; physical robot speed and stopping remain unproven.
 
 ## Repository map
 
