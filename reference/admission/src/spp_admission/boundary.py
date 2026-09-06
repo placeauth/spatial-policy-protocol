@@ -7,14 +7,17 @@ from typing import Any
 
 from jsonschema import ValidationError
 
-from .engine import ReplayRegistry, admit
+from .engine import ReplayRegistry, admit, derive_plan
 from .models import AdmissionProfile, EvidenceBinding, RobotState
 from .sufficiency import EvidenceRecord, _record_error, assess_sufficiency
 from .trust import (
+    SignedPlaceRequirements,
     SignedEvidence,
     SignedEvidenceRecord,
+    TrustedPolicyAuthorityRegistry,
     TrustedIssuerRegistry,
     evidence_scope,
+    verify_signed_place_requirements,
     verify_signed_evidence,
 )
 
@@ -145,3 +148,50 @@ def admit_verified_evidence_backed(
             signed_evidence.evidence if isinstance(signed_evidence, SignedEvidence) else {},
             robot, ["malformed_signed_evidence"],
         )
+
+
+def admit_verified_policy_evidence_backed(
+    signed_requirements: SignedPlaceRequirements, plan: dict[str, Any],
+    signed_evidence: SignedEvidence, robot: RobotState,
+    trusted_authorities: TrustedPolicyAuthorityRegistry,
+    trusted_issuers: TrustedIssuerRegistry,
+    source_records: list[SignedEvidenceRecord] | None = None,
+    replay_registry: ReplayRegistry | None = None, *, now: datetime | None = None,
+) -> AdmissionProfile:
+    """Fail-closed admission requiring trusted place policy and evidence."""
+    requirements = (signed_requirements.requirements
+                    if isinstance(signed_requirements, SignedPlaceRequirements) else {})
+    evidence = signed_evidence.evidence if isinstance(signed_evidence, SignedEvidence) else {}
+    check = verify_signed_place_requirements(
+        signed_requirements, trusted_authorities,
+        expected_place=requirements.get("place"), expected_scope=requirements.get("space"),
+    )
+    if not check.verified:
+        return _deny(requirements, evidence, robot, [check.reason or "policy_signature_invalid"])
+    return admit_verified_evidence_backed(
+        requirements, plan, signed_evidence, robot, trusted_issuers,
+        source_records=source_records, replay_registry=replay_registry, now=now,
+    )
+
+
+def derive_verified_plan(
+    signed_requirements: SignedPlaceRequirements, robot: RobotState,
+    trusted_authorities: TrustedPolicyAuthorityRegistry, *,
+    proven_guarantees: list[dict[str, Any]] | None = None,
+    challenge: str | None = None,
+) -> dict[str, Any]:
+    """Create a plan only after place requirements pass authority verification.
+
+    Legacy ``derive_plan`` remains explicitly locally trusted. Callers that
+    receive place policy from outside their trust boundary must use this entry
+    point and stop on its deterministic ValueError.
+    """
+    requirements = (signed_requirements.requirements
+                    if isinstance(signed_requirements, SignedPlaceRequirements) else {})
+    check = verify_signed_place_requirements(
+        signed_requirements, trusted_authorities,
+        expected_place=requirements.get("place"), expected_scope=requirements.get("space"),
+    )
+    if not check.verified:
+        raise ValueError(check.reason or "policy_signature_invalid")
+    return derive_plan(requirements, robot, proven_guarantees=proven_guarantees, challenge=challenge)

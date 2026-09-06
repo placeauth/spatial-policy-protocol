@@ -94,3 +94,20 @@ management, HSM protection, certificate lifecycle, distributed revocation, or
 physical trust in the evidence-generation process. The admission service must
 still authenticate current machine state, destination requirements and time. A
 caller-constructed AdmissionProfile is not proof of admission.
+
+### Signed place requirements reference path
+
+The reference admission layer also supports a distinct local policy-authority
+trust registry. `SignedPlaceRequirements` uses Ed25519 over a canonical
+SHA-256 digest of the entire current PlaceRequirementSet. The verified path
+checks that the authority is known and enabled, is authorized for the stated
+place and space, and that the complete requirement set has not changed before
+conformance or admission relies on it. Policy authorities and evidence issuers
+are separate trust roles.
+
+This is an additive reference mechanism, not a standardized SPP 0.1 signature
+format. It does not provide PKI, certificate lifecycle, remote key discovery,
+HSM custody, distributed revocation, global authority federation, or proof
+that a configured authority is legally or physically entitled to control a
+place. Existing unsigned policy loading remains an explicitly locally trusted
+compatibility path and must not be exposed as verified policy processing.

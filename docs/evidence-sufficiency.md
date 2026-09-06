@@ -74,6 +74,29 @@ This adds no wire-schema fields or normative SPP 0.1 rules. It is a local
 reference trust model, not PKI, key discovery, certificate lifecycle, remote
 revocation, HSM-backed custody, or proof that a test runner observed reality.
 
+### Signed place requirements
+
+`SignedPlaceRequirements` is a separate additive wrapper for a complete
+PlaceRequirementSet. `sign_place_requirements(...)` uses the same canonical
+JSON and Ed25519 approach as signed evidence. Its digest covers the entire
+requirements object, so place/space identity, policy ID/version, requirement
+contents and values, environment data, and any current semantic metadata are
+all protected. The current admission requirement-set model has no parent or
+inherited-policy reference field; therefore no separate inheritance graph is
+introduced or trusted by this reference layer.
+
+Provision `TrustedPolicyAuthority` public keys separately from
+`TrustedIssuer` keys. A policy authority has an ID, raw Ed25519 public key,
+allowed places, allowed scopes, and an enabled flag. It is not an evidence
+issuer merely because it belongs to the same organization. Use
+`derive_verified_plan(...)` when external place requirements first enter the
+conformance path, and `admit_verified_policy_evidence_backed(...)` when both
+the destination policy and the evidence must be verified. These paths reject unsigned requirements,
+unknown or disabled authorities, unauthorized place/scope assertions, and
+modified policies before conformance/admission work starts. The existing
+unsigned loaders and planning APIs remain explicitly locally trusted for
+compatibility.
+
 ## Reuse rules
 
 | Check | Required for reuse |
@@ -187,3 +210,8 @@ Policy discovery, independent attestation, revocation, dependency graphs, unit
 conversion, distributed replay storage and middleware integration remain outside
 this implementation. Schema validation uses the current repository resources,
 consistent with the reference package's existing clone-based setup.
+
+The local policy-authority registry is likewise not PKI, legal or physical
+proof that an authority controls a place, remote discovery, certificate
+lifecycle, HSM custody, distributed revocation, or a global authority
+federation. Deployments must provision and protect their trust anchors.

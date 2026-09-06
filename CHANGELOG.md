@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Added local Ed25519 signed place requirements and a separate trusted
+  policy-authority registry with place/scope authorization and fail-closed
+  verified policy-plus-evidence admission. This remains experimental reference
+  infrastructure; it adds no SPP 0.1 wire format or PKI.
+
 ## 0.2.0 — Experimental Preview
 
 - Added evidence sufficiency, selective requalification, and admission-boundary revalidation with explicit TOCTOU rejection.
