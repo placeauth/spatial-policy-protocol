@@ -24,6 +24,17 @@ def test_health() -> None:
     assert response.json()["spp_version"] == "0.1"
 
 
+def test_root_discovery() -> None:
+    response = call("GET", "/")
+    assert response.status_code == 200
+    assert response.json() == {
+        "service": "SPP Policy Server",
+        "status": "ok",
+        "health": "/health",
+        "docs": "/docs",
+    }
+
+
 def test_decision_endpoint() -> None:
     response = call(
         "POST",
