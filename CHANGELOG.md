@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added `spp-explain`, a deterministic developer trace that projects existing
+  requirements, provider selection, evidence assessment, selective
+  requalification, and admission outputs without changing decision logic.
+
 - Added a deterministic local requirement-mapping registry and a second,
   humanoid reference embodiment. The same place requirements now select
   embodiment-specific conformance mechanisms without changing SPP 0.1

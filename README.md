@@ -163,6 +163,19 @@ python demo/embodiment_mapping/run_demo.py
 See [embodiment-specific requirement mapping](docs/requirement-mapping.md) for
 the provider model, deterministic selection rule, and limitations.
 
+## Explain a decision
+
+After `python -m pip install -e .`, trace the existing patient-wing
+requalification path from requirements through provider selection, evidence
+assessment, tests, and admission:
+
+```sh
+spp-explain --scenario patient-wing
+```
+
+Use `--json` for deterministic machine-readable output. See [the explain trace
+guide](docs/explain-trace.md) for the other fixture-backed scenarios.
+
 ## Security and status
 
 Inspect evidence sufficiency across a four-space route, including a stricter

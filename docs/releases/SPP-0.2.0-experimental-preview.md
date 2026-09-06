@@ -12,6 +12,9 @@ SPP 0.2.0 Experimental Preview prepares the reference implementation for broader
 - Added local Ed25519 signed-evidence verification with trusted issuer scope/type authorization.
 - Added deterministic embodiment-specific requirement mapping for mobile-base
   and humanoid reference conformance paths.
+- Added `spp-explain`, a deterministic developer trace of existing place
+  requirements, provider selection, evidence reuse, requalification, and
+  admission results.
 - Added an experimental SPP-to-Nav2 `SpeedLimit` enforcement adapter and bounded runtime validation.
 - Expanded reference and ROS runtime test coverage.
 - SPP can gate Open-RMF task eligibility using evidence-backed AdmissionProfiles.
