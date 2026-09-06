@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added a deterministic local requirement-mapping registry and a second,
+  humanoid reference embodiment. The same place requirements now select
+  embodiment-specific conformance mechanisms without changing SPP 0.1
+  vocabulary or schemas.
+
 - Added a bounded Open-RMF delivery-acceptance adapter with destination/actor matching and explicit restriction acceptance. Verified the Humble Python callback interface from upstream source; adapter tests and evidence-backed demo only, no RMF runtime validation.
 
 - Added an additive local Ed25519 signed-evidence wrapper, trusted issuer registry, issuer scope/type authorization, and fail-closed verified admission before sufficiency checks. The legacy unsigned trusted path remains explicit for compatibility.

@@ -150,6 +150,19 @@ python demo/admission/run_demo.py d  # spatial transition and requalification
 
 Scenario D demonstrates the central interoperability point: the robot application remains unchanged while the destination place supplies different requirements. Existing sufficient evidence is reused and only unresolved guarantees are tested again. See [the admission demo guide](demo/admission/README.md).
 
+## Embodiment-specific conformance mapping
+
+The same place requirement can select different registered conformance
+mechanisms for a mobile base and a humanoid while retaining the same SPP
+vocabulary. Run the deterministic reference demonstration:
+
+```sh
+python demo/embodiment_mapping/run_demo.py
+```
+
+See [embodiment-specific requirement mapping](docs/requirement-mapping.md) for
+the provider model, deterministic selection rule, and limitations.
+
 ## Security and status
 
 Inspect evidence sufficiency across a four-space route, including a stricter
@@ -221,6 +234,7 @@ reference/ros2-enforcer/   experimental admission-to-Nav2 speed adapter
 reference/admission/       experimental conformance/admission implementation
 demo/clinic/               CLI, browser, and policy A/B demonstrations
 demo/admission/            evidence-based admission scenarios A-D
+demo/embodiment_mapping/   mobile-base and humanoid mapping demonstration
 docs/                      specifications, guides, whitepaper, and release notes
 .github/                   issue templates and test workflow
 tests/                     schema, API, policy, admission, and ROS runtime tests

@@ -10,6 +10,7 @@ from uuid import uuid4
 import yaml
 
 from .models import AdmissionProfile, EvidenceBinding, RobotState
+from .mapping import DEFAULT_REQUIREMENT_MAPPING_REGISTRY, RequirementMappingRegistry
 
 
 class ReplayRegistry:
@@ -55,29 +56,21 @@ def load_requirement_set(path: str | Path) -> dict[str, Any]:
     return requirements
 
 
-def _capability_key(requirement: dict[str, Any]) -> str:
-    return requirement["id"]
+def _test_for(
+    requirement: dict[str, Any],
+    embodiment: str = "demo_mobile_base",
+    mapping_registry: RequirementMappingRegistry = DEFAULT_REQUIREMENT_MAPPING_REGISTRY,
+) -> dict[str, Any]:
+    selection = mapping_registry.select(requirement, embodiment)
+    if selection.provider is None:
+        raise KeyError(selection.reason)
+    return selection.provider.build_test(requirement)
 
 
-def _test_for(requirement: dict[str, Any]) -> dict[str, Any]:
-    mapping = {
-        "movement.max_speed": ("speed-bound", "movement.max_speed"),
-        "human_separation": ("separation-bound", "human_separation"),
-        "sensing.facial_recognition": ("facial-recognition", "facial_recognition"),
-        "data.video_retention": ("video-retention", "video_retention"),
-    }
-    adapter, capability = mapping[requirement["id"]]
-    return {
-        "test_id": f"test:{adapter}",
-        "requirement_id": requirement["id"],
-        "adapter": adapter,
-        "capability": capability,
-        "expected": f"{requirement['operator']} {requirement['value']}",
-    }
-
-
-def _satisfies(requirement: dict[str, Any], capabilities: dict[str, Any]) -> bool:
-    actual = capabilities.get(_capability_key(requirement))
+def _satisfies(
+    requirement: dict[str, Any], capabilities: dict[str, Any], capability: str | None = None,
+) -> bool:
+    actual = capabilities.get(capability or requirement["id"])
     if actual is None:
         return False
     operator = requirement["operator"]
@@ -108,8 +101,13 @@ def derive_plan(
         if prior and prior.get("environment_digest") == robot.environment_digest and _satisfies(requirement, prior.get("capabilities", {})):
             reused.append(requirement["id"])
             continue
-        selected.append(_test_for(requirement))
         unresolved.append(requirement["id"])
+        try:
+            selected.append(_test_for(requirement, robot.embodiment))
+        except KeyError:
+            # An unsupported mapping remains explicit and fail-closed in the
+            # existing unresolved-guarantees field; no synthetic test is made.
+            continue
     policy_digest = requirement_set.get("policy_digest") or digest(requirement_set)
     plan = {
         "admission_version": "0.1-experimental",
@@ -134,7 +132,7 @@ def execute_plan(plan: dict[str, Any], robot: RobotState, requirement_set: dict[
     for test in plan["selected_tests"]:
         requirement_id = test["requirement_id"]
         requirement = next(r for r in requirement_set["requirements"] if r["id"] == requirement_id)
-        passed = _satisfies(requirement, robot.capabilities)
+        passed = _satisfies(requirement, robot.capabilities, test.get("capability"))
         results.append({"test_id": test["test_id"], "requirement_id": requirement_id, "passed": passed})
     return results
 

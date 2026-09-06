@@ -117,7 +117,7 @@ def _record_error(record: EvidenceRecord, robot: RobotState, now: datetime,
         if set(results) != set(tests):
             return "result_coverage_mismatch"
         for rid, test in tests.items():
-            if test != _test_for(requirements[rid]) or results[rid]["test_id"] != test["test_id"]:
+            if test != _test_for(requirements[rid], robot.embodiment) or results[rid]["test_id"] != test["test_id"]:
                 return "test_mapping_mismatch"
     except (ValidationError, KeyError, ValueError, TypeError, OverflowError):
         return "malformed_source_record"
@@ -146,10 +146,10 @@ def assess_sufficiency(destination: dict[str, Any], robot: RobotState,
     for target in destination["requirements"]:
         rid = target["id"]
         try:
-            _test_for(target)
+            _test_for(target, robot.embodiment)
+            mapping_supported = True
         except KeyError:
-            decisions.append(Sufficiency(rid, False, "unsupported_requirement"))
-            continue
+            mapping_supported = False
         reason, chosen = "missing_evidence", None
         for record, error in checked:
             if error:
@@ -171,9 +171,11 @@ def assess_sufficiency(destination: dict[str, Any], robot: RobotState,
                 reason = "failed_source_test"
             elif not _entails(source, target):
                 reason = "insufficient_proven_bound"
-            else:
+            elif mapping_supported:
                 chosen, reason = record.evidence["evidence_id"], "sufficient"
                 break
+        if not mapping_supported and reason == "missing_evidence":
+            reason = "unsupported_requirement"
         decisions.append(Sufficiency(rid, chosen is not None, reason, chosen))
     return decisions
 

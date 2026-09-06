@@ -10,6 +10,8 @@ SPP 0.2.0 Experimental Preview prepares the reference implementation for broader
 
 - Hardened evidence-backed admission and selective requalification.
 - Added local Ed25519 signed-evidence verification with trusted issuer scope/type authorization.
+- Added deterministic embodiment-specific requirement mapping for mobile-base
+  and humanoid reference conformance paths.
 - Added an experimental SPP-to-Nav2 `SpeedLimit` enforcement adapter and bounded runtime validation.
 - Expanded reference and ROS runtime test coverage.
 - SPP can gate Open-RMF task eligibility using evidence-backed AdmissionProfiles.
@@ -43,6 +45,8 @@ With one active `FollowPath` goal, the stock Regulated Pure Pursuit fixture emit
 - No physical-robot safety claim and no guaranteed stopping behavior.
 - No PKI, remote trust discovery, production key management, HSM protection, certificate lifecycle, or distributed revocation infrastructure.
 - No distributed replay service, broad vendor interoperability validation, or production deployment certification.
+- The embodiment registry is a local reference configuration, not a plugin
+  system, vendor certification program, or physical-safety guarantee.
 - Runtime validation is scoped to the documented Humble fixtures and does not certify arbitrary Nav2 configurations.
 
 ## Quickstart

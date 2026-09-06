@@ -8,6 +8,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [SPP 0.1 core specification](../spec/SPP-0.1.md)
 - [Evidence-based spatial admission](../spec/evidence-based-admission.md)
 - [Evidence sufficiency and selective requalification](evidence-sufficiency.md)
+- [Embodiment-specific requirement mapping](requirement-mapping.md)
 - [ROS 2 / Nav2 admission enforcement](../reference/ros2-enforcer/README.md)
 - [Open-RMF task admission adapter (boundary validation)](open-rmf.md)
 - [Technical review](technical-review.md)

@@ -26,6 +26,10 @@ __all__ = [
     "execute_plan",
     "load_requirement_set",
     "reset_replay_registry",
+    "ConformanceProvider",
+    "MappingSelection",
+    "RequirementMappingRegistry",
+    "DEFAULT_REQUIREMENT_MAPPING_REGISTRY",
     "EVIDENCE_BUNDLE_TYPE",
     "SignedEvidence",
     "SignedEvidenceRecord",
@@ -49,4 +53,10 @@ from .trust import (
     evidence_scope,
     sign_evidence,
     verify_signed_evidence,
+)
+from .mapping import (
+    ConformanceProvider,
+    DEFAULT_REQUIREMENT_MAPPING_REGISTRY,
+    MappingSelection,
+    RequirementMappingRegistry,
 )
