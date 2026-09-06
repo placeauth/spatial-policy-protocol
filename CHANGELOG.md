@@ -6,6 +6,9 @@
   policy-authority registry with place/scope authorization and fail-closed
   verified policy-plus-evidence admission. This remains experimental reference
   infrastructure; it adds no SPP 0.1 wire format or PKI.
+- Added a deterministic local AdmissionProfile lifecycle assessment with
+  explicit revocation, evidence/trust/binding checks, and selective
+  requalification triggers. It adds no distributed state or SPP 0.1 schema.
 
 ## 0.2.0 — Experimental Preview
 

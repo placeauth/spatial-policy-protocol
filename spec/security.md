@@ -111,3 +111,18 @@ HSM custody, distributed revocation, global authority federation, or proof
 that a configured authority is legally or physically entitled to control a
 place. Existing unsigned policy loading remains an explicitly locally trusted
 compatibility path and must not be exposed as verified policy processing.
+
+### AdmissionProfile lifecycle reference path
+
+`assess_profile_lifecycle` is a read-only local assessment for issued profiles.
+It fails closed from `VALID` when supporting evidence expires or is unavailable,
+runtime bindings change, the current policy has a demonstrated requirement
+impact, a configured issuer/authority is no longer trusted, or a local
+`ProfileRevocationRegistry` revokes the profile. It reuses the existing
+RequirementDelta output for selective requalification rather than authorizing
+changed requirements from an old profile.
+
+The registry is not a distributed revocation service and there is no push-based
+invalidation, online authority lookup, continuous runtime attestation, hardware
+enforcement, or globally synchronized state/clock service. Deployments must
+authenticate supplied runtime state, policy, evidence, trust anchors, and time.

@@ -215,3 +215,28 @@ The local policy-authority registry is likewise not PKI, legal or physical
 proof that an authority controls a place, remote discovery, certificate
 lifecycle, HSM custody, distributed revocation, or a global authority
 federation. Deployments must provision and protect their trust anchors.
+
+## AdmissionProfile lifecycle
+
+`assess_profile_lifecycle(...)` is a local, deterministic assessment for an
+already-issued `AdmissionProfile`; it never mutates the profile. Supply the
+current PlaceRequirementSet, authenticated current RobotState, and the
+supporting EvidenceBundle. It returns `VALID`, `REVALIDATE`, `REQUALIFY`, or
+`INVALID`, together with reason codes, reusable guarantees, invalidated
+guarantees, and the existing RequirementDelta result.
+
+`VALID` permits continued operation only when the supplied evidence is current,
+bindings still match, and the current requirements have no demonstrated impact.
+Expired or unavailable evidence and controller changes require `REVALIDATE`.
+Environment changes, changed/new/stricter requirements, and destination changes
+require `REQUALIFY`, reusing only guarantees that the existing delta logic can
+show unchanged. Actor/build changes, explicit local revocation, or failed
+current trust checks produce `INVALID` and require a new admission.
+
+`ProfileRevocationRegistry` is a deliberately small in-memory reference
+registry keyed by a deterministic profile identifier. For signed evidence or
+signed requirements, pass their existing wrappers and registries to recheck
+that the issuer/authority remains enabled. This is not push revocation,
+distributed synchronization, an online policy service, continuous runtime
+attestation, hardware enforcement, or a physical-safety guarantee. The caller
+must supply authenticated state and trusted time.

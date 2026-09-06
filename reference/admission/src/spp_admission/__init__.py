@@ -49,6 +49,10 @@ __all__ = [
     "sign_place_requirements",
     "verify_signed_evidence",
     "verify_signed_place_requirements",
+    "ProfileLifecycleAssessment",
+    "ProfileRevocationRegistry",
+    "assess_profile_lifecycle",
+    "profile_identifier",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -77,4 +81,10 @@ from .mapping import (
     DEFAULT_REQUIREMENT_MAPPING_REGISTRY,
     MappingSelection,
     RequirementMappingRegistry,
+)
+from .lifecycle import (
+    ProfileLifecycleAssessment,
+    ProfileRevocationRegistry,
+    assess_profile_lifecycle,
+    profile_identifier,
 )
