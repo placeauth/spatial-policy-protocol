@@ -9,6 +9,7 @@ SPP 0.2.0 Experimental Preview prepares the reference implementation for broader
 ## What changed
 
 - Hardened evidence-backed admission and selective requalification.
+- Added local Ed25519 signed-evidence verification with trusted issuer scope/type authorization.
 - Added an experimental SPP-to-Nav2 `SpeedLimit` enforcement adapter and bounded runtime validation.
 - Expanded reference and ROS runtime test coverage.
 
@@ -17,6 +18,7 @@ SPP 0.2.0 Experimental Preview prepares the reference implementation for broader
 - Added conservative evidence-sufficiency assessment with explicit reuse and retest reasons.
 - Validated provenance, freshness, and policy, environment, actor, controller, plan, and configuration state bindings at the admission boundary.
 - Hardened selective requalification and admission-boundary revalidation, including explicit TOCTOU rejection when relevant state changes after evidence is assessed.
+- Added a local trusted-issuer registry. The verified path rejects unknown, disabled, unauthorized, unsigned, and tampered evidence before sufficiency and admission evaluation.
 
 ## ROS 2/Nav2 runtime validation
 
@@ -33,7 +35,7 @@ With one active `FollowPath` goal, the stock Regulated Pure Pursuit fixture emit
 
 - Experimental and pre-standardization; not an adopted standard or production security system.
 - No physical-robot safety claim and no guaranteed stopping behavior.
-- No issuer-authentication or production PKI mechanism yet.
+- No PKI, remote trust discovery, production key management, HSM protection, certificate lifecycle, or distributed revocation infrastructure.
 - No distributed replay service, broad vendor interoperability validation, or production deployment certification.
 - Runtime validation is scoped to the documented Humble fixtures and does not certify arbitrary Nav2 configurations.
 

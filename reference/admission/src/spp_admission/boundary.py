@@ -10,6 +10,13 @@ from jsonschema import ValidationError
 from .engine import ReplayRegistry, admit
 from .models import AdmissionProfile, EvidenceBinding, RobotState
 from .sufficiency import EvidenceRecord, _record_error, assess_sufficiency
+from .trust import (
+    SignedEvidence,
+    SignedEvidenceRecord,
+    TrustedIssuerRegistry,
+    evidence_scope,
+    verify_signed_evidence,
+)
 
 
 def _deny(requirements: dict, evidence: dict, robot: RobotState,
@@ -85,3 +92,56 @@ def admit_evidence_backed(
         return admit(requirement_set, plan, evidence, robot, replay_registry, now=now)
     except (ValidationError, KeyError, TypeError, ValueError, AttributeError, OverflowError, OSError):
         return _deny(denial_req, denial_evidence, robot, ["malformed_source_record"])
+
+
+def admit_verified_evidence_backed(
+    requirement_set: dict[str, Any], plan: dict[str, Any], signed_evidence: SignedEvidence,
+    robot: RobotState, trusted_issuers: TrustedIssuerRegistry,
+    source_records: list[SignedEvidenceRecord] | None = None,
+    replay_registry: ReplayRegistry | None = None, *, now: datetime | None = None,
+) -> AdmissionProfile:
+    """Fail-closed admission for signed evidence from local trusted issuers.
+
+    This is distinct from ``admit_evidence_backed``, whose existing inputs are
+    trusted legacy local records. Every current or historical record accepted
+    here must retain its SignedEvidence wrapper and pass issuer verification.
+    """
+    try:
+        # Verify and admit the same synchronous snapshot so a caller cannot
+        # replace a signed bundle between signature verification and admission.
+        requirement_set, plan, signed_evidence, robot, source_records = deepcopy(
+            (requirement_set, plan, signed_evidence, robot, source_records)
+        )
+        denial_req = requirement_set if isinstance(requirement_set, dict) else {}
+        denial_evidence = signed_evidence.evidence if isinstance(signed_evidence, SignedEvidence) else {}
+        current_check = verify_signed_evidence(
+            signed_evidence, trusted_issuers,
+            expected_scope=evidence_scope(requirement_set),
+        )
+        if not current_check.verified:
+            return _deny(denial_req, denial_evidence, robot, [current_check.reason or "invalid_evidence_signature"])
+
+        verified_records: list[EvidenceRecord] = []
+        for source in source_records or []:
+            if not isinstance(source, SignedEvidenceRecord):
+                return _deny(denial_req, denial_evidence, robot, ["unsigned_source_evidence"])
+            source_check = verify_signed_evidence(
+                source.signed_evidence, trusted_issuers,
+                expected_scope=evidence_scope(source.requirements),
+            )
+            if not source_check.verified:
+                return _deny(denial_req, denial_evidence, robot,
+                             [source_check.reason or "invalid_evidence_signature"])
+            verified_records.append(EvidenceRecord(
+                source.requirements, source.plan, source.signed_evidence.evidence,
+            ))
+        return admit_evidence_backed(
+            requirement_set, plan, signed_evidence.evidence, robot,
+            source_records=verified_records, replay_registry=replay_registry, now=now,
+        )
+    except (KeyError, TypeError, ValueError, AttributeError):
+        return _deny(
+            requirement_set if isinstance(requirement_set, dict) else {},
+            signed_evidence.evidence if isinstance(signed_evidence, SignedEvidence) else {},
+            robot, ["malformed_signed_evidence"],
+        )

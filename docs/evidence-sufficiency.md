@@ -12,6 +12,7 @@ python demo/requalification/run_demo.py --scenario tamper
 python demo/requalification/run_demo.py --scenario stale
 python demo/requalification/run_demo.py --scenario controller-change
 python demo/requalification/run_demo.py --scenario toctou
+python demo/requalification/run_demo.py --scenario signed
 python demo/requalification/run_demo.py --json
 ```
 
@@ -49,6 +50,29 @@ requirements without a configured degraded restriction.
 Invalid destination structure, duplicate IDs or an environment mismatch stop
 planning with an exception. The caller must stop the operation on exceptions.
 Source-record failures cause retesting rather than evidence reuse.
+
+### Signed trusted-issuer path
+
+The reference layer also provides `SignedEvidence`, an additive wrapper around
+the existing complete EvidenceBundle. `sign_evidence(...)` uses Ed25519 over a
+canonical SHA-256 digest of the entire bundle, plus the issuer ID, evidence
+type, and local scope. The signed digest covers results, binding, policy and
+plan digests, actor/build/controller/environment identifiers, freshness fields,
+evidence scope, and assurance metadata.
+
+Provision `TrustedIssuer` public keys locally in a `TrustedIssuerRegistry`.
+An issuer has an ID, raw Ed25519 public key, allowed evidence types, allowed
+scopes, and an enabled flag. `admit_verified_evidence_backed(...)` verifies the
+current signed bundle and every historical `SignedEvidenceRecord` before the
+existing sufficiency and admission checks run. It fails closed for unsigned
+evidence, unknown or disabled issuers, invalid signatures, scope/type mismatch,
+and unauthorized issuers. `admit_evidence_backed(...)` remains an explicit
+UNSIGNED/TRUSTED LEGACY path for local compatibility; it is not issuer
+authentication.
+
+This adds no wire-schema fields or normative SPP 0.1 rules. It is a local
+reference trust model, not PKI, key discovery, certificate lifecycle, remote
+revocation, HSM-backed custody, or proof that a test runner observed reality.
 
 ## Reuse rules
 
@@ -146,8 +170,10 @@ registry. Historical proof reuse does not claim the original source challenge
 again. Registry persistence, concurrency and distribution remain deployment
 concerns. Current source checks use the four existing reference mappings.
 
-This is structural provenance and sufficiency, not issuer authentication.
-A malicious issuer can fabricate a passing result and recompute SHA-256.
+SHA-256 structural provenance alone is not issuer authentication: a malicious
+issuer can fabricate a passing result and recompute its digest. For the local
+verified path, use `admit_verified_evidence_backed` with trusted Ed25519
+issuers. The legacy APIs still rely on their trusted local caller.
 `AdmissionProfile` remains a constructible Python dataclass: downstream systems
 must trust the service that issued it, not arbitrary profile dictionaries or
 the mere presence of a status field. The enforced entry point is not exposed as

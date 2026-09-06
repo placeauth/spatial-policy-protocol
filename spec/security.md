@@ -68,8 +68,9 @@ deployment verifies it.
 Evidence assurance ranges from E0 declaration through E4 trusted external
 observation. The demo implements E2 behavioral evidence only. A place should
 learn the demonstrated guarantee and a digest, not proprietary source code,
-model weights, or controller internals. Signed or hardware-attested evidence
-can strengthen the binding later; SPP does not define custom cryptography.
+model weights, or controller internals. The reference admission layer provides
+local Ed25519 signing and trusted-issuer verification for complete evidence
+bundles. SPP 0.1 does not standardize this mechanism or custom cryptography.
 
 Degraded admission must name its restrictions. Essential safety requirements
 must fail closed to DENIED; a degraded profile must never be treated as a full
@@ -80,12 +81,16 @@ SPP does not itself force a malicious autonomous system to comply.
 
 ### Reference admission entry points
 
-Evidence-backed integrations should use `admit_evidence_backed`, which validates
-source provenance, current bindings, coverage, assurance and sufficiency again
-at admission time. `admit` is retained as a trusted legacy API and does not
-validate reused source records. Do not expose legacy selection to untrusted
-callers. See the [boundary and migration guidance](../docs/evidence-sufficiency.md#admission-boundary).
+Issuer-sensitive evidence-backed integrations should use
+`admit_verified_evidence_backed`, which verifies locally provisioned Ed25519
+issuer keys, issuer scope/type authorization, and signed bundle integrity before
+validating source provenance, current bindings, coverage, assurance and
+sufficiency. `admit_evidence_backed` and `admit` remain trusted legacy APIs;
+they do not authenticate evidence issuers. Do not expose legacy selection to
+untrusted callers. See the [boundary and migration guidance](../docs/evidence-sufficiency.md#admission-boundary).
 
-The admission service must authenticate evidence issuers, current machine state,
-destination requirements and time. Hash consistency does not establish issuer
-identity. A caller-constructed AdmissionProfile is not proof of admission.
+The reference registry is not PKI, remote trust discovery, production key
+management, HSM protection, certificate lifecycle, distributed revocation, or
+physical trust in the evidence-generation process. The admission service must
+still authenticate current machine state, destination requirements and time. A
+caller-constructed AdmissionProfile is not proof of admission.

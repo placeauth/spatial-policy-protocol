@@ -18,6 +18,7 @@ __all__ = [
     "derive_requalification_plan",
     "admit",
     "admit_evidence_backed",
+    "admit_verified_evidence_backed",
     "ReplayRegistry",
     "build_evidence",
     "compute_requirement_delta",
@@ -25,7 +26,27 @@ __all__ = [
     "execute_plan",
     "load_requirement_set",
     "reset_replay_registry",
+    "EVIDENCE_BUNDLE_TYPE",
+    "SignedEvidence",
+    "SignedEvidenceRecord",
+    "SignatureVerification",
+    "TrustedIssuer",
+    "TrustedIssuerRegistry",
+    "evidence_scope",
+    "sign_evidence",
+    "verify_signed_evidence",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
-from .boundary import admit_evidence_backed
+from .boundary import admit_evidence_backed, admit_verified_evidence_backed
+from .trust import (
+    EVIDENCE_BUNDLE_TYPE,
+    SignedEvidence,
+    SignedEvidenceRecord,
+    SignatureVerification,
+    TrustedIssuer,
+    TrustedIssuerRegistry,
+    evidence_scope,
+    sign_evidence,
+    verify_signed_evidence,
+)

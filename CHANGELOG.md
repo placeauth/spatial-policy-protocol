@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added an additive local Ed25519 signed-evidence wrapper, trusted issuer registry, issuer scope/type authorization, and fail-closed verified admission before sufficiency checks. The legacy unsigned trusted path remains explicit for compatibility.
+
 ## 0.2.0 — Experimental Preview (prepared; not yet released)
 
 - Added evidence-sufficiency assessment, provenance, freshness, and state-binding validation; strengthened selective requalification and admission-boundary revalidation, including explicit TOCTOU rejection.

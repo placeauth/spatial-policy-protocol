@@ -12,8 +12,23 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / "reference/admission/src"), str(ROOT / "reference/policy-server/src")]
 
-from spp_admission import EvidenceRecord, ReplayRegistry, derive_requalification_plan, admit_evidence_backed
-from spp_admission.engine import build_evidence, compute_requirement_delta, execute_plan, load_requirement_set
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+from spp_admission import (
+    EVIDENCE_BUNDLE_TYPE,
+    EvidenceRecord,
+    ReplayRegistry,
+    TrustedIssuer,
+    TrustedIssuerRegistry,
+    admit_evidence_backed,
+    admit_verified_evidence_backed,
+    derive_requalification_plan,
+    evidence_scope,
+    sign_evidence,
+    verify_signed_evidence,
+)
+from spp_admission.engine import build_evidence, compute_requirement_delta, derive_plan, execute_plan, load_requirement_set
 from spp_admission.models import RobotState
 
 
@@ -75,11 +90,60 @@ def run(scenario: str = "normal") -> list[dict]:
     return trace
 
 
+def run_signed() -> dict[str, str]:
+    """Exercise actual local issuer verification before evidence-backed admission."""
+    requirements = load_requirement_set(ROOT / "demo/admission/lobby.yaml")
+    robot = RobotState("robot:clinic:1", "build:1", "controller:1", "demo_mobile_base",
+                       requirements["environment_digest"], {"movement.max_speed": 0.6})
+    plan = derive_plan(requirements, robot, challenge="nonce:signed-demo")
+    evidence = build_evidence(requirements, plan, robot, execute_plan(plan, robot, requirements))
+    private_key = Ed25519PrivateKey.generate()
+    issuer = TrustedIssuer(
+        "clinic-validator-1",
+        private_key.public_key().public_bytes(serialization.Encoding.Raw, serialization.PublicFormat.Raw),
+        frozenset({EVIDENCE_BUNDLE_TYPE}), frozenset({evidence_scope(requirements)}),
+    )
+    trusted_issuers = TrustedIssuerRegistry([issuer])
+    signed = sign_evidence(evidence, issuer_id=issuer.issuer_id, private_key=private_key,
+                           scope=evidence_scope(requirements))
+    valid = verify_signed_evidence(signed, trusted_issuers, expected_scope=evidence_scope(requirements))
+    admitted = admit_verified_evidence_backed(
+        requirements, plan, signed, robot, trusted_issuers, replay_registry=ReplayRegistry(),
+    )
+
+    tampered_bundle = deepcopy(signed.evidence)
+    tampered_bundle["test_results"][0]["passed"] = False
+    tampered = replace(signed, evidence=tampered_bundle)
+    invalid = verify_signed_evidence(tampered, trusted_issuers, expected_scope=evidence_scope(requirements))
+    denied = admit_verified_evidence_backed(
+        requirements, plan, tampered, robot, trusted_issuers, replay_registry=ReplayRegistry(),
+    )
+    return {
+        "issuer": issuer.issuer_id,
+        "valid_signature": "VALID" if valid.verified else "INVALID",
+        "valid_admission": admitted.status,
+        "tampered_signature": "VALID" if invalid.verified else "INVALID",
+        "tampered_admission": denied.status,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", choices=["normal", "tamper", "stale", "controller-change", "toctou"], default="normal")
+    parser.add_argument("--scenario", choices=["normal", "tamper", "stale", "controller-change", "toctou", "signed"], default="normal")
     parser.add_argument("--json", action="store_true", help="Emit the actual trace for inspection")
     args = parser.parse_args()
+    if args.scenario == "signed":
+        trace = run_signed()
+        if args.json:
+            print(json.dumps(trace, indent=2))
+            return
+        print(f"Trusted issuer: {trace['issuer']}")
+        print(f"Evidence signature: {trace['valid_signature']}")
+        print(f"Admission: {trace['valid_admission']}")
+        print("\nEvidence modified after signing")
+        print(f"Signature: {trace['tampered_signature']}")
+        print(f"Admission: {trace['tampered_admission']}")
+        return
     trace = run(args.scenario)
     if args.json:
         print(json.dumps(trace, indent=2))
