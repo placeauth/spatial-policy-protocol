@@ -168,7 +168,8 @@ validation. Invalid reuse does not consume the destination nonce. Accepted
 nonces remain single-use, including across legacy/enforced callers sharing the
 registry. Historical proof reuse does not claim the original source challenge
 again. Registry persistence, concurrency and distribution remain deployment
-concerns. Current source checks use the four existing reference mappings.
+concerns. Current source checks use the configured local reference mapping
+registry, including mobile-base and humanoid mappings where applicable.
 
 SHA-256 structural provenance alone is not issuer authentication: a malicious
 issuer can fabricate a passing result and recompute its digest. For the local

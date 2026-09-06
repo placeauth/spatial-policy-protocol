@@ -1,27 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — Experimental Preview
 
-- Added `spp-explain`, a deterministic developer trace that projects existing
-  requirements, provider selection, evidence assessment, selective
-  requalification, and admission outputs without changing decision logic.
-
-- Added a deterministic local requirement-mapping registry and a second,
-  humanoid reference embodiment. The same place requirements now select
-  embodiment-specific conformance mechanisms without changing SPP 0.1
-  vocabulary or schemas.
-
-- Added a bounded Open-RMF delivery-acceptance adapter with destination/actor matching and explicit restriction acceptance. Verified the Humble Python callback interface from upstream source; adapter tests and evidence-backed demo only, no RMF runtime validation.
-
-- Added an additive local Ed25519 signed-evidence wrapper, trusted issuer registry, issuer scope/type authorization, and fail-closed verified admission before sufficiency checks. The legacy unsigned trusted path remains explicit for compatibility.
-
-## 0.2.0 — Experimental Preview (prepared; not yet released)
-
-- Added evidence-sufficiency assessment, provenance, freshness, and state-binding validation; strengthened selective requalification and admission-boundary revalidation, including explicit TOCTOU rejection.
-- Added the experimental ROS 2/Nav2 enforcement adapter and real runtime validation of `SpeedLimit` transport, ControllerServer-to-plugin-boundary delivery, and stock Nav2 Regulated Pure Pursuit motion behavior.
-- Demonstrated a speed-command change from 1.0 m/s to 0.5 m/s under the same active `FollowPath` goal using a fixed-pose runtime fixture.
-- Expanded the normal reference suite to 149 passing tests with 4 environment-dependent skips, plus 5 passing dedicated ROS runtime tests in the Humble validation environment.
-- Remains experimental and pre-standardization: this work makes no physical-robot safety claim, does not guarantee stopping, does not yet provide issuer authentication, and is not a production deployment certification.
+- Added evidence sufficiency, selective requalification, and admission-boundary revalidation with explicit TOCTOU rejection.
+- Added local Ed25519 signed evidence and trusted-issuer verification; the unsigned trusted legacy path remains explicit for compatibility.
+- Added the experimental ROS 2/Nav2 adapter and validated actual Humble `SpeedLimit` transport, ControllerServer-to-plugin-boundary delivery, and stock Regulated Pure Pursuit command behavior from 1.0 m/s to 0.5 m/s under one active `FollowPath` goal.
+- Added a bounded Open-RMF Humble Python delivery-acceptance adapter targeting `FleetUpdateHandle.consider_delivery_requests`; the adapter boundary is validated, not an Open-RMF runtime.
+- Added deterministic embodiment-specific conformance mapping, a humanoid reference embodiment, and `spp-explain` decision tracing.
+- The dependency-free suite reports 186 passed, 4 skipped. This release remains experimental and pre-standardization: it makes no physical-robot safety or guaranteed-stopping claim and is not a production deployment certification.
 
 ## 0.1.0 — Experimental Preview
 

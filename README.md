@@ -3,11 +3,11 @@
 An experimental, open interoperability protocol for establishing how autonomous systems may operate in physical environments.
 
 [![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](CHANGELOG.md)
-[![SPP 0.2.0 release preparation](https://img.shields.io/badge/SPP-0.2.0%20release%20preparation-blue.svg)](docs/releases/SPP-0.2.0-experimental-preview.md)
+[![SPP v0.2.0 Experimental Preview](https://img.shields.io/badge/SPP-v0.2.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.2.0-experimental-preview.md)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-[Quickstart](docs/quickstart.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Prepared 0.2 notes](docs/releases/SPP-0.2.0-experimental-preview.md) · [Latest release: 0.1](docs/releases/SPP-0.1.0-experimental-preview.md)
+[Quickstart](docs/quickstart.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [SPP v0.2 release notes](docs/releases/SPP-0.2.0-experimental-preview.md) · [Latest release: v0.2](docs/releases/SPP-0.2.0-experimental-preview.md)
 
 ## The core question
 
@@ -47,7 +47,7 @@ The protocol lifecycle is:
 Place requirements → Conformance plan → Evidence → Admission profile → Spatial transition
 ```
 
-For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), and the [current-main changelog](CHANGELOG.md). The [prepared SPP 0.2 notes](docs/releases/SPP-0.2.0-experimental-preview.md) are not a published release; the [SPP 0.1.0 release notes](docs/releases/SPP-0.1.0-experimental-preview.md) document the latest public tag.
+For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), [SPP v0.2 release notes](docs/releases/SPP-0.2.0-experimental-preview.md), and the [current-main changelog](CHANGELOG.md).
 
 ## Where SPP fits
 
@@ -188,7 +188,7 @@ python demo/requalification/run_demo.py
 The [evidence sufficiency guide](docs/evidence-sufficiency.md) covers integrity,
 freshness, scope and configuration checks, plus tamper and expiry demo variants.
 
-> **Current main:** prepared for SPP 0.2.0 Experimental Preview. The `v0.2.0-experimental-preview` tag and GitHub release have not been created; SPP 0.1.0 Experimental Preview remains the latest published release.
+> **Current release:** SPP v0.2.0 Experimental Preview. The normative protocol specification remains SPP 0.1.
 
 The current reference implementation demonstrates:
 
