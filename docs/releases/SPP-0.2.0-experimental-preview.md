@@ -12,6 +12,12 @@ SPP 0.2.0 Experimental Preview prepares the reference implementation for broader
 - Added local Ed25519 signed-evidence verification with trusted issuer scope/type authorization.
 - Added an experimental SPP-to-Nav2 `SpeedLimit` enforcement adapter and bounded runtime validation.
 - Expanded reference and ROS runtime test coverage.
+- SPP can gate Open-RMF task eligibility using evidence-backed AdmissionProfiles.
+  The [bounded adapter](../open-rmf.md) targets Humble's
+  `FleetUpdateHandle.consider_delivery_requests` callback; the interface was
+  verified from upstream source and the adapter boundary tested. No real RMF
+  runtime was validated. DEGRADED eligibility requires explicit restriction
+  acceptance; multi-robot assignment and execution revalidation remain host duties.
 
 ## Evidence/admission hardening
 

@@ -191,6 +191,11 @@ The SPP 0.1 protocol is implemented by an experimental reference implementation 
 
 ## ROS 2 / Nav2 integration
 
+Open-RMF: SPP can gate Open-RMF task eligibility using evidence-backed AdmissionProfiles.
+The [bounded adapter](docs/open-rmf.md) targets Humble's delivery-acceptance callback;
+only the adapter boundary is tested, with no RMF runtime validation. Run
+`python demo/open_rmf/run_demo.py` for ADMITTED, DEGRADED and DENIED examples.
+
 The experimental adapter maps a trusted `AdmissionProfile` to a deterministic
 Nav2 enforcement plan, then publishes `movement.max_speed` through an optional
 ROS runtime adapter. Denied navigation is represented fail-closed; actual stop

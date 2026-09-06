@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a bounded Open-RMF delivery-acceptance adapter with destination/actor matching and explicit restriction acceptance. Verified the Humble Python callback interface from upstream source; adapter tests and evidence-backed demo only, no RMF runtime validation.
+
 - Added an additive local Ed25519 signed-evidence wrapper, trusted issuer registry, issuer scope/type authorization, and fail-closed verified admission before sufficiency checks. The legacy unsigned trusted path remains explicit for compatibility.
 
 ## 0.2.0 — Experimental Preview (prepared; not yet released)
