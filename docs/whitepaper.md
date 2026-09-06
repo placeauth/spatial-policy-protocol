@@ -12,7 +12,7 @@ September 2026
 
 **Project:** PlaceAuth  
 **Protocol:** Spatial Policy Protocol (SPP)  
-**Prepared release:** SPP 0.2.0 Experimental Preview (not yet released)<br>
+**Current release:** SPP 0.2.0 Experimental Preview<br>
 **Repository:** [https://github.com/placeauth/spatial-policy-protocol](https://github.com/placeauth/spatial-policy-protocol)  
 **Author:** Braden Russell Glasgow  
 **Role:** Project Lead, PlaceAuth  
@@ -29,7 +29,7 @@ PlaceAuth is the umbrella project for an open interoperability effort in this ar
 
 SPP separates four concerns that are often coupled in deployments: place-defined requirements, machine conformance, evidence, and the operating profile that results. The place publishes requirements for a hierarchy of spaces. A machine, through an embodiment-appropriate adapter, maps those requirements to tests or other proof mechanisms. Evidence is bound to relevant machine, controller, policy, environment, and plan state, with freshness and assurance information. The admission layer then expresses an operating profile as `ADMITTED`, `DEGRADED`, or `DENIED`.
 
-The SPP 0.1.0 Experimental Preview is a reference implementation for technical review and interoperability experimentation. It includes machine-readable schemas, YAML examples, deterministic conformance and admission scenarios, an HTTP reference server with local and OPA/Rego evaluation, and an experimental ROS 2/Nav2 speed-limit adapter with runtime and ControllerServer-to-plugin-boundary validation. These components demonstrate a coherent model; they do not constitute certification, production security infrastructure, or evidence of industry adoption.
+SPP 0.2.0 Experimental Preview is a reference implementation for technical review and interoperability experimentation. Its reference package version is 0.2.0; the normative protocol specification remains SPP 0.1. It includes machine-readable schemas, YAML examples, deterministic conformance and admission scenarios, an HTTP reference server with local and OPA/Rego evaluation, evidence-backed admission, and bounded ROS 2/Nav2 and Open-RMF adapter work. These components demonstrate a coherent model; they do not constitute certification, production security infrastructure, or evidence of industry adoption.
 
 ## 2. Introduction
 
@@ -132,7 +132,7 @@ Illustrative mappings include:
 - a forklift safety-PLC test for a human-only aisle; and
 - a drone flight-controller test for a no-recording or geofenced operation.
 
-These examples are illustrative. The SPP 0.1.0 reference demo implements a simple mobile-base adapter for speed, human separation, facial-recognition disablement, and zero video retention. The other embodiments are not claimed to be implemented by the preview.
+These examples are illustrative. The reference implementation includes an embodiment-specific conformance provider registry with mobile and humanoid providers. Its demo implements a simple mobile-base path for speed, human separation, facial-recognition disablement, and zero video retention. The other embodiment examples are not claims of a complete deployment or certification.
 
 Conformance is not the same as authorization. A test can show that a property was demonstrated; the policy still determines whether the action is allowed in the requested space and context. Similarly, a passing test does not grant an indefinite right to operate. Evidence remains bound to policy, environment, actor state, and validity conditions.
 
@@ -140,9 +140,11 @@ Conformance is not the same as authorization. A test can show that a property wa
 
 An `EvidenceBundle` records the results selected by a conformance plan. An `EvidenceBinding` associates those results with the relevant actor or robot build, controller configuration, policy version and digest, environment or site-model digest, plan state, challenge, and validity window. The purpose is to make applicability inspectable and to reject evidence that is stale, modified, replayed, or bound to the wrong state.
 
-The reference implementation demonstrates behavioral evidence at assurance level E2. The schema reserves a range from E0 declaration through E4 trusted external observation, but the preview does not implement all levels. Higher assurance may require signed evidence, hardware attestation, independent observation, or other deployment-supplied mechanisms. SPP does not define custom cryptography or a production trust-anchor system.
+The reference layer supports signed Ed25519 evidence. A signed bundle carries an issuer identifier, signature algorithm, and signature bytes over canonical evidence content. A local `TrustedIssuerRegistry` performs issuer lookup, public-key verification, and authorization for the declared evidence type and scope. The verified admission path fails closed for unknown, disabled, unauthorized, or invalid issuers and signatures. Legacy unsigned evidence remains an explicit compatibility path only; the verified path does not silently treat unsigned evidence as trusted.
 
-Evidence freshness matters because a result can become invalid without the machine changing its identity. A controller update, sensor reconfiguration, changed policy, changed site model, or expired validity window can invalidate a previously applicable guarantee. A challenge or nonce helps prevent simple replay within the deployment’s acceptance window. The reference registry is intentionally lightweight and in-memory; it is reference/demo infrastructure, not a distributed replay service.
+The reference implementation demonstrates behavioral evidence at assurance level E2. The schema reserves a range from E0 declaration through E4 trusted external observation, but the preview does not implement all levels. The signed-evidence layer is a local reference trust model, not custom cryptography, a PKI, remote trust discovery, certificate lifecycle management, or a production trust-anchor system.
+
+Evidence freshness matters because a result can become invalid without the machine changing its identity. A controller update, sensor reconfiguration, changed policy, changed site model, or expired validity window can invalidate a previously applicable guarantee. A challenge or nonce helps prevent simple replay within the deployment’s acceptance window. The reference registry is intentionally lightweight and in-memory; it is reference/demo infrastructure, not a distributed replay service. At the admission boundary, the implementation revalidates the exact current conformance plan, policy, and environment bindings and rejects time-of-check/time-of-use changes that occur after initial evidence evaluation.
 
 The evidence model is deliberately proportional. It exchanges a guarantee, result, binding, digest, and assurance level. It does not require a robot to disclose proprietary internals. At the same time, a digest is not a magical proof of physical truth. A compromised adapter, dishonest self-report, or compromised runtime can still produce misleading evidence. The enforcement point and deployment trust architecture remain essential.
 
@@ -210,7 +212,7 @@ Updated operating profile
 
 The transition can also classify requirements as `STRICTER`, `RELAXED`, `NO_LONGER_APPLICABLE`, or `UNRESOLVED`. A stricter destination condition must not be silently treated as the old guarantee. A relaxed condition may be satisfied by an existing stronger result, subject to the implementation’s comparison rules. A requirement that no longer applies should not remain as an unexplained restriction in the new profile.
 
-Selective requalification does not weaken the place’s authority. It makes the reason for reuse explicit and preserves the boundary between proven and unproven conditions. The destination supplies the requirements; the actor supplies evidence; the admission layer derives the reduced plan and updated profile. The robot application can remain unchanged while the place changes the conditions under which it may operate.
+Selective requalification does not weaken the place’s authority. It makes the reason for reuse explicit and preserves the boundary between proven and unproven conditions. The destination supplies the requirements; the actor supplies evidence; the admission layer derives the `RequirementDelta`, reduced conformance plan, and updated profile. The robot application can remain unchanged while the place changes the conditions under which it may operate.
 
 ## 13. SPP Architecture
 
@@ -228,7 +230,7 @@ PlaceAuth
 
 **SPP Conformance** turns abstract place requirements into a deterministic plan of adapter-level tests or other proof mechanisms. It records the requirement-to-proof mapping, unresolved guarantees, policy and environment references, and the assurance level requested by the place.
 
-**SPP Admission** verifies evidence and derives the operating profile. It checks binding, freshness, integrity, policy and environment state, challenge use, and the result required for each guarantee. It also models `RequirementDelta` during spatial transitions and supports selective requalification.
+**SPP Admission** verifies evidence and derives the operating profile. It checks binding, freshness, integrity, signed-evidence issuer trust when the verified path is selected, policy and environment state, challenge use, and the result required for each guarantee. It also models `RequirementDelta` during spatial transitions, supports selective requalification, and revalidates the current admission boundary before a profile is used.
 
 The layers are protocol surfaces, not necessarily separate network services. A deployment may combine them in one process or distribute them across policy, fleet, robot, and building components. The reference repository keeps the boundaries visible so that independent implementations can replace individual pieces.
 
@@ -241,16 +243,17 @@ The current reference implementation demonstrates:
 - hierarchical policy inheritance and deny-by-default evaluation;
 - deterministic conformance planning and requirement-to-proof mapping;
 - evidence generation and binding to relevant state;
-- evidence digest, freshness, policy/environment binding, and reference replay checks;
+- evidence digest, freshness, policy/environment binding, reference replay checks, and signed Ed25519 evidence with local trusted-issuer verification;
 - `ADMITTED`, `DEGRADED`, and `DENIED` admission profiles;
 - essential-safety denial and explicit degraded restrictions;
-- spatial transition deltas and selective requalification;
+- spatial transition deltas, `RequirementDelta`, and selective requalification;
 - local policy evaluation and OPA/Rego integration;
 - a FastAPI reference server exposing health and decision endpoints;
-- an experimental ROS 2/Nav2 speed-limit adapter with runtime and ControllerServer-to-plugin-boundary validation; and
-- deterministic clinic and admission demonstrations.
+- an experimental ROS 2/Nav2 speed-limit adapter with SpeedLimit runtime, ControllerServer-to-plugin-boundary, and stock Regulated Pure Pursuit motion validation;
+- an Open-RMF task-eligibility adapter at the `FleetUpdateHandle.consider_delivery_requests` boundary; and
+- deterministic clinic and admission demonstrations, including `spp-explain` decision traces.
 
-The dependency-free reference test suite reports **149 passed, 3 skipped, 0 failed** in the documented environment. The four admission scenarios are:
+The dependency-free reference test suite reports **186 passed, 4 skipped, 0 failed** in the documented environment. The four admission scenarios are:
 
 ```text
 A  full conformance              -> ADMITTED
@@ -259,7 +262,9 @@ C  essential safety failure      -> DENIED
 D  transition and requalification-> updated profile
 ```
 
-The count describes the state of the reference test suite. It is not a measure of adoption, certification, interoperability across independent vendors, or production readiness. The ROS 2 component is an experimental speed-limit adapter; its runtime and ControllerServer-to-plugin boundary validation do not demonstrate stock-controller motion or physical enforcement. The OPA/Rego path is a reference adapter. Deployments must supply their own identity, transport, enforcement, safety, availability, and trust mechanisms.
+The count describes the state of the reference test suite. It is not a measure of adoption, certification, interoperability across independent vendors, or production readiness. The ROS 2 component is an experimental speed-limit adapter. Its real stock Nav2 Regulated Pure Pursuit validation observed command speed change from 1.0 m/s to 0.5 m/s under the same `FollowPath` goal. This is not a physical-robot safety claim, a guaranteed-stopping claim, or proof of physical enforcement. The Open-RMF work is limited to the adapter boundary named above and is not a real RMF runtime test. The OPA/Rego path is a reference adapter. Deployments must supply their own identity, transport, enforcement, safety, availability, and trust mechanisms.
+
+For operational review, the reference `spp-explain` command produces a deterministic trace of the evaluated request, resolved policy path, applicable requirements, evidence and admission checks, and resulting decision or operating profile. The trace is an explainability aid for the reference behavior; it is not an audit system or an independent proof of physical behavior.
 
 ## 15. Security and Trust Model
 
@@ -277,11 +282,11 @@ Trust depends on the deployment’s:
 - attestation, observation, or independent monitoring mechanisms; and
 - operational controls such as emergency stops and collision avoidance.
 
-The security guidance requires authenticated authorities and actors, integrity-protected transport, protected policy administration, short-lived decisions, trusted time, fail-closed behavior on errors, and minimum necessary context. It also warns that logs may reveal sensitive information about facilities, people, robots, and denied activity.
+The security guidance requires authenticated authorities and actors, integrity-protected transport, protected policy administration, short-lived decisions, trusted time, fail-closed behavior on errors, and minimum necessary context. The reference signed-evidence path adds Ed25519 verification through a local `TrustedIssuerRegistry`; it verifies issuer identity, canonical evidence integrity, and the issuer’s authorization for the asserted evidence type and scope. It also warns that logs may reveal sensitive information about facilities, people, robots, and denied activity.
 
 The threat model includes policy tampering and rollback, actor spoofing, context and space forgery, action confusion, decision replay, obligation stripping, parser differentials, denial of service, policy probing, and enforcement bypass. Evidence-based admission adds forged or modified test results, stale or replayed bundles, wrong-build or wrong-configuration evidence, compromised adapters, unavailable attestation, and unsafe degraded profiles treated as full admission.
 
-SPP 0.1 does not standardize signatures, identity or PKI, revocation, distributed replay protection, geometry, or certification. Production deployments must provide appropriate mechanisms. Safety systems remain independently authoritative and can override an SPP permit. These limitations are part of the model, not implementation details to be hidden by a positive profile.
+SPP 0.1 does not standardize a PKI, remote trust discovery, certificate chains or lifecycle, distributed revocation or replay protection, geometry, or certification. The reference signed-evidence implementation does not provide production key management, HSM protection, certificate lifecycle, distributed revocation infrastructure, or physical trust in the evidence-generation process. Production deployments must provide appropriate mechanisms. Safety systems remain independently authoritative and can override an SPP permit. These limitations are part of the model, not implementation details to be hidden by a positive profile.
 
 ## 16. Relationship to Existing Infrastructure
 
@@ -289,13 +294,13 @@ SPP is intended to complement existing systems rather than replace them. A deplo
 
 SPP contributes the place-facing vocabulary and exchange: requirements, applicable spaces, decision semantics, proof references, evidence bindings, and operating profiles. A ROS 2 node or fleet adapter can act as an enforcement point. An OPA/Rego policy engine can evaluate a policy representation. A building system can remain authoritative for an actuator. A localization service can provide context that the decision point treats as trusted only to the degree the deployment supports.
 
-This composability is deliberate. SPP does not assume one middleware, transport, robot form, policy engine, or building vendor. Nor does it claim that an integration exists merely because a system is named as compatible. The current ROS 2 integration is an experimental speed-limit adapter with runtime and ControllerServer-to-plugin-boundary validation; it does not demonstrate stock-controller motion or physical enforcement. The preview contains no formal affiliation or endorsement by the projects mentioned here.
+This composability is deliberate. SPP does not assume one middleware, transport, robot form, policy engine, or building vendor. Nor does it claim that an integration exists merely because a system is named as compatible. The current ROS 2 integration is an experimental speed-limit adapter with SpeedLimit runtime, ControllerServer-to-plugin-boundary, and stock Regulated Pure Pursuit motion validation; it observed a 1.0 m/s to 0.5 m/s command-speed change under the same `FollowPath` goal, not stock-controller safety or physical enforcement. The Open-RMF adapter is limited to task eligibility at the `FleetUpdateHandle.consider_delivery_requests` boundary and has no real RMF runtime validation claim. The preview contains no formal affiliation or endorsement by the projects mentioned here.
 
 ## 17. Open Questions
 
 The experimental model leaves important questions for future technical work and review:
 
-1. **Identity and trust anchors:** How should places, actors, fleets, and evidence issuers discover and authenticate one another across organizations?
+1. **Identity and trust anchors:** The reference layer verifies named local issuers; how should places, actors, fleets, and evidence issuers discover and authenticate one another across organizations?
 2. **Evidence assurance:** Which assurance levels are meaningful for different requirements, and how should independent observation or hardware attestation be represented?
 3. **Physical enforcement:** How can an admission profile be coupled reliably to the actuator, runtime, or building controller that must enforce it?
 4. **Discovery:** How does a machine find the authoritative policy for the space it is entering without exposing unnecessary facility information?
@@ -308,9 +313,9 @@ These questions are intentionally open. The preview provides a concrete vocabula
 
 ## 18. Current Status
 
-SPP 0.1.0 is an **Experimental Preview** developed under PlaceAuth. It is available in a public repository under the Apache-2.0 license and is positioned for pre-standardization technical review. The repository includes specifications, schemas, examples, reference services, an experimental runtime enforcement adapter, demos, tests, security guidance, and release notes.
+SPP 0.2.0 is an **Experimental Preview** developed under PlaceAuth. Its reference package version is 0.2.0, while the normative protocol specification remains SPP 0.1. It is available in a public repository under the Apache-2.0 license and is positioned for pre-standardization technical review. The repository includes specifications, schemas, examples, reference services, experimental runtime and task-eligibility adapters, demos, tests, security guidance, and release notes.
 
-The preview is usable as a reference and experimentation surface, but it is not production-ready security infrastructure. In particular, it does not provide production identity or PKI, distributed replay protection, hardware attestation, certification, production-grade ROS 2/Nav2 or Open-RMF deployment integration, physical enforcement guarantees, discovery, or broad vendor interoperability testing.
+The preview is usable as a reference and experimentation surface, but it is not production-ready security infrastructure. In particular, it does not provide a production PKI, remote trust discovery, production key management, distributed replay protection, hardware attestation, certification, production-grade ROS 2/Nav2 or Open-RMF deployment integration, physical enforcement guarantees, discovery, or broad vendor interoperability testing.
 
 Technical feedback is welcome when it is specific and reproducible: a schema ambiguity, an evaluation discrepancy, a security concern, an interoperability proposal, or a failing test is more useful than an assumption that the preview already represents a finished standard.
 
@@ -341,6 +346,6 @@ The core idea is simple:
 > Autonomous systems should be able to demonstrate that those conditions are met.
 > The result should be a machine-readable operating profile that both sides understand.
 
-SPP 0.1.0 is an experimental attempt to make that exchange concrete. Its next value comes from review, independent implementations, careful security analysis, and evidence about where the model is useful or incomplete.
+SPP 0.2.0 is an experimental implementation release that makes that exchange concrete while the normative protocol specification remains SPP 0.1. Its next value comes from review, independent implementations, careful security analysis, and evidence about where the model is useful or incomplete.
 
 Certain technologies described by PlaceAuth are patent pending.

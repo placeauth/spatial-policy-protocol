@@ -59,21 +59,17 @@ def transition_diagram() -> str:
     return """
 <figure class="diagram transition-diagram">
   <figcaption>Selective requalification across a spatial transition</figcaption>
-  <div class="transition-inputs">
-    <div class="diagram-box">Existing evidence</div>
+  <div class="transition-inputs compact-transition">
+    <div class="diagram-box">Previous Evidence</div>
     <div class="diagram-plus">+</div>
-    <div class="diagram-box">Destination requirements</div>
+    <div class="diagram-box">Destination Requirements</div>
   </div>
   <div class="diagram-arrow" aria-hidden="true"></div>
-  <div class="diagram-box wide">Requirement delta</div>
+  <div class="diagram-box wide">RequirementDelta</div>
   <div class="diagram-arrow" aria-hidden="true"></div>
-  <div class="transition-output">
-    <div class="diagram-box">Reuse still-sufficient evidence</div>
-    <div class="diagram-plus">+</div>
-    <div class="diagram-box">Requalify new, stricter, or unresolved requirements</div>
-  </div>
+  <div class="diagram-box wide">Reduced ConformancePlan</div>
   <div class="diagram-arrow" aria-hidden="true"></div>
-  <div class="diagram-box wide">Updated operating profile</div>
+  <div class="diagram-box wide">Updated AdmissionProfile</div>
 </figure>
 """
 
@@ -201,10 +197,10 @@ def render_html(markdown: str) -> str:
 <section class="title-page"><div class="title-rule"></div><div class="brand">PlaceAuth</div><div class="tagline">A common language for machines and places.</div>
 <div class="title-content"><div class="kicker">Whitepaper</div><h1>From Permission<br>to Admission</h1><p class="subtitle">An Open Interoperability Model for Autonomous Systems in Physical Environments</p></div>
 <div class="author-attribution"><div class="author-name">Braden Russell Glasgow</div><div>Project Lead, PlaceAuth</div></div>
-<div class="title-meta"><div>Revision 0.1&nbsp;&nbsp;|&nbsp;&nbsp;September 2026</div><div>SPP 0.2.0 Experimental Preview (prepared; not yet released)</div><div>Experimental / Pre-standardization</div><div>placeauth.org</div></div>
+<div class="title-meta"><div>Revision 0.1&nbsp;&nbsp;|&nbsp;&nbsp;September 2026</div><div>SPP 0.2.0 Experimental Preview</div><div>Experimental / Pre-standardization</div><div>placeauth.org</div></div>
 <p class="patent">Certain technologies described by PlaceAuth are patent pending.</p></section>
 <section class="publication-page"><div class="kicker">Publication information</div><h1>PlaceAuth / SPP</h1><table class="publication-table"><tbody>
-<tr><th>Project</th><td>PlaceAuth</td></tr><tr><th>Author</th><td>Braden Russell Glasgow</td></tr><tr><th>Role</th><td>Project Lead, PlaceAuth</td></tr><tr><th>Protocol</th><td>Spatial Policy Protocol (SPP)</td></tr><tr><th>Prepared release</th><td>SPP 0.2.0 Experimental Preview (not yet released)</td></tr>
+<tr><th>Project</th><td>PlaceAuth</td></tr><tr><th>Author</th><td>Braden Russell Glasgow</td></tr><tr><th>Role</th><td>Project Lead, PlaceAuth</td></tr><tr><th>Protocol</th><td>Spatial Policy Protocol (SPP)</td></tr><tr><th>Current release</th><td>SPP 0.2.0 Experimental Preview</td></tr>
 <tr><th>Repository</th><td><a href="https://github.com/placeauth/spatial-policy-protocol">github.com/placeauth/spatial-policy-protocol</a></td></tr><tr><th>Website</th><td><a href="https://placeauth.org/">placeauth.org</a></td></tr>
 <tr><th>General</th><td><a href="mailto:hello@placeauth.org">hello@placeauth.org</a></td></tr><tr><th>Standards &amp; interoperability</th><td><a href="mailto:standards@placeauth.org">standards@placeauth.org</a></td></tr><tr><th>Security</th><td><a href="mailto:security@placeauth.org">security@placeauth.org</a></td></tr>
 <tr><th>License</th><td>Apache License 2.0</td></tr><tr><th>Status</th><td>Experimental / Pre-standardization</td></tr></tbody></table>
