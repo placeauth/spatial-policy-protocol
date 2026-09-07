@@ -25,6 +25,7 @@ test = ["pytest>=8.3,<9"]
 spp-evaluate = "spp.evaluator:main"
 spp-server = "spp.server:main"
 spp-explain = "spp_admission.explain:main"
+spp-place-package = "spp_admission.place_package:main"
 
 [tool.setuptools]
 packages = ["spp", "spp_admission"]

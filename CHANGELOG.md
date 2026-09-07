@@ -9,6 +9,9 @@
 - Added a deterministic local AdmissionProfile lifecycle assessment with
   explicit revocation, evidence/trust/binding checks, and selective
   requalification triggers. It adds no distributed state or SPP 0.1 schema.
+- Added Place Package 0.1: a portable, single-file JSON PlaceRequirementSet
+  exchange with local policy-authority verification and Ed25519 tamper
+  detection. It adds no discovery, registry, or SPP 0.1 wire change.
 
 ## 0.2.0 — Experimental Preview
 

@@ -53,6 +53,12 @@ __all__ = [
     "ProfileRevocationRegistry",
     "assess_profile_lifecycle",
     "profile_identifier",
+    "PLACE_PACKAGE_VERSION",
+    "PlacePackageVerification",
+    "create_place_package",
+    "serialize_place_package",
+    "load_place_package",
+    "verify_place_package",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -87,4 +93,12 @@ from .lifecycle import (
     ProfileRevocationRegistry,
     assess_profile_lifecycle,
     profile_identifier,
+)
+from .place_package import (
+    PLACE_PACKAGE_VERSION,
+    PlacePackageVerification,
+    create_place_package,
+    serialize_place_package,
+    load_place_package,
+    verify_place_package,
 )

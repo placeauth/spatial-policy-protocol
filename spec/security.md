@@ -126,3 +126,16 @@ The registry is not a distributed revocation service and there is no push-based
 invalidation, online authority lookup, continuous runtime attestation, hardware
 enforcement, or globally synchronized state/clock service. Deployments must
 authenticate supplied runtime state, policy, evidence, trust anchors, and time.
+
+### Portable Place Package reference path
+
+Place Package 0.1 supports a single-file JSON exchange of a complete
+PlaceRequirementSet with local Ed25519 policy-authority verification. The
+reference verifier validates format, requirement structure, authority state and
+place/scope authorization, canonical package digest, and signature offline.
+The authority ID in a package is not itself a trust anchor; deployments must
+provision public keys locally.
+
+This provides neither network discovery nor a global registry, PKI/certificate
+chains, DNS trust, remote revocation propagation, automatic trust-anchor
+distribution, or proof of legal or physical place ownership.
