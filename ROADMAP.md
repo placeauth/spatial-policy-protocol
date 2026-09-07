@@ -65,8 +65,9 @@ feature breadth.
 - **Deliverable:** a documented runtime fixture using the intended
   `FleetUpdateHandle` task-admission boundary.
 - **Complete when:** an actual runtime hook is exercised and its limits are
-  reported. Current blocker: constructing a real `FleetUpdateHandle` requires
-  fleet traits and a navigation graph.
+  reported. The bounded fixture now exercises real delivery callbacks and bid
+  responses using one stationary registered test robot; see
+  [validation details](docs/open-rmf.md).
 - **Non-goals:** a full Open-RMF fleet deployment or broad RMF integration.
 
 ### 7. Second enforcement or facility-side integration

@@ -1,0 +1,39 @@
+name: Open-RMF Runtime
+on:
+  push:
+    paths:
+      - 'reference/admission/**'
+      - 'tests/open_rmf/**'
+      - '.github/workflows/open-rmf-runtime.yml'
+  pull_request:
+    paths:
+      - 'reference/admission/**'
+      - 'tests/open_rmf/**'
+      - '.github/workflows/open-rmf-runtime.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  delivery-gating:
+    runs-on: ubuntu-22.04
+    container: ros:humble-ros-base-jammy
+    timeout-minutes: 10
+    env:
+      ROS_LOCALHOST_ONLY: '1'
+      SPP_RMF_RUNTIME: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install binary runtime
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends ros-humble-rmf-fleet-adapter-python python3-pip python3-pytest
+          python3 -m pip install 'jsonschema>=4.23,<5' cryptography pyyaml
+          dpkg-query -W ros-humble-rmf-fleet-adapter-python
+      - name: Exercise real delivery consideration
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          ros2 run rmf_traffic_ros2 rmf_traffic_schedule &
+          schedule_pid=$!
+          trap 'kill "$schedule_pid" || true' EXIT
+          timeout 60 python3 -m pytest -v -s tests/open_rmf/test_rmf_runtime.py

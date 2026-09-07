@@ -2,12 +2,49 @@
 
 SPP can gate Open-RMF task eligibility using evidence-backed AdmissionProfiles.
 
-**Validation level: adapter boundary only.** Pure mapping and a callback test
-double are tested. The actual Humble Python binding was inspected, but no RMF
-runtime, dispatcher, fleet, or physical robot was exercised. Python `rmf_adapter`
-was absent locally, Docker's Linux daemon was unavailable, and the existing
-Ubuntu 24.04 environment had no ROS installation or Humble RMF package candidate.
-No stack installation or source build was attempted.
+**Validation level: live delivery consideration and bid response.** SPP task
+eligibility has been validated through a live Open-RMF Humble
+FleetUpdateHandle.consider_delivery_requests runtime path using a minimal test
+fleet and registered test robot.
+
+The fixture creates a real Adapter, uses add_fleet and add_robot, and obtains a
+RobotUpdateHandle. A real ROS BidNotice reaches the registered pickup/dropoff
+callbacks. ADMITTED produces a BidResponse with a proposal; DENIED produces no
+proposal and returns admission_denied. Both requests invoke two callbacks.
+The profiles reuse the existing adapter-test structure; this test validates the
+runtime bridge, not evidence issuance or signature verification end to end.
+
+## Reproduce the runtime validation
+
+Use Ubuntu 22.04 with ROS 2 Humble and binary package
+ros-humble-rmf-fleet-adapter-python (locally validated version:
+2.1.8-1jammy.20260726.143012). Install pytest and the existing SPP Python
+dependencies. In a sourced Humble shell, start the packaged schedule service:
+
+```sh
+ros2 run rmf_traffic_ros2 rmf_traffic_schedule
+```
+
+In another sourced shell at the repository root:
+
+```sh
+SPP_RMF_RUNTIME=1 python3 -m pytest -v -s tests/open_rmf/test_rmf_runtime.py
+```
+
+The isolated Open-RMF Runtime workflow runs only this test. Missing runtime
+dependencies fail when explicitly enabled; ordinary runs skip it.
+
+All configuration is TEST ONLY: one lobby waypoint marked as a charger,
+linear/angular velocity and acceleration limits (1.0, 0.5), a 0.2 m circular
+footprint, and one stationary robot. Mandatory planner defaults use a 24 V,
+40 Ah, 8 A battery, 20 kg mass, 10 inertia, 0.2 friction, and 1 W device loads;
+battery drain accounting is disabled. Command callbacks immediately acknowledge
+startup paths; no task is dispatched and pickup/dropoff share the lobby.
+
+This is not physical robot, building integration, fleet-wide scheduler,
+traffic negotiation, dispatch execution, or production deployment validation.
+DEGRADED restriction semantics remain covered by the existing adapter tests,
+not this runtime fixture.
 
 ## Use
 

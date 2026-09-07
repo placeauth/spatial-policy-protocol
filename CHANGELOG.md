@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Validated Open-RMF Humble delivery consideration with one registered test
+  robot: ADMITTED produces a bid proposal; DENIED returns admission_denied.
+  This validates task eligibility, not dispatch execution or physical motion.
+
 - Defined the SPP 0.3 Operational Interoperability milestone and its bounded
   documentation, validation, and independent-implementation priorities. This
   is planning only and does not revise SPP 0.1 or the 0.2.0 release.
