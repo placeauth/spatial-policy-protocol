@@ -1,0 +1,217 @@
+{
+  "admission": {
+    "outcome": "ADMITTED",
+    "place": "clinic",
+    "reasons": [],
+    "restrictions": [],
+    "space": "clinic/patient-wing",
+    "unresolved": []
+  },
+  "decision_id": "urn:spp:decision:b34796b1a261cd41316c7cd1ce088d58560db55b4950dd32d7796a25b5fd5ad6",
+  "evidence_assessment": [
+    {
+      "assurance_level": null,
+      "evidence_id": null,
+      "freshness_status": null,
+      "reason_codes": [
+        "insufficient_proven_bound"
+      ],
+      "requirement_id": "movement.max_speed",
+      "status": "insufficient"
+    },
+    {
+      "assurance_level": null,
+      "evidence_id": null,
+      "freshness_status": null,
+      "reason_codes": [
+        "missing_evidence"
+      ],
+      "requirement_id": "human_separation",
+      "status": "insufficient"
+    },
+    {
+      "assurance_level": null,
+      "evidence_id": null,
+      "freshness_status": null,
+      "reason_codes": [
+        "missing_evidence"
+      ],
+      "requirement_id": "sensing.facial_recognition",
+      "status": "insufficient"
+    },
+    {
+      "assurance_level": null,
+      "evidence_id": null,
+      "freshness_status": null,
+      "reason_codes": [
+        "missing_evidence"
+      ],
+      "requirement_id": "data.video_retention",
+      "status": "insufficient"
+    }
+  ],
+  "lifecycle": {
+    "invalidated_guarantees": [],
+    "reasons": [],
+    "required_action": "continue",
+    "reusable_guarantees": [
+      "movement.max_speed",
+      "human_separation",
+      "sensing.facial_recognition",
+      "data.video_retention"
+    ],
+    "status": "VALID"
+  },
+  "place": {
+    "id": "clinic",
+    "policy_version": 3,
+    "space": "clinic/patient-wing"
+  },
+  "provider_selection": [
+    {
+      "assurance_level": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_speed_bound",
+      "provider_version": null,
+      "reason": null,
+      "requirement_id": "movement.max_speed",
+      "status": "SELECTED"
+    },
+    {
+      "assurance_level": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_lidar_separation",
+      "provider_version": null,
+      "reason": null,
+      "requirement_id": "human_separation",
+      "status": "SELECTED"
+    },
+    {
+      "assurance_level": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_camera_privacy",
+      "provider_version": null,
+      "reason": null,
+      "requirement_id": "sensing.facial_recognition",
+      "status": "SELECTED"
+    },
+    {
+      "assurance_level": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_video_retention",
+      "provider_version": null,
+      "reason": null,
+      "requirement_id": "data.video_retention",
+      "status": "SELECTED"
+    }
+  ],
+  "reasons": [],
+  "requirement_delta": {
+    "invalidated_requirements": [],
+    "items": [
+      {
+        "classification": "STRICTER",
+        "requirement_id": "movement.max_speed"
+      },
+      {
+        "classification": "NEW",
+        "requirement_id": "human_separation"
+      },
+      {
+        "classification": "NEW",
+        "requirement_id": "sensing.facial_recognition"
+      },
+      {
+        "classification": "NEW",
+        "requirement_id": "data.video_retention"
+      }
+    ],
+    "new_requirements": [
+      "human_separation",
+      "sensing.facial_recognition",
+      "data.video_retention"
+    ],
+    "reusable_requirements": [],
+    "stricter_requirements": [
+      "movement.max_speed"
+    ],
+    "unresolved_requirements": []
+  },
+  "requirements": [
+    {
+      "action": "movement.enter",
+      "id": "movement.max_speed",
+      "operator": "<=",
+      "unit": "m/s",
+      "value": 0.7
+    },
+    {
+      "action": "movement.enter",
+      "id": "human_separation",
+      "operator": ">=",
+      "unit": "m",
+      "value": 1.2
+    },
+    {
+      "action": "sensing.video",
+      "id": "sensing.facial_recognition",
+      "operator": "prohibited",
+      "value": true
+    },
+    {
+      "action": "data.video",
+      "id": "data.video_retention",
+      "operator": "=",
+      "unit": "seconds",
+      "value": 0
+    }
+  ],
+  "restrictions": [],
+  "reused_guarantees": [],
+  "selected_tests": [
+    {
+      "adapter": "speed-bound",
+      "assurance_target": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_speed_bound",
+      "requirement_id": "movement.max_speed",
+      "selection_reason": null,
+      "test_id": "test:speed-bound"
+    },
+    {
+      "adapter": "separation-bound",
+      "assurance_target": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_lidar_separation",
+      "requirement_id": "human_separation",
+      "selection_reason": null,
+      "test_id": "test:separation-bound"
+    },
+    {
+      "adapter": "facial-recognition",
+      "assurance_target": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_camera_privacy",
+      "requirement_id": "sensing.facial_recognition",
+      "selection_reason": null,
+      "test_id": "test:facial-recognition"
+    },
+    {
+      "adapter": "video-retention",
+      "assurance_target": "E2",
+      "embodiment": "demo_mobile_base",
+      "provider_id": "mobile_video_retention",
+      "requirement_id": "data.video_retention",
+      "selection_reason": null,
+      "test_id": "test:video-retention"
+    }
+  ],
+  "subject": {
+    "actor_id": "robot:trace:1",
+    "build_fingerprint": "build:trace:1",
+    "controller_fingerprint": "controller:trace:1",
+    "embodiment": "demo_mobile_base",
+    "environment_digest": "sha256:site-model-clinic-v1"
+  },
+  "trace_version": "0.1"
+}

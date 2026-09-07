@@ -11,7 +11,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [Portable signed Place Packages](place-package.md)
 - [Embodiment-specific requirement mapping](requirement-mapping.md)
 - [External conformance providers](conformance-providers.md)
-- [Explain an SPP decision](explain-trace.md)
+- [Explain an SPP decision and machine-readable trace](explain-trace.md)
 - [ROS 2 / Nav2 admission enforcement](../reference/ros2-enforcer/README.md)
 - [Open-RMF task admission adapter (boundary validation)](open-rmf.md)
 - [Technical review](technical-review.md)

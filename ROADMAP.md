@@ -19,6 +19,9 @@ feature breadth.
   output without changing admission semantics.
 - **Non-goals:** a second audit, event, or telemetry framework.
 
+Trace format 0.1 and its schema are now implemented. Future work may only
+change this format through explicit trace-versioning.
+
 ### 2. Requirement vocabulary / namespacing
 
 - **Objective:** make independent extensions safer and more predictable.

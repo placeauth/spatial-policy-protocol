@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spatial-policy.org/schema/explain-trace.schema.json",
+  "title": "SPP Explain Trace 0.1",
+  "description": "Stable machine-readable projection of an SPP reference decision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trace_version", "decision_id", "place", "subject", "requirements", "provider_selection", "evidence_assessment", "requirement_delta", "selected_tests", "reused_guarantees", "admission", "lifecycle", "restrictions", "reasons"],
+  "properties": {
+    "trace_version": {"const": "0.1"},
+    "decision_id": {"type": "string", "pattern": "^urn:spp:decision:[a-f0-9]{64}$"},
+    "place": {"$ref": "#/$defs/place"},
+    "subject": {"$ref": "#/$defs/subject"},
+    "requirements": {"type": "array", "items": {"$ref": "#/$defs/requirement"}},
+    "provider_selection": {"type": "array", "items": {"$ref": "#/$defs/provider_selection"}},
+    "evidence_assessment": {"type": "array", "items": {"$ref": "#/$defs/evidence_assessment"}},
+    "requirement_delta": {"$ref": "#/$defs/requirement_delta"},
+    "selected_tests": {"type": "array", "items": {"$ref": "#/$defs/selected_test"}},
+    "reused_guarantees": {"type": "array", "items": {"$ref": "#/$defs/reused_guarantee"}},
+    "admission": {"$ref": "#/$defs/admission"},
+    "lifecycle": {"anyOf": [{"$ref": "#/$defs/lifecycle"}, {"type": "null"}]},
+    "restrictions": {"$ref": "#/$defs/strings"},
+    "reasons": {"$ref": "#/$defs/strings"}
+  },
+  "$defs": {
+    "strings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "place": {"type": "object", "additionalProperties": false, "required": ["id", "space", "policy_version"], "properties": {"id": {"type": "string"}, "space": {"type": "string"}, "policy_version": {"type": "integer"}}},
+    "subject": {"type": "object", "additionalProperties": false, "required": ["actor_id", "build_fingerprint", "controller_fingerprint", "embodiment", "environment_digest"], "properties": {"actor_id": {"type": "string"}, "build_fingerprint": {"type": "string"}, "controller_fingerprint": {"type": "string"}, "embodiment": {"type": "string"}, "environment_digest": {"type": "string"}}},
+    "requirement": {"type": "object", "additionalProperties": false, "required": ["id", "action", "operator", "value"], "properties": {"id": {"type": "string"}, "action": {"type": "string"}, "operator": {"type": "string"}, "value": {}, "unit": {"type": "string"}, "scope": {}}},
+    "provider_selection": {"type": "object", "additionalProperties": false, "required": ["requirement_id", "embodiment", "provider_id", "provider_version", "assurance_level", "status", "reason"], "properties": {"requirement_id": {"type": "string"}, "embodiment": {"type": "string"}, "provider_id": {"type": ["string", "null"]}, "provider_version": {"type": ["string", "null"]}, "assurance_level": {"type": ["string", "null"]}, "status": {"enum": ["SELECTED", "UNRESOLVED"]}, "reason": {"type": ["string", "null"]}}},
+    "evidence_assessment": {"type": "object", "additionalProperties": false, "required": ["requirement_id", "evidence_id", "status", "assurance_level", "freshness_status", "reason_codes"], "properties": {"requirement_id": {"type": "string"}, "evidence_id": {"type": ["string", "null"]}, "status": {"enum": ["accepted", "rejected", "reused", "insufficient"]}, "assurance_level": {"type": ["string", "null"]}, "freshness_status": {"type": ["string", "null"]}, "reason_codes": {"$ref": "#/$defs/strings"}}},
+    "delta_item": {"type": "object", "additionalProperties": false, "required": ["requirement_id", "classification"], "properties": {"requirement_id": {"type": "string"}, "classification": {"type": "string"}}},
+    "requirement_delta": {"type": "object", "additionalProperties": false, "required": ["items", "reusable_requirements", "new_requirements", "stricter_requirements", "unresolved_requirements", "invalidated_requirements"], "properties": {"items": {"type": "array", "items": {"$ref": "#/$defs/delta_item"}}, "reusable_requirements": {"$ref": "#/$defs/strings"}, "new_requirements": {"$ref": "#/$defs/strings"}, "stricter_requirements": {"$ref": "#/$defs/strings"}, "unresolved_requirements": {"$ref": "#/$defs/strings"}, "invalidated_requirements": {"$ref": "#/$defs/strings"}}},
+    "selected_test": {"type": "object", "additionalProperties": false, "required": ["test_id", "provider_id", "requirement_id", "embodiment", "assurance_target", "selection_reason", "adapter"], "properties": {"test_id": {"type": "string"}, "provider_id": {"type": ["string", "null"]}, "requirement_id": {"type": "string"}, "embodiment": {"type": "string"}, "assurance_target": {"type": "string"}, "selection_reason": {"type": ["string", "null"]}, "adapter": {"type": "string"}}},
+    "reused_guarantee": {"type": "object", "additionalProperties": false, "required": ["requirement_id", "source_evidence_id", "status", "reason", "freshness_status"], "properties": {"requirement_id": {"type": "string"}, "source_evidence_id": {"type": ["string", "null"]}, "status": {"const": "reused"}, "reason": {"type": "string"}, "freshness_status": {"type": ["string", "null"]}}},
+    "admission": {"type": "object", "additionalProperties": false, "required": ["outcome", "restrictions", "reasons", "unresolved", "place", "space"], "properties": {"outcome": {"enum": ["ADMITTED", "DEGRADED", "DENIED"]}, "restrictions": {"$ref": "#/$defs/strings"}, "reasons": {"$ref": "#/$defs/strings"}, "unresolved": {"$ref": "#/$defs/strings"}, "place": {"type": "string"}, "space": {"type": "string"}}},
+    "lifecycle": {"type": "object", "additionalProperties": false, "required": ["status", "reasons", "reusable_guarantees", "invalidated_guarantees", "required_action"], "properties": {"status": {"enum": ["VALID", "REVALIDATE", "REQUALIFY", "INVALID"]}, "reasons": {"$ref": "#/$defs/strings"}, "reusable_guarantees": {"$ref": "#/$defs/strings"}, "invalidated_guarantees": {"$ref": "#/$defs/strings"}, "required_action": {"type": "string"}}}
+  }
+}

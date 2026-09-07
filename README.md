@@ -184,8 +184,9 @@ assessment, tests, and admission:
 spp-explain --scenario patient-wing
 ```
 
-Use `--json` for deterministic machine-readable output. See [the explain trace
-guide](docs/explain-trace.md) for the other fixture-backed scenarios.
+Use `--json` for deterministic, schema-defined machine-readable output. See
+[the explain trace guide](docs/explain-trace.md) for the format and
+fixture-backed scenarios.
 
 ## Security and status
 

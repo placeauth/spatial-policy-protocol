@@ -65,6 +65,7 @@ __all__ = [
     "ExternalConformanceProvider",
     "ProviderSelection",
     "ConformanceProviderRegistry",
+    "TRACE_FORMAT_VERSION",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -116,3 +117,4 @@ from .providers import (
     ProviderSelection,
     ConformanceProviderRegistry,
 )
+from .explain import TRACE_FORMAT_VERSION

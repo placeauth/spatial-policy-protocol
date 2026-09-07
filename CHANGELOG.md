@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added trace format 0.1: a stable JSON schema, canonical fixture output, and
+  deterministic machine-readable projection of existing explain decisions. It
+  does not change SPP 0.1 or admission behavior.
+
 - Validated Open-RMF Humble delivery consideration with one registered test
   robot: ADMITTED produces a bid proposal; DENIED returns admission_denied.
   This validates task eligibility, not dispatch execution or physical motion.

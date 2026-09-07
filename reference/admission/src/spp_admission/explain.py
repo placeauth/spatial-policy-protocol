@@ -22,26 +22,32 @@ from .mapping import DEFAULT_REQUIREMENT_MAPPING_REGISTRY
 from .boundary import admit_evidence_backed
 from .models import RobotState
 from .sufficiency import EvidenceRecord, assess_sufficiency, derive_requalification_plan
+from .lifecycle import assess_profile_lifecycle
 
 
 _ROOT = Path(__file__).resolve().parents[4]
 _NOW = datetime(2030, 1, 1, tzinfo=timezone.utc)
+TRACE_FORMAT_VERSION = "0.1"
 
 
 @dataclass(frozen=True)
 class ExplainTrace:
-    """A read-only projection of existing conformance and admission outputs."""
+    """Stable, read-only machine projection of existing admission outputs."""
 
-    place: str
-    space: str
-    embodiment: str
+    trace_version: str
+    decision_id: str
+    place: dict[str, Any]
+    subject: dict[str, Any]
     requirements: list[dict[str, Any]]
     provider_selection: list[dict[str, Any]]
     evidence_assessment: list[dict[str, Any]]
-    requirement_delta: list[dict[str, Any]]
-    tests_selected: list[dict[str, Any]]
-    reused_guarantees: list[str]
-    admission_result: dict[str, Any]
+    requirement_delta: dict[str, Any]
+    selected_tests: list[dict[str, Any]]
+    reused_guarantees: list[dict[str, Any]]
+    admission: dict[str, Any]
+    lifecycle: dict[str, Any] | None
+    restrictions: list[str]
+    reasons: list[str]
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -116,41 +122,86 @@ def build_trace(scenario: str = "patient-wing") -> ExplainTrace:
         )
         providers.append({
             "requirement_id": requirement["id"],
-            "resolved": selection.resolved,
+            "embodiment": robot.embodiment,
             "provider_id": selection.provider.provider_id if selection.provider else None,
+            "provider_version": None,
             "assurance_level": selection.provider.assurance_level if selection.provider else None,
+            "status": "SELECTED" if selection.resolved else "UNRESOLVED",
             "reason": selection.reason,
         })
-    return ExplainTrace(
-        destination["place"], destination["space"], robot.embodiment,
-        [
-            {key: requirement[key] for key in ("id", "action", "operator", "value", "unit") if key in requirement}
-            for requirement in destination["requirements"]
-        ],
-        providers,
-        [
-            {
-                "requirement_id": decision.requirement_id,
-                "status": "REUSED" if decision.sufficient else "REJECTED",
-                "reason": decision.reason,
-                "evidence_id": decision.evidence_id,
-            }
-            for decision in assessment
-        ],
-        compute_requirement_delta(asdict(source_profile), destination),
-        plan["selected_tests"], plan["reused_guarantees"],
-        {
-            "status": profile.status,
-            "restrictions": profile.restrictions,
-            "reason_codes": profile.reason_codes,
-            "unresolved": profile.unresolved,
-        },
-    )
+    requirements = [
+        {key: requirement[key] for key in ("id", "action", "operator", "value", "unit", "scope") if key in requirement}
+        for requirement in destination["requirements"]
+    ]
+    evidence_assessment = []
+    for decision in assessment:
+        status = "reused" if decision.sufficient else (
+            "rejected" if decision.reason in {"evidence_digest_mismatch", "evidence_binding_mismatch", "policy_digest_mismatch"}
+            else "insufficient"
+        )
+        evidence_assessment.append({
+            "requirement_id": decision.requirement_id,
+            "evidence_id": decision.evidence_id,
+            "status": status,
+            "assurance_level": None,
+            "freshness_status": None,
+            "reason_codes": [decision.reason],
+        })
+    delta_items = compute_requirement_delta(asdict(source_profile), destination)
+    delta = {
+        "items": delta_items,
+        "reusable_requirements": [item["requirement_id"] for item in delta_items if item["classification"] == "REUSED"],
+        "new_requirements": [item["requirement_id"] for item in delta_items if item["classification"] == "NEW"],
+        "stricter_requirements": [item["requirement_id"] for item in delta_items if item["classification"] == "STRICTER"],
+        "unresolved_requirements": [item["requirement_id"] for item in delta_items if item["classification"] == "UNRESOLVED"],
+        "invalidated_requirements": [],
+    }
+    selected_tests = []
+    for test in plan["selected_tests"]:
+        provider = next(item for item in providers if item["requirement_id"] == test["requirement_id"])
+        selected_tests.append({
+            "test_id": test["test_id"], "provider_id": provider["provider_id"],
+            "requirement_id": test["requirement_id"], "embodiment": robot.embodiment,
+            "assurance_target": plan["required_assurance_level"],
+            "selection_reason": provider["reason"], "adapter": test["adapter"],
+        })
+    reused = [
+        {"requirement_id": item["requirement_id"], "source_evidence_id": item["evidence_id"],
+         "status": "reused", "reason": item["reason_codes"][0], "freshness_status": item["freshness_status"]}
+        for item in evidence_assessment if item["status"] == "reused"
+    ]
+    lifecycle_assessment = assess_profile_lifecycle(profile, destination, robot, evidence, now=_NOW)
+    lifecycle = {
+        "status": lifecycle_assessment.status,
+        "reasons": lifecycle_assessment.reasons,
+        "reusable_guarantees": lifecycle_assessment.reusable_guarantees,
+        "invalidated_guarantees": lifecycle_assessment.invalidated_guarantees,
+        "required_action": lifecycle_assessment.required_action,
+    }
+    admission = {
+        "outcome": profile.status, "restrictions": list(profile.restrictions),
+        "reasons": list(profile.reason_codes), "unresolved": list(profile.unresolved),
+        "place": profile.place, "space": profile.space,
+    }
+    trace_fields = {
+        "trace_version": TRACE_FORMAT_VERSION,
+        "place": {"id": destination["place"], "space": destination["space"], "policy_version": destination["policy_version"]},
+        "subject": {"actor_id": robot.actor_id, "build_fingerprint": robot.build_fingerprint,
+                    "controller_fingerprint": robot.controller_fingerprint, "embodiment": robot.embodiment,
+                    "environment_digest": robot.environment_digest},
+        "requirements": requirements, "provider_selection": providers,
+        "evidence_assessment": evidence_assessment, "requirement_delta": delta,
+        "selected_tests": selected_tests, "reused_guarantees": reused,
+        "admission": admission, "lifecycle": lifecycle,
+        "restrictions": list(profile.restrictions), "reasons": list(profile.reason_codes),
+    }
+    decision_id = "urn:spp:decision:" + digest(trace_fields).removeprefix("sha256:")
+    return ExplainTrace(decision_id=decision_id, **trace_fields)
 
 
 def render_trace(trace: ExplainTrace) -> str:
     """Render only fields supplied by ``ExplainTrace`` in stable order."""
-    lines = [f"PLACE: {trace.space}", f"EMBODIMENT: {trace.embodiment}", "", "Requirements:"]
+    lines = [f"PLACE: {trace.place['space']}", f"EMBODIMENT: {trace.subject['embodiment']}", "", "Requirements:"]
     for requirement in trace.requirements:
         unit = f" {requirement['unit']}" if requirement.get("unit") else ""
         lines.append(f"  {requirement['id']} {requirement['operator']} {requirement['value']}{unit}")
@@ -160,19 +211,20 @@ def render_trace(trace: ExplainTrace) -> str:
         lines.append(f"  {selection['requirement_id']}: {provider}")
     lines.extend(["", "Existing evidence:"])
     for assessment in trace.evidence_assessment:
-        lines.append(f"  {assessment['requirement_id']}: {assessment['status']} ({assessment['reason']})")
+        status = "REUSED" if assessment["status"] == "reused" else "REJECTED"
+        lines.append(f"  {assessment['requirement_id']}: {status} ({assessment['reason_codes'][0]})")
     lines.extend(["", "Requirement delta:"])
-    for item in trace.requirement_delta:
+    for item in trace.requirement_delta["items"]:
         lines.append(f"  {item['requirement_id']}: {item['classification']}")
     lines.extend(["", "Requalification:"])
-    for requirement_id in trace.reused_guarantees:
-        lines.append(f"  reuse: {requirement_id}")
-    for test in trace.tests_selected:
+    for guarantee in trace.reused_guarantees:
+        lines.append(f"  reuse: {guarantee['requirement_id']}")
+    for test in trace.selected_tests:
         lines.append(f"  test: {test['requirement_id']} ({test['adapter']})")
-    lines.extend(["", "Admission:", f"  {trace.admission_result['status']}"])
-    for restriction in trace.admission_result["restrictions"]:
+    lines.extend(["", "Admission:", f"  {trace.admission['outcome']}"])
+    for restriction in trace.admission["restrictions"]:
         lines.append(f"  restriction: {restriction}")
-    for reason in trace.admission_result["reason_codes"]:
+    for reason in trace.admission["reasons"]:
         lines.append(f"  reason: {reason}")
     return "\n".join(lines)
 
