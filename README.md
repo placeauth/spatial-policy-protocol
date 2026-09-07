@@ -266,7 +266,7 @@ tests/                     schema, API, policy, admission, and ROS runtime tests
 
 ## Documentation
 
-Use the [documentation index](docs/README.md) for the core specification, evidence and admission model, schemas, security and threat model, demos, roadmap, release notes, and whitepaper.
+Use the [documentation index](docs/README.md) for the core specification, evidence and admission model, schemas, security and threat model, demos, roadmap, release notes, and whitepaper. The [SPP 0.3 Operational Interoperability roadmap](ROADMAP.md) defines the next planned development milestone.
 
 ## Contributing
 

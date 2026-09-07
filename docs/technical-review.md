@@ -30,6 +30,18 @@ The project needs critical technical feedback more than general encouragement. I
 
 5. **Most valuable next proof.** What single implementation or integration would most increase confidence in the model? Examples might include an independent policy/admission implementation, production-grade key custody, building-system integration, a physical-robot measurement, or a cross-vendor interoperability fixture.
 
+6. **Exchange boundaries.** Can the Place Package be implemented and consumed
+outside Python? Is the external conformance-provider contract sufficiently
+narrow, including its descriptor, result, and assurance semantics?
+
+7. **Lifecycle and vocabulary.** Are `VALID`, `REVALIDATE`, `REQUALIFY`, and
+`INVALID` useful lifecycle semantics? Is the requirement-vocabulary extension
+model too loose or too restrictive for independent implementations?
+
+8. **Next boundary.** Which external integration would best test SPP's
+interoperability boundary next: live Open-RMF task admission, a facility-side
+integration, or another distinct execution boundary?
+
 Start with the [five-minute quickstart](quickstart.md), then review the [SPP 0.1 specification](../spec/SPP-0.1.md), [evidence sufficiency guidance](evidence-sufficiency.md), and [ROS 2 / Nav2 integration notes](../reference/ros2-enforcer/README.md). The design rationale is in the [Markdown Whitepaper](whitepaper.md) and [PDF Whitepaper](whitepaper/PlaceAuth-SPP-White-Paper.pdf). The [documentation index](README.md) links to implementation guides, examples, security material, and release history.
 
 Please use the repository's protocol-feedback, interoperability-proposal, or implementation-bug issue templates for focused, reproducible feedback. Do not post suspected vulnerabilities publicly; follow [security reporting](../SECURITY.md).

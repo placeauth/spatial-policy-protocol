@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Defined the SPP 0.3 Operational Interoperability milestone and its bounded
+  documentation, validation, and independent-implementation priorities. This
+  is planning only and does not revise SPP 0.1 or the 0.2.0 release.
 - Added local Ed25519 signed place requirements and a separate trusted
   policy-authority registry with place/scope authorization and fail-closed
   verified policy-plus-evidence admission. This remains experimental reference
