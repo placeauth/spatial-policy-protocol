@@ -59,6 +59,12 @@ __all__ = [
     "serialize_place_package",
     "load_place_package",
     "verify_place_package",
+    "ASSURANCE_LEVELS",
+    "ConformanceProviderDescriptor",
+    "ConformanceProviderResult",
+    "ExternalConformanceProvider",
+    "ProviderSelection",
+    "ConformanceProviderRegistry",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -101,4 +107,12 @@ from .place_package import (
     serialize_place_package,
     load_place_package,
     verify_place_package,
+)
+from .providers import (
+    ASSURANCE_LEVELS,
+    ConformanceProviderDescriptor,
+    ConformanceProviderResult,
+    ExternalConformanceProvider,
+    ProviderSelection,
+    ConformanceProviderRegistry,
 )

@@ -12,6 +12,10 @@
 - Added Place Package 0.1: a portable, single-file JSON PlaceRequirementSet
   exchange with local policy-authority verification and Ed25519 tamper
   detection. It adds no discovery, registry, or SPP 0.1 wire change.
+- Added an explicit local external conformance-provider interface with
+  deterministic requirement, embodiment, and assurance-level selection. It
+  feeds the existing evidence and admission path and adds no provider discovery,
+  remote trust service, or SPP 0.1 wire change.
 
 ## 0.2.0 — Experimental Preview
 

@@ -163,6 +163,17 @@ python demo/embodiment_mapping/run_demo.py
 See [embodiment-specific requirement mapping](docs/requirement-mapping.md) for
 the provider model, deterministic selection rule, and limitations.
 
+### External conformance providers
+
+External conformance providers can explicitly register a descriptor, be
+selected deterministically for a requirement and embodiment, and feed their
+result into the existing evidence and admission path. See [external conformance
+providers](docs/conformance-providers.md) and run:
+
+```sh
+python demo/conformance_provider/run_demo.py
+```
+
 ## Explain a decision
 
 After `python -m pip install -e .`, trace the existing patient-wing
