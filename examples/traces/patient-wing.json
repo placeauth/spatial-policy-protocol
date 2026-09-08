@@ -7,7 +7,7 @@
     "space": "clinic/patient-wing",
     "unresolved": []
   },
-  "decision_id": "urn:spp:decision:b34796b1a261cd41316c7cd1ce088d58560db55b4950dd32d7796a25b5fd5ad6",
+  "decision_id": "urn:spp:decision:72bdbf858a6fc7e57bb579458fe7d191a55504d26aac1d596f18fea526b7d7cf",
   "evidence_assessment": [
     {
       "assurance_level": null,
@@ -140,28 +140,40 @@
   "requirements": [
     {
       "action": "movement.enter",
+      "canonical_unit": "m/s",
+      "comparison": "MAX",
       "id": "movement.max_speed",
       "operator": "<=",
+      "requirement_version": "1.0",
       "unit": "m/s",
       "value": 0.7
     },
     {
       "action": "movement.enter",
+      "canonical_unit": "m",
+      "comparison": "MIN",
       "id": "human_separation",
       "operator": ">=",
+      "requirement_version": "1.0",
       "unit": "m",
       "value": 1.2
     },
     {
       "action": "sensing.video",
+      "canonical_unit": null,
+      "comparison": "PROHIBITED",
       "id": "sensing.facial_recognition",
       "operator": "prohibited",
+      "requirement_version": "1.0",
       "value": true
     },
     {
       "action": "data.video",
+      "canonical_unit": "seconds",
+      "comparison": "EXACT",
       "id": "data.video_retention",
       "operator": "=",
+      "requirement_version": "1.0",
       "unit": "seconds",
       "value": 0
     }

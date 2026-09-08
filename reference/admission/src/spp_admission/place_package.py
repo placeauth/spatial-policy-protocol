@@ -16,6 +16,7 @@ from referencing import Registry, Resource
 
 from .engine import _canonical, digest
 from .trust import ED25519, TrustedPolicyAuthority, TrustedPolicyAuthorityRegistry
+from .vocabulary import DEFAULT_REQUIREMENT_VOCABULARY
 
 
 PLACE_PACKAGE_VERSION = "0.1"
@@ -124,6 +125,10 @@ def verify_place_package(
         return _invalid("invalid_place_package", package)
     try:
         Draft202012Validator(_schema("place-requirement-set.schema.json")).validate(requirements)
+        for requirement in requirements["requirements"]:
+            resolution = DEFAULT_REQUIREMENT_VOCABULARY.validate(requirement)
+            if not resolution.resolved:
+                return _invalid("unknown_requirement", package)
     except (OSError, ValueError, ValidationError, TypeError):
         return _invalid("invalid_place_package", package)
     if not authority.allows_place(requirements["place"]) or not all(authority.allows_scope(item) for item in package["scope"]):

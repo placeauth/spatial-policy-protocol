@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added a local versioned requirement vocabulary with built-in definitions,
+  exact provider-version compatibility, additive PlaceRequirementSet fields,
+  and version-aware RequirementDelta handling.
+
 - Added trace format 0.1: a stable JSON schema, canonical fixture output, and
   deterministic machine-readable projection of existing explain decisions. It
   does not change SPP 0.1 or admission behavior.

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spatial-policy.org/schema/requirement-definition.schema.json",
+  "title": "SPP Requirement Definition 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["requirement_id", "version", "value_type", "unit", "comparison", "description"],
+  "properties": {
+    "requirement_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+$"},
+    "value_type": {"enum": ["number", "integer", "boolean"]},
+    "unit": {"type": ["string", "null"]},
+    "comparison": {"enum": ["MAX", "MIN", "EXACT", "PROHIBITED"]},
+    "description": {"type": "string", "minLength": 1}
+  }
+}

@@ -10,6 +10,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [Evidence sufficiency and selective requalification](evidence-sufficiency.md)
 - [Portable signed Place Packages](place-package.md)
 - [Embodiment-specific requirement mapping](requirement-mapping.md)
+- [Versioned requirement vocabulary](requirement-vocabulary.md)
 - [External conformance providers](conformance-providers.md)
 - [Explain an SPP decision and machine-readable trace](explain-trace.md)
 - [ROS 2 / Nav2 admission enforcement](../reference/ros2-enforcer/README.md)

@@ -23,6 +23,7 @@ from .boundary import admit_evidence_backed
 from .models import RobotState
 from .sufficiency import EvidenceRecord, assess_sufficiency, derive_requalification_plan
 from .lifecycle import assess_profile_lifecycle
+from .vocabulary import DEFAULT_REQUIREMENT_VOCABULARY
 
 
 _ROOT = Path(__file__).resolve().parents[4]
@@ -129,10 +130,16 @@ def build_trace(scenario: str = "patient-wing") -> ExplainTrace:
             "status": "SELECTED" if selection.resolved else "UNRESOLVED",
             "reason": selection.reason,
         })
-    requirements = [
-        {key: requirement[key] for key in ("id", "action", "operator", "value", "unit", "scope") if key in requirement}
-        for requirement in destination["requirements"]
-    ]
+    requirements = []
+    for requirement in destination["requirements"]:
+        item = {key: requirement[key] for key in ("id", "requirement_version", "action", "operator", "value", "unit", "scope") if key in requirement}
+        resolution = DEFAULT_REQUIREMENT_VOCABULARY.resolve(item["id"], item.get("requirement_version"))
+        if resolution.resolved:
+            definition = resolution.definition
+            item["requirement_version"] = definition.version
+            item["canonical_unit"] = definition.unit
+            item["comparison"] = definition.comparison
+        requirements.append(item)
     evidence_assessment = []
     for decision in assessment:
         status = "reused" if decision.sufficient else (

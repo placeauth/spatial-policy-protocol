@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Callable, Iterable
+from .vocabulary import DEFAULT_REQUIREMENT_VOCABULARY
 
 
 _ASSURANCE_LEVELS = ("E0", "E1", "E2", "E3", "E4")
@@ -36,6 +37,7 @@ class ConformanceProvider:
     assurance_level: str
     priority: int
     test_factory: TestFactory
+    requirement_versions: frozenset[str] = frozenset({"1.0"})
 
     def build_test(self, requirement: dict[str, Any]) -> dict[str, Any]:
         return self.test_factory(requirement)
@@ -83,17 +85,25 @@ class RequirementMappingRegistry:
     ) -> MappingSelection:
         if required_assurance_level not in _ASSURANCE_LEVELS:
             raise ValueError("unknown required assurance level")
+        resolution = DEFAULT_REQUIREMENT_VOCABULARY.validate(requirement)
+        if not resolution.resolved:
+            return MappingSelection(str(requirement.get("id", "")), embodiment, None, resolution.reason)
+        version = resolution.definition.version
         required_index = _ASSURANCE_LEVELS.index(required_assurance_level)
         candidates = [
             provider for provider in self._providers.values()
             if provider.requirement_id == requirement.get("id")
+            and version in provider.requirement_versions
             and provider.embodiment == embodiment
             and _ASSURANCE_LEVELS.index(provider.assurance_level) >= required_index
         ]
         if not candidates:
+            matching_id = [provider for provider in self._providers.values()
+                           if provider.requirement_id == requirement.get("id")
+                           and provider.embodiment == embodiment]
             return MappingSelection(
                 str(requirement.get("id", "")), embodiment, None,
-                "unsupported_requirement_or_embodiment",
+                "unsupported_requirement_version" if matching_id else "unsupported_requirement_or_embodiment",
             )
         provider = sorted(candidates, key=lambda item: (-item.priority, item.provider_id))[0]
         return MappingSelection(requirement["id"], embodiment, provider)

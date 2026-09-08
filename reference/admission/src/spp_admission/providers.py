@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from typing import Any, Iterable, Protocol
 
 from .models import RobotState
+from .vocabulary import DEFAULT_REQUIREMENT_VOCABULARY, RequirementVocabularyRegistry
 
 
 ASSURANCE_LEVELS = ("E0", "E1", "E2", "E3", "E4")
@@ -22,6 +23,7 @@ class ConformanceProviderDescriptor:
     evidence_type: str
     priority: int = 0
     description: str | None = None
+    supported_requirement_versions: dict[str, frozenset[str]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -71,8 +73,12 @@ def _meets_assurance(provider: ConformanceProviderDescriptor, minimum: str) -> b
 class ConformanceProviderRegistry:
     """Configured local registry; it does not discover, load, or trust providers."""
 
-    def __init__(self, providers: Iterable[ExternalConformanceProvider] = ()) -> None:
+    def __init__(
+        self, providers: Iterable[ExternalConformanceProvider] = (),
+        vocabulary: RequirementVocabularyRegistry = DEFAULT_REQUIREMENT_VOCABULARY,
+    ) -> None:
         self._providers: dict[str, ExternalConformanceProvider] = {}
+        self._vocabulary = vocabulary
         for provider in providers:
             self.register(provider)
 
@@ -94,10 +100,15 @@ class ConformanceProviderRegistry:
     ) -> list[ExternalConformanceProvider]:
         if minimum_assurance_level not in ASSURANCE_LEVELS:
             raise ValueError("unknown required assurance level")
+        resolution = self._vocabulary.validate(requirement)
+        if not resolution.resolved:
+            return []
         requirement_id = requirement.get("id")
+        version = resolution.definition.version
         return sorted(
             [provider for provider in self._providers.values()
              if requirement_id in provider.descriptor.supported_requirement_types
+             and self._supports_version(provider.descriptor, requirement_id, version)
              and embodiment in provider.descriptor.supported_embodiments
              and _meets_assurance(provider.descriptor, minimum_assurance_level)],
             key=lambda provider: (-provider.descriptor.priority, provider.descriptor.provider_id),
@@ -108,7 +119,12 @@ class ConformanceProviderRegistry:
     ) -> ProviderSelection:
         if minimum_assurance_level not in ASSURANCE_LEVELS:
             raise ValueError("unknown required assurance level")
+        resolution = self._vocabulary.validate(requirement)
         requirement_id = str(requirement.get("id", ""))
+        if not resolution.resolved:
+            reason = "unsupported_requirement" if resolution.status == "UNKNOWN" else resolution.reason
+            return ProviderSelection(requirement_id, embodiment, None, reason)
+        version = resolution.definition.version
         by_requirement = [provider for provider in self._providers.values()
                           if requirement_id in provider.descriptor.supported_requirement_types]
         if not by_requirement:
@@ -117,12 +133,23 @@ class ConformanceProviderRegistry:
                          if embodiment in provider.descriptor.supported_embodiments]
         if not by_embodiment:
             return ProviderSelection(requirement_id, embodiment, None, "unsupported_embodiment")
-        candidates = [provider for provider in by_embodiment
+        by_version = [provider for provider in by_embodiment
+                      if self._supports_version(provider.descriptor, requirement_id, version)]
+        if not by_version:
+            return ProviderSelection(requirement_id, embodiment, None, "unsupported_requirement_version")
+        candidates = [provider for provider in by_version
                       if _meets_assurance(provider.descriptor, minimum_assurance_level)]
         if not candidates:
             return ProviderSelection(requirement_id, embodiment, None, "insufficient_assurance")
         provider = sorted(candidates, key=lambda item: (-item.descriptor.priority, item.descriptor.provider_id))[0]
         return ProviderSelection(requirement_id, embodiment, provider)
+
+    @staticmethod
+    def _supports_version(descriptor: ConformanceProviderDescriptor, requirement_id: str, version: str) -> bool:
+        declared = descriptor.supported_requirement_versions.get(requirement_id)
+        # Existing provider descriptors predate vocabulary versions. They retain
+        # safe compatibility only for the built-in 1.0 definitions.
+        return version in declared if declared is not None else version == "1.0"
 
     def evaluate(
         self, requirement: dict[str, Any], subject: RobotState, minimum_assurance_level: str = "E2",

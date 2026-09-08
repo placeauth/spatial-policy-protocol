@@ -18,6 +18,12 @@ an `evaluate(requirement, subject)` method. The descriptor contains:
 - evidence type; and
 - optional description and deterministic priority.
 
+Providers may also declare supported_requirement_versions as an ID-to-version
+set. Selection requires an exact compatible version. Existing descriptors that
+omit this field retain compatibility with built-in version 1.0 only. Requirement
+IDs, versions, units, and comparison meanings are defined by the
+[requirement vocabulary](requirement-vocabulary.md).
+
 `evaluate` returns a `ConformanceProviderResult` with the provider identity,
 requirement ID, pass/fail result, measured value, assurance level, evidence
 type, and optional metadata.

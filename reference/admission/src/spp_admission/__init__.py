@@ -65,7 +65,12 @@ __all__ = [
     "ExternalConformanceProvider",
     "ProviderSelection",
     "ConformanceProviderRegistry",
-    "TRACE_FORMAT_VERSION",
+    "RequirementDefinition",
+    "RequirementResolution",
+    "RequirementVocabularyRegistry",
+    "DEFAULT_REQUIREMENT_VOCABULARY",
+    "BUILTIN_REQUIREMENTS",
+    "requirements_compatible",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -117,4 +122,11 @@ from .providers import (
     ProviderSelection,
     ConformanceProviderRegistry,
 )
-from .explain import TRACE_FORMAT_VERSION
+from .vocabulary import (
+    BUILTIN_REQUIREMENTS,
+    DEFAULT_REQUIREMENT_VOCABULARY,
+    RequirementDefinition,
+    RequirementResolution,
+    RequirementVocabularyRegistry,
+    requirements_compatible,
+)

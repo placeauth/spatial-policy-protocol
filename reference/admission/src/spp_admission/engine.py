@@ -11,6 +11,7 @@ import yaml
 
 from .models import AdmissionProfile, EvidenceBinding, RobotState
 from .mapping import DEFAULT_REQUIREMENT_MAPPING_REGISTRY, RequirementMappingRegistry
+from .vocabulary import DEFAULT_REQUIREMENT_VOCABULARY, requirement_version, requirements_compatible
 
 
 class ReplayRegistry:
@@ -53,6 +54,8 @@ def load_requirement_set(path: str | Path) -> dict[str, Any]:
         raise ValueError("unsupported admission version")
     if not requirements.get("requirements"):
         raise ValueError("requirement set must contain requirements")
+    for requirement in requirements["requirements"]:
+        DEFAULT_REQUIREMENT_VOCABULARY.validate(requirement)
     return requirements
 
 
@@ -232,7 +235,11 @@ def admit(
                 essential_failure = True
                 reasons.append(f"failed:{rid}")
         else:
-            guarantees.append({"id": rid, "operator": requirement["operator"], "value": requirement["value"], "environment_digest": robot.environment_digest, "capabilities": robot.capabilities})
+            guarantee = {"id": rid, "operator": requirement["operator"], "value": requirement["value"], "environment_digest": robot.environment_digest, "capabilities": robot.capabilities}
+            version = requirement_version(requirement)
+            if version is not None:
+                guarantee["requirement_version"] = version
+            guarantees.append(guarantee)
     status = "DENIED" if essential_failure else ("DEGRADED" if restrictions else "ADMITTED")
     profile = {"guarantees": guarantees, "restrictions": restrictions}
     return AdmissionProfile(status, robot.actor_id, requirement_set["place"], requirement_set["space"], requirement_set["policy_version"], evidence["evidence_digest"], _binding(evidence), profile, restrictions, sorted(unresolved | failures), reasons)
@@ -251,6 +258,8 @@ def compute_requirement_delta(previous_profile: dict[str, Any], new_requirement_
         old = previous.get(requirement["id"])
         if not old:
             classification = "NEW"
+        elif not requirements_compatible(old, requirement):
+            classification = "UNRESOLVED"
         elif old.get("operator") == requirement["operator"] and old.get("value") == requirement["value"]:
             classification = "REUSED"
         elif old.get("operator") == requirement["operator"] and isinstance(old.get("value"), (int, float)) and isinstance(requirement.get("value"), (int, float)):

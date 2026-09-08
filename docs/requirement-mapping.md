@@ -5,6 +5,10 @@ robot test. The experimental reference implementation uses a small local
 `RequirementMappingRegistry` to select a deterministic conformance mechanism
 from a requirement ID, an embodiment, and a required assurance level.
 
+Built-in mappings support vocabulary version 1.0. An omitted version on a
+built-in is the explicit compatibility default; an incompatible requested
+version remains unresolved. See the [requirement vocabulary](requirement-vocabulary.md).
+
 The included mappings demonstrate the distinction:
 
 | Place requirement | Mobile-base mechanism | Humanoid mechanism |

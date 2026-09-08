@@ -27,6 +27,12 @@ The package has these required fields:
 The canonical example is
 [`examples/place-packages/clinic-patient-wing.json`](../examples/place-packages/clinic-patient-wing.json).
 
+Each embedded requirement may carry requirement_version. Known built-ins without
+that field use the documented vocabulary 1.0 compatibility default; an unknown
+extension must be explicitly registered by the consuming implementation or
+package verification fails closed. See the
+[requirement vocabulary](requirement-vocabulary.md).
+
 ## Canonicalization and verification
 
 JSON is canonicalized as UTF-8 JSON with lexicographically sorted keys and no

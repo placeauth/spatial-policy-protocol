@@ -32,6 +32,9 @@ change this format through explicit trace-versioning.
 - **Non-goals:** standardizing every robot capability or a universal robotics
   vocabulary.
 
+Vocabulary version 1.0 is now defined for the current built-ins, including
+provider compatibility and Place Package behavior.
+
 ### 3. Place Package hardening
 
 - **Objective:** stabilize the portable package as an exchange boundary.
