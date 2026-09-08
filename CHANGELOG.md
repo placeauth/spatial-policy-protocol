@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 — Experimental Preview (prepared)
+## 0.3.0 — Experimental Preview (release-ready)
 
 - Added a deterministic, schema-defined machine-readable decision trace format
   0.1 for independent tooling; it explains decisions but is not authorization.

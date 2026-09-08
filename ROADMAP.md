@@ -116,7 +116,7 @@ reference decision boundary, not building-hardware validation.
 ## 0.3 release status
 
 - **0.3 implementation:** COMPLETE
-- **Release preparation:** IN PROGRESS
+- **Release preparation:** COMPLETE
 - **Publication:** PENDING
 
 The reference implementation/package version is prepared as `0.3.0`. The

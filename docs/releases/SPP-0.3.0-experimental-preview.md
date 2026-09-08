@@ -4,8 +4,8 @@
 
 ## Overview
 
-SPP v0.3.0 Experimental Preview prepares the reference implementation for
-independent implementation and bounded operational integration. It strengthens
+SPP v0.3.0 Experimental Preview is release-ready for independent
+implementation and bounded operational integration. It strengthens
 the interoperability boundaries around Place Packages, requirement semantics,
 conformance providers, decision traces, profile lifecycle, trust, and
 place-side/runtime integration. The normative protocol specification remains
@@ -61,9 +61,10 @@ lifecycle, and trace without relying on the Python reference implementation.
 ## Validation status
 
 The dependency-free reference suite reports **255 passed, 5 skipped, 1
-unrelated Windows pytest-cache warning**. Runtime fixtures are separately
-covered by the ROS 2 Nav2 and Open-RMF Runtime GitHub Actions workflows; their
-release-candidate status must be confirmed before publication.
+unrelated Windows pytest-cache warning**. The Test workflow succeeded on the
+release-ready commit. The ROS 2 Nav2 and Open-RMF Runtime GitHub Actions
+workflows succeeded on the latest relevant runtime-code commit; the
+release-ready documentation/version commit does not alter runtime code.
 
 ## Known limitations
 
@@ -92,5 +93,5 @@ release-candidate status must be confirmed before publication.
 ## License / status
 
 Licensed under Apache-2.0. Certain technologies described by PlaceAuth are
-patent pending. This prepared release remains experimental and
+patent pending. This release-ready preview remains experimental and
 pre-standardization.

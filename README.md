@@ -9,7 +9,7 @@ An experimental, open interoperability protocol for establishing how autonomous 
 
 [Quickstart](docs/quickstart.md) · [Implement SPP independently](docs/implementing-spp.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Prepared v0.3 notes](docs/releases/SPP-0.3.0-experimental-preview.md) · [Latest published: v0.2](docs/releases/SPP-0.2.0-experimental-preview.md)
 
-> **Prepared for release:** SPP v0.3.0 Experimental Preview — Operational Interoperability. The latest published release remains SPP v0.2.0 Experimental Preview.
+> **Release-ready:** SPP v0.3.0 Experimental Preview — Operational Interoperability. The latest published release remains SPP v0.2.0 Experimental Preview until publication.
 
 ## The core question
 
@@ -213,7 +213,7 @@ python demo/requalification/run_demo.py
 The [evidence sufficiency guide](docs/evidence-sufficiency.md) covers integrity,
 freshness, scope and configuration checks, plus tamper and expiry demo variants.
 
-> **Prepared release:** SPP v0.3.0 Experimental Preview. **Latest published release:** SPP v0.2.0 Experimental Preview. The normative protocol specification remains SPP 0.1.
+> **Release-ready:** SPP v0.3.0 Experimental Preview. **Latest published release:** SPP v0.2.0 Experimental Preview until publication. The normative protocol specification remains SPP 0.1.
 
 The current reference implementation demonstrates:
 
