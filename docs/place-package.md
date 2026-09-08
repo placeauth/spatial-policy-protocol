@@ -27,25 +27,53 @@ The package has these required fields:
 The canonical example is
 [`examples/place-packages/clinic-patient-wing.json`](../examples/place-packages/clinic-patient-wing.json).
 
-Each embedded requirement may carry requirement_version. Known built-ins without
-that field use the documented vocabulary 1.0 compatibility default; an unknown
-extension must be explicitly registered by the consuming implementation or
-package verification fails closed. See the
-[requirement vocabulary](requirement-vocabulary.md).
+Newly emitted packages use the canonical embedded requirement shape:
+
+```json
+{"id":"movement.max_speed","requirement_version":"1.0","value":0.8,"unit":"m/s"}
+```
+
+The requirement ID and version resolve the comparison semantics from the
+[requirement vocabulary](requirement-vocabulary.md); `movement.max_speed`
+version `1.0` therefore means `MAX`, without duplicating that definition in the
+package. Creation orders requirements by ID and version and supplies the
+canonical unit when an existing built-in omitted it.
+
+Legacy packages may omit `requirement_version` only for a known built-in with
+exactly one registered definition, currently built-in `1.0`. An unknown
+extension never receives a version default. Extension IDs must use
+`x-<organization>.<requirement>` syntax and must also be explicitly registered
+by the consumer; valid syntax alone does not establish semantics. Conflicting
+duplicate ID/version entries are rejected.
 
 ## Canonicalization and verification
 
-JSON is canonicalized as UTF-8 JSON with lexicographically sorted keys and no
-insignificant whitespace. The verifier first validates package structure and
-version, looks up the local authority, checks that it is enabled and authorized
-for the package's place/scope, validates the embedded requirement set, checks
-the recomputed package digest, and finally verifies the Ed25519 signature.
+JSON is canonicalized as UTF-8 JSON with lexicographically sorted object keys,
+stable requirement ordering, and no insignificant whitespace. For the same
+semantic package, reference creation produces the same package digest; changing
+a requirement ID, version, value, or unit produces a different digest.
+
+An independent consumer must: (1) parse the package and confirm format `0.1`;
+(2) confirm the package fields mirror the embedded requirement set; (3) resolve
+each requirement ID/version and validate its value, unit, comparison, extension
+syntax, and duplicate behavior; (4) look up an enabled local authority and
+authorize its place/scope; (5) recompute the package digest; and (6) verify the
+Ed25519 signature. Requirements are accepted only after every step passes.
 
 `verify_place_package(...)` returns `PlacePackageVerification` with `valid`,
 ordered reason codes, package digest, and authority ID. Typical failures are
 `unsupported_place_package_version`, `invalid_place_package`,
 `unknown_policy_authority`, `policy_authority_disabled`,
-`policy_authority_unauthorized`, and `place_package_signature_invalid`.
+`policy_authority_unauthorized`, `unknown_requirement`,
+`incompatible_requirement_version`, `requirement_unit_mismatch`,
+`requirement_value_type_mismatch`, `invalid_extension_namespace`,
+`conflicting_requirement`, and `place_package_signature_invalid`.
+
+After verification, a consumer hands `movement.max_speed` version `1.0` to a
+conformance provider that declares support for that same ID/version, then uses
+the resulting evidence for admission. RequirementDelta compares the same ID and
+compatible version normally; an incompatible version is `UNRESOLVED` and needs
+requalification.
 
 The package supplies an authority identifier, not a trust anchor. Consumers
 must provision trusted public keys locally in `TrustedPolicyAuthorityRegistry`.

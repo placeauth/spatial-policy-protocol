@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import re
 from copy import deepcopy
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -16,10 +17,11 @@ from referencing import Registry, Resource
 
 from .engine import _canonical, digest
 from .trust import ED25519, TrustedPolicyAuthority, TrustedPolicyAuthorityRegistry
-from .vocabulary import DEFAULT_REQUIREMENT_VOCABULARY
+from .vocabulary import DEFAULT_REQUIREMENT_VOCABULARY, RequirementVocabularyRegistry
 
 
 PLACE_PACKAGE_VERSION = "0.1"
+_EXTENSION_ID = re.compile(r"^x-[a-z0-9][a-z0-9-]*\.[a-z][a-z0-9_.-]*$")
 
 
 @dataclass(frozen=True)
@@ -57,22 +59,89 @@ def _signature_payload(package: dict[str, Any]) -> bytes:
     }).encode("utf-8")
 
 
+def _requirement_failure(requirement: dict[str, Any], vocabulary: RequirementVocabularyRegistry) -> str | None:
+    """Return one deterministic vocabulary failure code, if any."""
+    identifier = str(requirement.get("id", ""))
+    resolution = vocabulary.validate(requirement)
+    if not resolution.resolved:
+        if resolution.reason == "unknown_requirement":
+            return "unknown_requirement" if _EXTENSION_ID.fullmatch(identifier) else "invalid_extension_namespace"
+        return resolution.reason
+    return None
+
+
+def _canonical_requirement_set(
+    requirements: dict[str, Any], vocabulary: RequirementVocabularyRegistry,
+) -> dict[str, Any]:
+    """Produce the versioned, ordered requirement payload emitted by new packages."""
+    normalized = deepcopy(requirements)
+    seen: dict[tuple[str, str], dict[str, Any]] = {}
+    output: list[dict[str, Any]] = []
+    for requirement in normalized["requirements"]:
+        resolution = vocabulary.resolve(str(requirement.get("id", "")), requirement.get("requirement_version"))
+        if not resolution.resolved:
+            raise ValueError(resolution.reason or "unknown_requirement")
+        definition = resolution.definition
+        assert definition is not None
+        item = dict(requirement, requirement_version=definition.version)
+        if definition.unit is not None and "unit" not in item:
+            item["unit"] = definition.unit
+        failure = _requirement_failure(item, vocabulary)
+        if failure:
+            raise ValueError(failure)
+        key = (definition.requirement_id, definition.version)
+        previous = seen.get(key)
+        if previous is not None and previous != item:
+            raise ValueError("conflicting_requirement")
+        if previous is None:
+            seen[key] = item
+            output.append(item)
+    normalized["requirements"] = sorted(
+        output, key=lambda item: (item["id"], item["requirement_version"]),
+    )
+    return normalized
+
+
+def _validate_requirement_set(
+    requirements: dict[str, Any], vocabulary: RequirementVocabularyRegistry,
+) -> str | None:
+    """Validate legacy or canonical package requirements without rewriting them."""
+    seen: dict[tuple[str, str], dict[str, Any]] = {}
+    for requirement in requirements["requirements"]:
+        try:
+            failure = _requirement_failure(requirement, vocabulary)
+        except ValueError as error:
+            return str(error)
+        if failure:
+            return failure
+        resolution = vocabulary.resolve(str(requirement["id"]), requirement.get("requirement_version"))
+        assert resolution.definition is not None
+        key = (resolution.definition.requirement_id, resolution.definition.version)
+        previous = seen.get(key)
+        if previous is not None and previous != requirement:
+            return "conflicting_requirement"
+        seen[key] = requirement
+    return None
+
+
 def create_place_package(
     requirements: dict[str, Any], *, authority_id: str, private_key: Ed25519PrivateKey,
     policy_id: str | None = None, scope: list[str] | None = None,
     metadata: dict[str, Any] | None = None,
+    vocabulary: RequirementVocabularyRegistry = DEFAULT_REQUIREMENT_VOCABULARY,
 ) -> dict[str, Any]:
     """Create a portable JSON package with one signature over all semantics."""
     if not authority_id:
         raise ValueError("authority_id is required")
+    canonical_requirements = _canonical_requirement_set(requirements, vocabulary)
     package = {
         "place_package_version": PLACE_PACKAGE_VERSION,
-        "place_id": requirements["space"],
-        "policy_id": policy_id or requirements["requirement_set_id"],
-        "policy_version": requirements["policy_version"],
-        "scope": list(scope or [requirements["space"]]),
+        "place_id": canonical_requirements["space"],
+        "policy_id": policy_id or canonical_requirements["requirement_set_id"],
+        "policy_version": canonical_requirements["policy_version"],
+        "scope": sorted(scope or [canonical_requirements["space"]]),
         "authority_id": authority_id,
-        "requirements": deepcopy(requirements),
+        "requirements": canonical_requirements,
         "metadata": deepcopy(metadata or {}),
         "algorithm": ED25519,
     }
@@ -101,6 +170,7 @@ def _invalid(reason: str, package: dict[str, Any] | None = None) -> PlacePackage
 
 def verify_place_package(
     package: dict[str, Any], trusted_authorities: TrustedPolicyAuthorityRegistry,
+    vocabulary: RequirementVocabularyRegistry = DEFAULT_REQUIREMENT_VOCABULARY,
 ) -> PlacePackageVerification:
     """Validate structure, local authority authorization, digest, and signature."""
     if not isinstance(package, dict):
@@ -112,11 +182,6 @@ def verify_place_package(
         _validate_package(package)
     except (OSError, ValueError, ValidationError, TypeError):
         return _invalid("invalid_place_package", package)
-    authority = trusted_authorities.get(package["authority_id"])
-    if authority is None:
-        return _invalid("unknown_policy_authority", package)
-    if not authority.enabled:
-        return _invalid("policy_authority_disabled", package)
     requirements = package["requirements"]
     if (package["place_id"] != requirements["space"]
             or package["policy_id"] != requirements["requirement_set_id"]
@@ -125,12 +190,16 @@ def verify_place_package(
         return _invalid("invalid_place_package", package)
     try:
         Draft202012Validator(_schema("place-requirement-set.schema.json")).validate(requirements)
-        for requirement in requirements["requirements"]:
-            resolution = DEFAULT_REQUIREMENT_VOCABULARY.validate(requirement)
-            if not resolution.resolved:
-                return _invalid("unknown_requirement", package)
+        failure = _validate_requirement_set(requirements, vocabulary)
+        if failure:
+            return _invalid(failure, package)
     except (OSError, ValueError, ValidationError, TypeError):
         return _invalid("invalid_place_package", package)
+    authority = trusted_authorities.get(package["authority_id"])
+    if authority is None:
+        return _invalid("unknown_policy_authority", package)
+    if not authority.enabled:
+        return _invalid("policy_authority_disabled", package)
     if not authority.allows_place(requirements["place"]) or not all(authority.allows_scope(item) for item in package["scope"]):
         return _invalid("policy_authority_unauthorized", package)
     if digest(_unsigned_content(package)) != package["package_digest"]:

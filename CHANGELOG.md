@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Hardened Place Package 0.1 requirement semantics: new package output carries
+  explicit vocabulary versions and canonical units, validation rejects
+  incompatible versions, invalid extensions, and conflicting requirements, and
+  deterministic creation orders requirements without changing the package format.
+
 - Added a local versioned requirement vocabulary with built-in definitions,
   exact provider-version compatibility, additive PlaceRequirementSet fields,
   and version-aware RequirementDelta handling.

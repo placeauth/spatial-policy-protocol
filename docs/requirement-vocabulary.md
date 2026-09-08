@@ -47,10 +47,10 @@ External providers may declare supported_requirement_versions as an ID-to-versio
 set. Legacy descriptors remain compatible with built-in 1.0 only. Provider
 selection rejects an ID whose requested version is not supported.
 
-Place Packages carry the embedded PlaceRequirementSet unchanged. They may add
-requirement_version to each requirement. Package verification accepts known
-built-ins with the documented 1.0 default and fails closed for an unknown
-extension without a locally registered definition.
+New Place Package output carries canonical requirement IDs and explicit
+requirement_version values. Legacy package input may omit a version only for an
+unambiguous known built-in version 1.0. Package verification fails closed for an
+unknown extension without a locally registered definition.
 
 ## Limits
 

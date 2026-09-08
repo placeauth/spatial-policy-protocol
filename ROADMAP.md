@@ -44,6 +44,10 @@ provider compatibility and Place Package behavior.
   without relying on the Python source.
 - **Non-goals:** network discovery, PKI expansion, or remote package services.
 
+Place Package 0.1 now emits explicit requirement versions and canonical units,
+with deterministic ordering and vocabulary-aware verification. Independent
+consumer guidance is published; no format-version change was required.
+
 ### 4. Conformance-provider contract hardening
 
 - **Objective:** make the external provider interface precise for third parties.

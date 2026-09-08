@@ -8,7 +8,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [SPP 0.1 core specification](../spec/SPP-0.1.md)
 - [Evidence-based spatial admission](../spec/evidence-based-admission.md)
 - [Evidence sufficiency and selective requalification](evidence-sufficiency.md)
-- [Portable signed Place Packages](place-package.md)
+- [Portable signed Place Packages and versioned requirements](place-package.md)
 - [Embodiment-specific requirement mapping](requirement-mapping.md)
 - [Versioned requirement vocabulary](requirement-vocabulary.md)
 - [External conformance providers](conformance-providers.md)

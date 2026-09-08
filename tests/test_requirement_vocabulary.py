@@ -18,7 +18,6 @@ from spp_admission import (  # noqa: E402
     TrustedPolicyAuthorityRegistry, compute_requirement_delta,
     create_place_package, verify_place_package,
 )
-from spp_admission.models import RobotState  # noqa: E402
 
 
 SPEED = {"id": "movement.max_speed", "requirement_version": "1.0", "action": "movement", "operator": "<=", "value": .8, "unit": "m/s"}
@@ -88,7 +87,6 @@ def test_place_package_accepts_known_default_and_fails_closed_for_unknown_extens
     authority = TrustedPolicyAuthority("authority", public, frozenset({"clinic"}), frozenset({"clinic/lobby"}))
     package = create_place_package(requirement_set, authority_id="authority", private_key=key)
     assert verify_place_package(package, TrustedPolicyAuthorityRegistry([authority])).valid
-    unknown = deepcopy(requirement_set)
-    unknown["requirements"] = [{"id": "x-acme.visibility", "requirement_version": "1.0", "action": "sensing", "operator": "=", "value": True}]
-    package = create_place_package(unknown, authority_id="authority", private_key=key)
-    assert verify_place_package(package, TrustedPolicyAuthorityRegistry([authority])).reasons == ["unknown_requirement"]
+    unknown = deepcopy(package)
+    unknown["requirements"]["requirements"] = [{"id": "x-acme.visibility", "requirement_version": "1.0", "action": "sensing", "operator": "=", "value": True}]
+    assert verify_place_package(unknown, TrustedPolicyAuthorityRegistry([authority])).reasons == ["unknown_requirement"]
