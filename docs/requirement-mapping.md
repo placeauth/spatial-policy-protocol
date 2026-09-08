@@ -18,7 +18,7 @@ The included mappings demonstrate the distinction:
 | `sensing.facial_recognition` | camera policy check | vision-pipeline privacy check |
 
 Providers are configured explicitly in-process. Each provider declares its
-supported requirement ID and embodiment, assurance level, deterministic
+supported requirement ID/version and embodiment, assurance level, deterministic
 priority, and a test factory. The highest-priority compatible provider wins;
 provider ID is the tie breaker. If no compatible provider is registered, the
 requirement remains in `unresolved_guarantees` and no synthetic test is made.

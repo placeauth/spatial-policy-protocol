@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Hardened the external conformance-provider contract with required exact
+  requirement-version declarations and fail-closed validation of provider
+  identity, version, requirement/version, assurance, evidence type, and unit
+  before a result may become evidence.
+
 - Hardened Place Package 0.1 requirement semantics: new package output carries
   explicit vocabulary versions and canonical units, validation rejects
   incompatible versions, invalid extensions, and conflicting requirements, and

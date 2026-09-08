@@ -38,6 +38,9 @@ class ConformanceProviderResult:
     assurance_level: str
     evidence_type: str
     metadata: dict[str, Any] = field(default_factory=dict)
+    requirement_version: str | None = None
+    unit: str | None = None
+    reasons: tuple[str, ...] = ()
 
     def to_evidence_result(self, test_id: str) -> dict[str, Any]:
         """Return the existing EvidenceBundle test-result representation."""
@@ -89,6 +92,9 @@ class ConformanceProviderRegistry:
                 or not descriptor.supported_embodiments
                 or not descriptor.supported_assurance_levels
                 or not descriptor.evidence_type
+                or set(descriptor.supported_requirement_versions) != set(descriptor.supported_requirement_types)
+                or any(not versions for versions in descriptor.supported_requirement_versions.values())
+                or any(not version for versions in descriptor.supported_requirement_versions.values() for version in versions)
                 or any(level not in ASSURANCE_LEVELS for level in descriptor.supported_assurance_levels)):
             raise ValueError("invalid provider descriptor")
         if descriptor.provider_id in self._providers:
@@ -159,11 +165,48 @@ class ConformanceProviderRegistry:
             return selection, None
         result = selection.provider.evaluate(requirement, subject)
         descriptor = selection.provider.descriptor
-        if (result.provider_id != descriptor.provider_id
-                or result.provider_version != descriptor.provider_version
-                or result.requirement_id != requirement.get("id")
-                or result.assurance_level not in descriptor.supported_assurance_levels
-                or ASSURANCE_LEVELS.index(result.assurance_level) < ASSURANCE_LEVELS.index(minimum_assurance_level)
-                or result.evidence_type != descriptor.evidence_type):
-            raise ValueError("invalid provider result")
+        error = self.validate_result(selection, requirement, subject, result, minimum_assurance_level)
+        if error:
+            raise ValueError(error)
         return selection, result
+
+    def validate_result(
+        self, selection: ProviderSelection, requirement: dict[str, Any], subject: RobotState,
+        result: ConformanceProviderResult, minimum_assurance_level: str = "E2",
+    ) -> str | None:
+        """Validate a selected provider result before evidence conversion.
+
+        Provider registration is local configuration, not a trust decision. This
+        method only verifies that a result conforms to the selected descriptor.
+        """
+        if selection.provider is None:
+            return "unresolved_provider"
+        descriptor = selection.provider.descriptor
+        resolution = self._vocabulary.validate(requirement)
+        if not resolution.resolved:
+            return resolution.reason or "unsupported_requirement"
+        definition = resolution.definition
+        assert definition is not None
+        if result.provider_id != descriptor.provider_id:
+            return "provider_result_provider_id_mismatch"
+        if result.provider_version != descriptor.provider_version:
+            return "provider_result_provider_version_mismatch"
+        if result.requirement_id != definition.requirement_id:
+            return "provider_result_requirement_id_mismatch"
+        if result.requirement_version != definition.version:
+            return "provider_result_requirement_version_mismatch"
+        if subject.embodiment not in descriptor.supported_embodiments:
+            return "provider_result_embodiment_mismatch"
+        if result.assurance_level not in descriptor.supported_assurance_levels:
+            return "provider_result_assurance_mismatch"
+        if ASSURANCE_LEVELS.index(result.assurance_level) < ASSURANCE_LEVELS.index(minimum_assurance_level):
+            return "provider_result_insufficient_assurance"
+        if result.evidence_type != descriptor.evidence_type:
+            return "provider_result_evidence_type_mismatch"
+        if result.unit != definition.unit:
+            return "provider_result_unit_mismatch"
+        if type(result.passed) is not bool or not isinstance(result.metadata, dict):
+            return "invalid_provider_result"
+        if not isinstance(result.reasons, tuple) or not all(isinstance(reason, str) for reason in result.reasons):
+            return "invalid_provider_result"
+        return None

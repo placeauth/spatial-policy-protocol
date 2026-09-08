@@ -12,6 +12,7 @@ class GaitSpeedProvider:
         evidence_type="behavioral_test",
         priority=100,
         description="Reference gait-speed conformance provider.",
+        supported_requirement_versions={"movement.max_speed": frozenset({"1.0"})},
     )
 
     def evaluate(self, requirement, subject):
@@ -20,5 +21,5 @@ class GaitSpeedProvider:
         return ConformanceProviderResult(
             self.descriptor.provider_id, self.descriptor.provider_version,
             requirement["id"], passed, measured, "E2", self.descriptor.evidence_type,
-            {"capability": "gait.maximum_speed_mps"},
+            {"capability": "gait.maximum_speed_mps"}, requirement_version="1.0", unit="m/s",
         )

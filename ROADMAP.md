@@ -58,6 +58,10 @@ consumer guidance is published; no format-version change was required.
 - **Non-goals:** dynamic plugins, a provider marketplace, or provider
   certification.
 
+The reference contract now requires exact requirement-version declarations and
+validates execution results before evidence conversion. Provider identity is
+still local configuration, not a trust authority.
+
 ### 5. Third-party implementation guidance
 
 - **Objective:** document a minimal implementation path independent of this

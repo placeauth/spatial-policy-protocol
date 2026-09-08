@@ -13,40 +13,56 @@ An `ExternalConformanceProvider` exposes a `ConformanceProviderDescriptor` and
 an `evaluate(requirement, subject)` method. The descriptor contains:
 
 - provider ID and version;
-- supported requirement IDs, embodiments, and assurance levels (`E0` through
-  `E4`);
+- supported requirement IDs with an exact version set, embodiments, and
+  assurance levels (`E0` through `E4`);
 - evidence type; and
 - optional description and deterministic priority.
 
-Providers may also declare supported_requirement_versions as an ID-to-version
-set. Selection requires an exact compatible version. Existing descriptors that
-omit this field retain compatibility with built-in version 1.0 only. Requirement
-IDs, versions, units, and comparison meanings are defined by the
+`supported_requirement_versions` is an ID-to-version set. Every supported
+requirement must have an explicit non-empty set; registration rejects an
+incomplete descriptor. Selection requires an exact compatible version.
+Requirement IDs, versions, units, and comparison meanings are defined by the
 [requirement vocabulary](requirement-vocabulary.md).
 
-`evaluate` returns a `ConformanceProviderResult` with the provider identity,
-requirement ID, pass/fail result, measured value, assurance level, evidence
-type, and optional metadata.
+```python
+ConformanceProviderDescriptor(
+    provider_id="gait-speed-provider", provider_version="1.0",
+    supported_requirement_types=frozenset({"movement.max_speed"}),
+    supported_requirement_versions={"movement.max_speed": frozenset({"1.0"})},
+    supported_embodiments=frozenset({"humanoid"}),
+    supported_assurance_levels=frozenset({"E2", "E3"}),
+    evidence_type="behavioral_test", priority=100,
+)
+```
+
+`evaluate` returns a `ConformanceProviderResult` with provider ID/version,
+requirement ID/version, pass/fail result, measured value, canonical unit,
+assurance level, evidence type, reasons, and metadata.
 
 ## Local selection
 
 `ConformanceProviderRegistry` accepts providers through explicit registration
 and rejects duplicate provider IDs. For a requirement and subject embodiment,
-it filters to compatible providers that meet the requested minimum assurance
-level. It selects the highest priority provider; provider ID is the stable tie
-breaker. An unresolved selection reports whether the requirement, embodiment,
-or assurance level was unsupported.
+it resolves the vocabulary definition, then filters by exact requirement
+ID/version, exact embodiment, and requested minimum assurance level. It selects
+the highest priority provider; provider ID is the stable tie breaker. An
+unresolved selection reports whether the requirement, version, embodiment, or
+assurance level was unsupported. It never guesses a provider, lowers assurance,
+or coerces an embodiment.
 
 ## Evidence and admission
 
-The result's `to_evidence_result()` method adapts the result to the existing
-conformance-plan test result. The established path remains:
+Before `to_evidence_result()` may be used, the registry verifies the selected
+descriptor and vocabulary bindings: provider ID/version, requirement ID/version,
+embodiment, assurance, evidence type, canonical unit, pass/fail type, reasons,
+and metadata. A mismatch fails closed with a deterministic provider-result
+error. The established path remains:
 
-`provider execution -> existing test result -> EvidenceBundle -> admission`.
+`Place Package -> vocabulary -> provider execution -> validated test result -> EvidenceBundle -> trusted evidence issuer signature -> admission`.
 
 Provider identity is distinct from an evidence issuer. When signed evidence is
 needed, the existing trusted-issuer verification layer signs and verifies the
-generated evidence separately.
+generated evidence separately. Provider registration does not imply trust.
 
 ## Minimal example
 
@@ -67,7 +83,8 @@ python demo/conformance_provider/run_demo.py
 ## Limits
 
 There is no provider discovery, dynamic loading, network service, sandboxing,
-certificate-based provider trust, remote registry, or vendor certification in
-this reference implementation. Registering a provider is a local operator
-configuration decision; its execution environment and real-world test quality
-remain outside SPP admission.
+certificate-based provider trust, remote registry, provider installation,
+supply-chain attestation, or vendor certification in this reference
+implementation. Registering a provider is a local operator configuration
+decision; its execution environment and real-world test quality remain outside
+SPP admission.

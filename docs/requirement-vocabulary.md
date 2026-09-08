@@ -44,8 +44,9 @@ requalification instead of comparing bounds.
 ## Providers and Place Packages
 
 External providers may declare supported_requirement_versions as an ID-to-version
-set. Legacy descriptors remain compatible with built-in 1.0 only. Provider
-selection rejects an ID whose requested version is not supported.
+set. The hardened provider contract requires an exact declaration for every
+supported requirement. Provider selection rejects an ID whose requested version
+is not supported.
 
 New Place Package output carries canonical requirement IDs and explicit
 requirement_version values. Legacy package input may omit a version only for an
