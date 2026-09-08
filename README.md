@@ -3,11 +3,13 @@
 An experimental, open interoperability protocol for establishing how autonomous systems may operate in physical environments.
 
 [![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](CHANGELOG.md)
-[![SPP v0.2.0 Experimental Preview](https://img.shields.io/badge/SPP-v0.2.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.2.0-experimental-preview.md)
+[![Latest published: SPP v0.2.0 Experimental Preview](https://img.shields.io/badge/latest%20published-SPP%20v0.2.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.2.0-experimental-preview.md)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-[Quickstart](docs/quickstart.md) · [Implement SPP independently](docs/implementing-spp.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [SPP v0.2 release notes](docs/releases/SPP-0.2.0-experimental-preview.md) · [Latest release: v0.2](docs/releases/SPP-0.2.0-experimental-preview.md)
+[Quickstart](docs/quickstart.md) · [Implement SPP independently](docs/implementing-spp.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Prepared v0.3 notes](docs/releases/SPP-0.3.0-experimental-preview.md) · [Latest published: v0.2](docs/releases/SPP-0.2.0-experimental-preview.md)
+
+> **Prepared for release:** SPP v0.3.0 Experimental Preview — Operational Interoperability. The latest published release remains SPP v0.2.0 Experimental Preview.
 
 ## The core question
 
@@ -47,7 +49,7 @@ The protocol lifecycle is:
 Place requirements → Conformance plan → Evidence → Admission profile → Spatial transition
 ```
 
-For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), [SPP v0.2 release notes](docs/releases/SPP-0.2.0-experimental-preview.md), and the [current-main changelog](CHANGELOG.md).
+For the technical overview, read the [whitepaper](docs/whitepaper.md), [SPP 0.1 specification](spec/SPP-0.1.md), [prepared SPP v0.3 release notes](docs/releases/SPP-0.3.0-experimental-preview.md), [latest published SPP v0.2 release notes](docs/releases/SPP-0.2.0-experimental-preview.md), and the [current-main changelog](CHANGELOG.md).
 
 ## Where SPP fits
 
@@ -211,7 +213,7 @@ python demo/requalification/run_demo.py
 The [evidence sufficiency guide](docs/evidence-sufficiency.md) covers integrity,
 freshness, scope and configuration checks, plus tamper and expiry demo variants.
 
-> **Current release:** SPP v0.2.0 Experimental Preview. The normative protocol specification remains SPP 0.1.
+> **Prepared release:** SPP v0.3.0 Experimental Preview. **Latest published release:** SPP v0.2.0 Experimental Preview. The normative protocol specification remains SPP 0.1.
 
 The current reference implementation demonstrates:
 
@@ -278,7 +280,7 @@ tests/                     schema, API, policy, admission, and ROS runtime tests
 
 ## Documentation
 
-Use the [documentation index](docs/README.md) for the core specification, evidence and admission model, schemas, security and threat model, demos, roadmap, release notes, and whitepaper. The [SPP 0.3 Operational Interoperability roadmap](ROADMAP.md) defines the next planned development milestone.
+Use the [documentation index](docs/README.md) for the core specification, evidence and admission model, schemas, security and threat model, demos, roadmap, release notes, and whitepaper. The [SPP 0.3 Operational Interoperability roadmap](ROADMAP.md) records the completed implementation milestone and release-preparation status.
 
 ## Contributing
 

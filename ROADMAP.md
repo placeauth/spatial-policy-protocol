@@ -1,8 +1,9 @@
 # Roadmap
 
 SPP is an experimental protocol project. This roadmap describes validation and
-interoperability work, not adoption commitments. The current implementation
-release is SPP 0.2.0 Experimental Preview; the normative protocol
+interoperability work, not adoption commitments. The latest published
+implementation release is SPP 0.2.0 Experimental Preview. SPP v0.3.0
+Experimental Preview is prepared for release; the normative protocol
 specification remains SPP 0.1.
 
 ## SPP 0.3 — Operational Interoperability
@@ -111,6 +112,16 @@ reference decision boundary, not building-hardware validation.
   distinguish implementation version 0.3 from normative SPP 0.1.
 - **Non-goals:** changing the normative SPP version without a separate protocol
   process.
+
+## 0.3 release status
+
+- **0.3 implementation:** COMPLETE
+- **Release preparation:** IN PROGRESS
+- **Publication:** PENDING
+
+The reference implementation/package version is prepared as `0.3.0`. The
+normative protocol specification remains SPP 0.1; Place Package and explain
+trace formats remain 0.1.
 
 ## Recommended order
 

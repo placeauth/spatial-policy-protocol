@@ -33,6 +33,8 @@ This index collects the public specifications, implementation notes, examples, a
 
 - [Roadmap](../ROADMAP.md)
 - [Current main changes](../CHANGELOG.md)
+- [SPP v0.3.0 Experimental Preview prepared release notes](releases/SPP-0.3.0-experimental-preview.md)
+- [SPP v0.3.0 release checklist](releases/SPP-0.3.0-release-checklist.md)
 - [SPP v0.2.0 Experimental Preview release notes](releases/SPP-0.2.0-experimental-preview.md)
 - [SPP v0.1.0 Experimental Preview release notes](releases/SPP-0.1.0-experimental-preview.md)
 - [Markdown Whitepaper — From Permission to Admission](whitepaper.md)

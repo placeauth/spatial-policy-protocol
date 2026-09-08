@@ -1,55 +1,57 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — Experimental Preview (prepared)
 
-- Added a bounded facility-side access-control adapter. It maps current
-  AdmissionProfiles to exact place-access decisions, preserves DEGRADED
-  restrictions, and fails closed on stale, invalid, or wrong-place profiles.
-  It adds no physical door, building protocol, or vendor integration.
+- Added a deterministic, schema-defined machine-readable decision trace format
+  0.1 for independent tooling; it explains decisions but is not authorization.
+
+- Added a versioned requirement vocabulary with dotted identifiers, explicit
+  requirement versions, canonical units, exact comparison semantics, extension
+  namespace conventions, and fail-closed incompatible-version handling.
+
+- Hardened Place Package 0.1 with canonical versioned requirements, exact
+  unit/version validation, fail-closed unknown extensions, deterministic signed
+  package semantics, and independently verifiable single-file JSON.
+
+- Hardened the external conformance-provider contract with provider identity
+  and version, exact requirement-version, embodiment, assurance, evidence-type
+  compatibility, deterministic selection, and provider-result validation.
 
 - Added an implementation-oriented guide for independent experimental SPP
   consumers covering Place Packages, vocabulary, providers, evidence, admission,
   lifecycle, trace output, and fail-closed interoperability behavior.
 
-- Hardened the external conformance-provider contract with required exact
-  requirement-version declarations and fail-closed validation of provider
-  identity, version, requirement/version, assurance, evidence type, and unit
-  before a result may become evidence.
+- Added an explicit AdmissionProfile lifecycle with `VALID`, `REVALIDATE`,
+  `REQUALIFY`, and `INVALID` states, local revocation, trust-anchor
+  invalidation, and policy/evidence/binding change handling.
 
-- Hardened Place Package 0.1 requirement semantics: new package output carries
-  explicit vocabulary versions and canonical units, validation rejects
-  incompatible versions, invalid extensions, and conflicting requirements, and
-  deterministic creation orders requirements without changing the package format.
+- Added local Ed25519 verification for signed evidence issuers and separate
+  signed place-policy authorities. These are distinct local trust roles and do
+  not add PKI, remote discovery, or trust federation.
 
-- Added a local versioned requirement vocabulary with built-in definitions,
-  exact provider-version compatibility, additive PlaceRequirementSet fields,
-  and version-aware RequirementDelta handling.
+- Validated the evidence-backed ROS 2 Humble / Nav2 path through
+  `nav2_msgs/msg/SpeedLimit`, ControllerServer, and stock Regulated Pure
+  Pursuit: under one active `FollowPath` goal, commanded speed changed from
+  1.0 m/s to 0.5 m/s. This is not a physical stopping, functional-safety, or
+  physical-world validation claim.
 
-- Added trace format 0.1: a stable JSON schema, canonical fixture output, and
-  deterministic machine-readable projection of existing explain decisions. It
-  does not change SPP 0.1 or admission behavior.
+- Validated a live Open-RMF Humble task-eligibility fixture using fleet adapter
+  Python 2.1.8, a real `Adapter`, `FleetUpdateHandle`, one stationary registered
+  test robot, real delivery bids, and four delivery-consideration callback
+  invocations. `ADMITTED` produced a bid proposal; `DENIED` produced no proposal
+  with `admission_denied`. `DEGRADED` remains adapter-tested, not
+  runtime-validated. No dispatch execution, traffic negotiation, fleet-wide,
+  or physical-motion claim is made.
 
-- Validated Open-RMF Humble delivery consideration with one registered test
-  robot: ADMITTED produces a bid proposal; DENIED returns admission_denied.
-  This validates task eligibility, not dispatch execution or physical motion.
+- Added a bounded facility-side access-control adapter. It maps current
+  AdmissionProfiles to exact place-access decisions, preserves DEGRADED
+  restrictions only when explicitly accepted, and fails closed on stale,
+  revoked, invalid, denied, or wrong-place profiles. It adds no physical door,
+  building protocol, or vendor integration.
 
-- Defined the SPP 0.3 Operational Interoperability milestone and its bounded
-  documentation, validation, and independent-implementation priorities. This
-  is planning only and does not revise SPP 0.1 or the 0.2.0 release.
-- Added local Ed25519 signed place requirements and a separate trusted
-  policy-authority registry with place/scope authorization and fail-closed
-  verified policy-plus-evidence admission. This remains experimental reference
-  infrastructure; it adds no SPP 0.1 wire format or PKI.
-- Added a deterministic local AdmissionProfile lifecycle assessment with
-  explicit revocation, evidence/trust/binding checks, and selective
-  requalification triggers. It adds no distributed state or SPP 0.1 schema.
-- Added Place Package 0.1: a portable, single-file JSON PlaceRequirementSet
-  exchange with local policy-authority verification and Ed25519 tamper
-  detection. It adds no discovery, registry, or SPP 0.1 wire change.
-- Added an explicit local external conformance-provider interface with
-  deterministic requirement, embodiment, and assurance-level selection. It
-  feeds the existing evidence and admission path and adds no provider discovery,
-  remote trust service, or SPP 0.1 wire change.
+- SPP 0.3 remains experimental and pre-standardization. It does not revise the
+  normative SPP 0.1 protocol specification or claim production certification,
+  physical safety, PKI, or trust federation.
 
 ## 0.2.0 — Experimental Preview
 
