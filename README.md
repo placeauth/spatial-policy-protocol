@@ -3,13 +3,13 @@
 An experimental, open interoperability protocol for establishing how autonomous systems may operate in physical environments.
 
 [![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](CHANGELOG.md)
-[![Latest published: SPP v0.2.0 Experimental Preview](https://img.shields.io/badge/latest%20published-SPP%20v0.2.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.2.0-experimental-preview.md)
+[![Latest published: SPP v0.3.0 Experimental Preview](https://img.shields.io/badge/latest%20published-SPP%20v0.3.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.3.0-experimental-preview.md)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-[Quickstart](docs/quickstart.md) · [Implement SPP independently](docs/implementing-spp.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [Prepared v0.3 notes](docs/releases/SPP-0.3.0-experimental-preview.md) · [Latest published: v0.2](docs/releases/SPP-0.2.0-experimental-preview.md)
+[Quickstart](docs/quickstart.md) · [Implement SPP independently](docs/implementing-spp.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [SPP v0.3 release notes](docs/releases/SPP-0.3.0-experimental-preview.md) · [Latest published: v0.3](docs/releases/SPP-0.3.0-experimental-preview.md)
 
-> **Release-ready:** SPP v0.3.0 Experimental Preview — Operational Interoperability. The latest published release remains SPP v0.2.0 Experimental Preview until publication.
+> **Latest published release:** SPP v0.3.0 Experimental Preview — Operational Interoperability.
 
 ## The core question
 
@@ -213,7 +213,7 @@ python demo/requalification/run_demo.py
 The [evidence sufficiency guide](docs/evidence-sufficiency.md) covers integrity,
 freshness, scope and configuration checks, plus tamper and expiry demo variants.
 
-> **Release-ready:** SPP v0.3.0 Experimental Preview. **Latest published release:** SPP v0.2.0 Experimental Preview until publication. The normative protocol specification remains SPP 0.1.
+> **Latest published release:** SPP v0.3.0 Experimental Preview. The normative protocol specification remains SPP 0.1.
 
 The current reference implementation demonstrates:
 
