@@ -71,6 +71,9 @@ __all__ = [
     "DEFAULT_REQUIREMENT_VOCABULARY",
     "BUILTIN_REQUIREMENTS",
     "requirements_compatible",
+    "FacilityAccessDecision",
+    "ReferenceDoorController",
+    "map_profile_to_access",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -130,3 +133,4 @@ from .vocabulary import (
     RequirementVocabularyRegistry,
     requirements_compatible,
 )
+from .facility_access import FacilityAccessDecision, ReferenceDoorController, map_profile_to_access

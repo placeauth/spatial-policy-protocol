@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added a bounded facility-side access-control adapter. It maps current
+  AdmissionProfiles to exact place-access decisions, preserves DEGRADED
+  restrictions, and fails closed on stale, invalid, or wrong-place profiles.
+  It adds no physical door, building protocol, or vendor integration.
+
 - Added an implementation-oriented guide for independent experimental SPP
   consumers covering Place Packages, vocabulary, providers, evidence, admission,
   lifecycle, trace output, and fail-closed interoperability behavior.

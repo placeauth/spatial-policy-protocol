@@ -13,6 +13,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [Embodiment-specific requirement mapping](requirement-mapping.md)
 - [Versioned requirement vocabulary](requirement-vocabulary.md)
 - [External conformance providers and result validation](conformance-providers.md)
+- [Facility access-control boundary](facility-access.md)
 - [Explain an SPP decision and machine-readable trace](explain-trace.md)
 - [ROS 2 / Nav2 admission enforcement](../reference/ros2-enforcer/README.md)
 - [Open-RMF task admission adapter (boundary validation)](open-rmf.md)

@@ -97,6 +97,11 @@ published exchange boundaries without prescribing the reference code structure.
   profile in a documented fixture.
 - **Non-goals:** a near-duplicate Nav2 path or a mandatory building platform.
 
+The bounded [facility access-control boundary](docs/facility-access.md) now
+maps a current AdmissionProfile to an exact place-access decision, preserving
+DEGRADED restrictions and lifecycle fail-closed behavior. It is a pure
+reference decision boundary, not building-hardware validation.
+
 ### 8. Release-readiness pass
 
 - **Objective:** ensure the 0.3 surfaces tell one consistent, bounded story.

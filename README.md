@@ -174,6 +174,17 @@ providers](docs/conformance-providers.md) and run:
 python demo/conformance_provider/run_demo.py
 ```
 
+### Facility access-control boundary
+
+A bounded reference door-controller boundary can grant or deny access to an
+exact place from an AdmissionProfile while preserving DEGRADED restrictions and
+lifecycle state. It does not drive physical hardware. See [facility access
+control](docs/facility-access.md) and run:
+
+```sh
+python demo/facility_access/run_demo.py
+```
+
 ## Explain a decision
 
 After `python -m pip install -e .`, trace the existing patient-wing
