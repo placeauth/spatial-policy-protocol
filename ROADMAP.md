@@ -72,6 +72,10 @@ still local configuration, not a trust authority.
   semantics and fixtures.
 - **Non-goals:** a mandatory SDK, cloud service, or governance program.
 
+The independent implementation guide is published at
+[Implementing SPP Independently](docs/implementing-spp.md). It connects the
+published exchange boundaries without prescribing the reference code structure.
+
 ### 6. Live Open-RMF runtime validation
 
 - **Objective:** exercise the bounded Open-RMF task-admission hook in a real

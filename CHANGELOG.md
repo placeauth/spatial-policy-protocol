@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added an implementation-oriented guide for independent experimental SPP
+  consumers covering Place Packages, vocabulary, providers, evidence, admission,
+  lifecycle, trace output, and fail-closed interoperability behavior.
+
 - Hardened the external conformance-provider contract with required exact
   requirement-version declarations and fail-closed validation of provider
   identity, version, requirement/version, assurance, evidence type, and unit

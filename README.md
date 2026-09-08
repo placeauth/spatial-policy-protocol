@@ -7,7 +7,7 @@ An experimental, open interoperability protocol for establishing how autonomous 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
-[Quickstart](docs/quickstart.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [SPP v0.2 release notes](docs/releases/SPP-0.2.0-experimental-preview.md) · [Latest release: v0.2](docs/releases/SPP-0.2.0-experimental-preview.md)
+[Quickstart](docs/quickstart.md) · [Implement SPP independently](docs/implementing-spp.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Specification](spec/SPP-0.1.md) · [SPP v0.2 release notes](docs/releases/SPP-0.2.0-experimental-preview.md) · [Latest release: v0.2](docs/releases/SPP-0.2.0-experimental-preview.md)
 
 ## The core question
 
