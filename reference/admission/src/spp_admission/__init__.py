@@ -74,6 +74,14 @@ __all__ = [
     "FacilityAccessDecision",
     "ReferenceDoorController",
     "map_profile_to_access",
+    "RestrictionAcknowledgement",
+    "RestrictionAcknowledgementAssessment",
+    "RestrictionEnforcementMapping",
+    "acknowledge_restriction",
+    "assess_degraded_restriction_acknowledgement",
+    "map_restriction_to_handler",
+    "restriction_identifier",
+    "restriction_profile_identifier",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -134,3 +142,13 @@ from .vocabulary import (
     requirements_compatible,
 )
 from .facility_access import FacilityAccessDecision, ReferenceDoorController, map_profile_to_access
+from .restriction_acknowledgement import (
+    RestrictionAcknowledgement,
+    RestrictionAcknowledgementAssessment,
+    RestrictionEnforcementMapping,
+    acknowledge_restriction,
+    assess_degraded_restriction_acknowledgement,
+    map_restriction_to_handler,
+    restriction_identifier,
+    restriction_profile_identifier,
+)
