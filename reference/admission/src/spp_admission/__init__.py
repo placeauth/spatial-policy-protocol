@@ -74,6 +74,13 @@ __all__ = [
     "FacilityAccessDecision",
     "ReferenceDoorController",
     "map_profile_to_access",
+    "ADMISSION_ENVELOPE_TYPE",
+    "ADMISSION_ENVELOPE_VERSION",
+    "SignedAdmissionEnvelope",
+    "AdmissionEnvelopeVerification",
+    "admission_scope",
+    "sign_admission_profile",
+    "verify_signed_admission_envelope",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -134,3 +141,12 @@ from .vocabulary import (
     requirements_compatible,
 )
 from .facility_access import FacilityAccessDecision, ReferenceDoorController, map_profile_to_access
+from .admission_envelope import (
+    ADMISSION_ENVELOPE_TYPE,
+    ADMISSION_ENVELOPE_VERSION,
+    AdmissionEnvelopeVerification,
+    SignedAdmissionEnvelope,
+    admission_scope,
+    sign_admission_profile,
+    verify_signed_admission_envelope,
+)
