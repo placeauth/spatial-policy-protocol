@@ -1,86 +1,63 @@
 # Try SPP in 5 Minutes
 
-This path runs a representative evidence-based admission scenario. You will see a place's requirements become a conformance plan, receive passing test results as evidence, and produce an `ADMITTED` operating profile. The same demo also includes `DEGRADED` and `DENIED` outcomes; a second command below shows how SPP handles a move into a space with stricter requirements. Both paths run locally and do not require an API server.
+This is the canonical PlaceAuth / SPP demonstration. It runs actual inherited policy evaluation plus the experimental evidence-backed admission path locally: no API server, simulator, Docker installation, or robot hardware is required.
 
 ## Prerequisites
 
 - Git
 - Python 3.11 or newer
 
-The quickstart uses the repository's existing Python dependencies. Docker is not required.
-
-## Run the primary admission scenario
-
-Clone the repository and create an isolated environment:
+## Run the canonical demo
 
 ```sh
 git clone https://github.com/placeauth/spatial-policy-protocol.git
 cd spatial-policy-protocol
-python -m venv .venv
-```
-
-Activate it:
-
-```sh
-# Windows PowerShell
-.\.venv\Scripts\Activate.ps1
-
-# macOS/Linux
-source .venv/bin/activate
-```
-
-Install the existing development dependencies and run Scenario A:
-
-```sh
 python -m pip install -r requirements-dev.txt
-python demo/admission/run_demo.py a
+python demo/admission/run_demo.py --canonical
 ```
 
-Scenario A evaluates a robot against the patient-wing requirements. The output includes the requirements, the conformance tests and results, an evidence digest, and the resulting profile. A successful run includes output like this:
+The output has two layers.
+
+1. **Core policy:** the same machine requests `movement.enter` in three clinic spaces. The lobby returns `PERMIT`, the staff corridor returns `CONDITIONAL` and requires `clinic.staff_escort`, and the pharmacy returns `DENY`. The policy of the destination place changes what the machine may do.
+2. **Evidence-based admission:** `PlaceRequirementSet -> ConformancePlan -> EvidenceBundle / EvidenceBinding -> AdmissionProfile`. The same machine moves from the lobby to the patient wing, reuses sufficient movement evidence, and evaluates the new requirements. You then see `ADMITTED`, `DEGRADED` with `sensing.video.capture=disabled`, and `DENIED` for a failed essential human-separation requirement.
+
+Representative output:
 
 ```text
-requirements: movement.max_speed, human_separation, sensing.facial_recognition, data.video_retention
-tests:        ['movement.max_speed', 'human_separation', 'sensing.facial_recognition', 'data.video_retention']
-results:      [('movement.max_speed', 'PASS'), ('human_separation', 'PASS'), ('sensing.facial_recognition', 'PASS'), ('data.video_retention', 'PASS')]
-admission:    ADMITTED
+PLACE: clinic/staff-corridor
+DECISION: CONDITIONAL
+REQUIRES: clinic.staff_escort
+
+MOVE: same machine -> clinic/patient-wing
+REUSED EVIDENCE: movement.max_speed
+ADMISSION: ADMITTED
+
+UNSATISFIED: data.video_retention (nonessential)
+ADMISSION: DEGRADED
+RESTRICTIONS: sensing.video.capture=disabled
+
+UNSATISFIED: human_separation (essential)
+ADMISSION: DENIED
+WHY: failed:human_separation
 ```
 
-The full output also prints an `evidence: sha256:...` line; its digest value is specific to that run.
+## What happened
 
-For the other admission outcomes, run `python demo/admission/run_demo.py b` for a `DEGRADED` profile or `python demo/admission/run_demo.py c` for a `DENIED` profile.
+SPP is not static robot configuration or a geofence. The place declares requirements; the machine evaluates its capabilities and evidence against them; SPP returns a policy decision or scoped admission profile that constrains behavior in that place. A `DEGRADED` profile preserves its explicit restriction, while an essential failure yields `DENIED`.
 
-## Try the spatial-transition example
+The command uses deterministic reference logic. It does not demonstrate physical robot behavior, hardware attestation, or production enforcement.
 
-Run Scenario D:
+## Verify the checkout
 
 ```sh
-python demo/admission/run_demo.py d
+python -m pytest -q
 ```
 
-It first evaluates the robot in the lobby, then moves it to the patient wing. The output shows the requirement delta and that the still-sufficient movement guarantee is reused while only the three new requirements are tested:
-
-```text
-delta:        [{'requirement_id': 'movement.max_speed', 'classification': 'REUSED'}, {'requirement_id': 'human_separation', 'classification': 'NEW'}, {'requirement_id': 'sensing.facial_recognition', 'classification': 'NEW'}, {'requirement_id': 'data.video_retention', 'classification': 'NEW'}]
-patient wing:
-reused:       ['movement.max_speed']
-tests:        ['human_separation', 'sensing.facial_recognition', 'data.video_retention']
-admission:    ADMITTED
-```
-
-This is the central spatial admission flow: the same robot enters a new space with stricter requirements, reuses evidence that remains sufficient, requalifies only unresolved guarantees, and receives an updated profile.
-
-## What just happened?
-
-SPP starts with requirements published for a place and space. The reference implementation converts them into a conformance plan, runs the relevant checks, collects the results in an evidence bundle, and derives an `ADMITTED`, `DEGRADED`, or `DENIED` operating profile.
-
-For a transition, SPP compares existing evidence with the destination requirements. That comparison produces a requirement delta: guarantees that remain sufficient can be reused, while new, stricter, or unresolved requirements are selectively requalified. The resulting evidence supports an updated profile scoped to the destination.
-
-## Next steps
+## Continue exploring
 
 - [Repository overview](../README.md)
-- [Whitepaper — From Permission to Admission](whitepaper.md)
+- [Admission demo details](../demo/admission/README.md)
 - [SPP 0.1 core specification](../spec/SPP-0.1.md)
 - [Evidence-based spatial admission specification](../spec/evidence-based-admission.md)
-- [Admission demo details](../demo/admission/README.md)
 - [Security considerations](../spec/security.md)
-- [Contributing guide](../CONTRIBUTING.md)
+- [Technical review](technical-review.md)

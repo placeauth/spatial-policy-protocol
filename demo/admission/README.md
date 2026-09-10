@@ -2,6 +2,26 @@
 
 This deterministic reference demo shows how a place-defined requirement set is converted into conformance tests, evidence, and an operating profile. It uses a declared mobile-base state and the same robot application in every scenario.
 
+## Canonical five-minute proof
+
+Run the concise, two-layer demonstration from the repository root after installing `requirements-dev.txt`:
+
+```sh
+python demo/admission/run_demo.py --canonical
+```
+
+It first evaluates actual inherited clinic policy (`PERMIT`, `CONDITIONAL`, and
+`DENY`), then runs the real admission path:
+
+```text
+PlaceRequirementSet -> ConformancePlan -> EvidenceBundle / EvidenceBinding -> AdmissionProfile
+```
+
+The output shows the same machine entering a patient wing with sufficient
+movement evidence reused, then the actual `ADMITTED`, `DEGRADED` (video capture
+disabled), and `DENIED` (essential human-separation failure) outcomes. No
+physical robot or runtime is connected.
+
 ## Run
 
 From the repository root, after installing `requirements-dev.txt`:
