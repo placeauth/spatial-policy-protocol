@@ -29,6 +29,11 @@ class ProfileLifecycleAssessment:
     required_action: str
     requirement_delta: list[dict[str, Any]]
 
+    @property
+    def may_rely_without_additional_work(self) -> bool:
+        """Only VALID permits continued reliance on the prior profile."""
+        return self.status == "VALID"
+
 
 class ProfileRevocationRegistry:
     """Small in-memory reference registry; not a distributed revocation service."""
@@ -153,6 +158,11 @@ def assess_profile_lifecycle(
         if profile.place != current_requirements.get("place"):
             return _assessment(
                 "REQUALIFY", ["profile_destination_changed"], [],
+                [item["requirement_id"] for item in delta], delta,
+            )
+        if profile.space != current_requirements.get("space"):
+            return _assessment(
+                "REQUALIFY", ["profile_space_changed"], [],
                 [item["requirement_id"] for item in delta], delta,
             )
         policy_digest = digest(current_requirements)

@@ -74,6 +74,26 @@ __all__ = [
     "FacilityAccessDecision",
     "ReferenceDoorController",
     "map_profile_to_access",
+    "ADMISSION_ENVELOPE_TYPE",
+    "ADMISSION_ENVELOPE_VERSION",
+    "SignedAdmissionEnvelope",
+    "AdmissionEnvelopeVerification",
+    "admission_scope",
+    "sign_admission_profile",
+    "verify_signed_admission_envelope",
+    "CurrentEvaluationContext",
+    "EvidenceRevocationRegistry",
+    "assess_subject_bound_revalidation",
+    "RestrictionAcknowledgement",
+    "RestrictionAcknowledgementAssessment",
+    "RestrictionEnforcementMapping",
+    "acknowledge_restriction",
+    "assess_degraded_restriction_acknowledgement",
+    "map_restriction_to_handler",
+    "restriction_identifier",
+    "restriction_profile_identifier",
+    "AdmissionRelianceAssessment",
+    "assess_admission_reliance",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -134,3 +154,24 @@ from .vocabulary import (
     requirements_compatible,
 )
 from .facility_access import FacilityAccessDecision, ReferenceDoorController, map_profile_to_access
+from .admission_envelope import (
+    ADMISSION_ENVELOPE_TYPE,
+    ADMISSION_ENVELOPE_VERSION,
+    AdmissionEnvelopeVerification,
+    SignedAdmissionEnvelope,
+    admission_scope,
+    sign_admission_profile,
+    verify_signed_admission_envelope,
+)
+from .revalidation import CurrentEvaluationContext, EvidenceRevocationRegistry, assess_subject_bound_revalidation
+from .restriction_acknowledgement import (
+    RestrictionAcknowledgement,
+    RestrictionAcknowledgementAssessment,
+    RestrictionEnforcementMapping,
+    acknowledge_restriction,
+    assess_degraded_restriction_acknowledgement,
+    map_restriction_to_handler,
+    restriction_identifier,
+    restriction_profile_identifier,
+)
+from .reliance import AdmissionRelianceAssessment, assess_admission_reliance
