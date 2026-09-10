@@ -74,6 +74,9 @@ __all__ = [
     "FacilityAccessDecision",
     "ReferenceDoorController",
     "map_profile_to_access",
+    "CurrentEvaluationContext",
+    "EvidenceRevocationRegistry",
+    "assess_subject_bound_revalidation",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -134,3 +137,4 @@ from .vocabulary import (
     requirements_compatible,
 )
 from .facility_access import FacilityAccessDecision, ReferenceDoorController, map_profile_to_access
+from .revalidation import CurrentEvaluationContext, EvidenceRevocationRegistry, assess_subject_bound_revalidation
