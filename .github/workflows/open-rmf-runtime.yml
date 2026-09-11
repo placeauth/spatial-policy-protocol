@@ -27,7 +27,7 @@ jobs:
         run: |
           apt-get update -qq
           apt-get install -y --no-install-recommends ros-humble-rmf-fleet-adapter-python python3-pip python3-pytest
-          python3 -m pip install 'jsonschema>=4.23,<5' cryptography pyyaml
+          python3 -m pip install 'jsonschema>=4.23,<5' cryptography pyyaml 'rfc8785>=0.1.4,<1'
           dpkg-query -W ros-humble-rmf-fleet-adapter-python
       - name: Exercise real delivery consideration
         shell: bash

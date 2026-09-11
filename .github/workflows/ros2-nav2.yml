@@ -32,7 +32,7 @@ jobs:
         run: |
           apt-get update -qq
           apt-get install -y --no-install-recommends ros-humble-nav2-msgs ros-humble-nav2-controller ros-humble-nav2-regulated-pure-pursuit-controller build-essential cmake python3-pytest python3-yaml python3-pip
-          python3 -m pip install 'jsonschema>=4.23,<5'
+          python3 -m pip install 'jsonschema>=4.23,<5' 'rfc8785>=0.1.4,<1'
       - name: Build test-only controller observation plugin (not Nav2)
         shell: bash
         run: |
