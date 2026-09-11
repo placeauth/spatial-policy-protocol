@@ -97,11 +97,11 @@ clock distribution is outside this profile.
 
 Before canonicalization, a conforming raw-wire parser MUST reject malformed
 JSON, malformed UTF-8, duplicate **decoded** object keys, unsupported numeric
-representations, and invalid Unicode scalar values. A schema/structure layer
-MUST then reject an unknown canonicalization profile, missing required
-envelope fields, wrong primitive types, and unknown status values. Absent,
-`null`, empty string, and empty array MUST remain distinct unless a specific
-field definition states otherwise.
+representations, and invalid Unicode scalar values. A final raw-envelope
+schema SHOULD define required fields, primitive types, unknown-field handling,
+and permitted status values, and SHOULD reject inputs that violate those
+definitions. Absent, `null`, empty string, and empty array SHOULD remain
+distinct unless a final field definition explicitly states otherwise.
 
 The current Python JCS parser demonstrates fail-closed duplicate-key,
 non-finite-number, Unicode, and numeric-boundary behavior, but is explicitly a
@@ -143,13 +143,20 @@ The experimental envelope fields are:
 | `scope` | Derived as `place::space`. |
 | `issued_at`, `expires_at` | Canonical UTC validity interval. |
 | `signed_payload_digest` | JCS SHA-256 digest of the profile. |
-| `signature` | Base64-encoded Ed25519 signature. |
+| `signature` | Standard padded Base64-encoded Ed25519 signature. |
 | `profile` | The complete bound `AdmissionProfile`. |
 
-The Ed25519 signature input is JCS over the envelope metadata from
-`issuer_id` through `signed_payload_digest`, including the canonicalization
-profile. Implementations of this profile MUST NOT silently substitute another
-algorithm; an unsupported algorithm fails closed. The trust model is local:
+The Ed25519 signature input is JCS over an object containing exactly these
+metadata fields: `issuer_id`, `algorithm`, `envelope_type`,
+`envelope_version`, `canonicalization_profile`, `subject_id`, `place`, `space`,
+`scope`, `issued_at`, `expires_at`, and `signed_payload_digest`. The
+`AdmissionProfile` content is cryptographically bound through
+`signed_payload_digest`; it is not included directly in this metadata
+preimage. Implementations of this profile MUST NOT silently substitute another
+algorithm; an unsupported algorithm fails closed. The current interoperability
+fixtures use standard padded Base64 for both the signature and public-key
+fixture representation. That fixture encoding is experimental and MAY be
+finalized differently by a future raw-wire schema. The trust model is local:
 the verifier receives a registry containing an enabled issuer public key and
 authorization for the envelope type and derived scope.
 
@@ -190,10 +197,12 @@ embedded restrictions, effective restrictions, unresolved values, and reason
 codes. Other arrays, including guarantees, reason codes, unresolved values,
 and test results, MUST remain ordered and MUST NOT be treated as sets.
 
-An acknowledgement and enforcement mapping need the same restriction digest,
-the same restriction-profile identifier, and one matching nonempty handler for
-each effective restriction. This establishes recognized configured mapping,
-not physical enforcement proof.
+A `RestrictionAcknowledgement` carries the restriction-profile identifier and
+the exact restriction digest. A local enforcement mapping is matched using
+that exact restriction digest and a matching nonempty handler identifier; the
+mapping itself does not carry the restriction-profile identifier. One matching
+acknowledgement and mapping are required for each effective restriction. This
+establishes recognized configured mapping, not physical enforcement proof.
 
 ## 11. Failure taxonomy
 
@@ -217,10 +226,10 @@ should preserve the underlying reason where it can do so safely.
 
 ## 12. Security considerations
 
-Subject and place/space binding prevents a valid artifact from being replayed
-at a different declared subject or governed scope. It does not prevent
-same-subject, same-scope reuse before expiry or local revocation; deployments
-needing one-time use require an additional replay mechanism. The signature
+Subject and place/space binding causes rejection when an artifact is presented
+for a different expected subject or governed scope. Same-subject, same-scope
+reuse remains allowed until expiry or local revocation; deployments needing
+one-time use require an additional replay mechanism. The signature
 binds the canonicalization profile, so profile-identifier tampering invalidates
 the signature. Strict parsing avoids duplicate-key and numeric-normalization
 confusion before signed bytes are trusted.
