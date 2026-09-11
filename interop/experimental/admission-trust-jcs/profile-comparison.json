@@ -1,0 +1,50 @@
+{
+  "expected": {
+    "canonical_bytes_equal": false,
+    "digest_equal": false,
+    "signature_equal": false
+  },
+  "jcs_profile": {
+    "canonical_json": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"café 🚀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+    "digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+    "signature": "k4yAX8wYeUVOZ2qkCZnTRlJdBuA9x14kup7dQQANDdaynuwthOhYDGsVU9BjQ3YGQrw5oQEuTCPcGWLZ4OWfCw==",
+    "signature_input": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}"
+  },
+  "logical_profile": {
+    "actor_id": "robot:jcs:1",
+    "binding": {
+      "actor_id": "robot:jcs:1",
+      "build_fingerprint": "build:jcs:1",
+      "controller_fingerprint": "controller:jcs:1",
+      "environment_digest": "sha256:environment-jcs",
+      "plan_digest": "sha256:plan-jcs",
+      "policy_digest": "sha256:policy-jcs"
+    },
+    "evidence_digest": "sha256:jcs-evidence",
+    "operating_profile": {
+      "guarantees": [
+        {
+          "id": "movement.max_speed",
+          "value": 0.5
+        }
+      ],
+      "label": "café 🚀",
+      "restrictions": []
+    },
+    "place": "clinic",
+    "policy_version": 7,
+    "reason_codes": [
+      "jcs_reference"
+    ],
+    "restrictions": [],
+    "space": "clinic/lobby",
+    "status": "ADMITTED",
+    "unresolved": []
+  },
+  "python_profile": {
+    "canonical_json": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"caf\\u00e9 \\ud83d\\ude80\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+    "digest": "sha256:14daa6fa50751a49f021ac98d4b536c350615f131497ea78e51e2e0b383f00b0",
+    "signature": "t5WyD4EuGxnoDswZI9t73bAZBYPrynPp8GrDRfDHvHlhp8xI4fiEtk8AWxoM7EyKkrlYgm/7XUNym3NEzzu5Cg==",
+    "signature_input": "{\"algorithm\":\"Ed25519\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:14daa6fa50751a49f021ac98d4b536c350615f131497ea78e51e2e0b383f00b0\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}"
+  }
+}

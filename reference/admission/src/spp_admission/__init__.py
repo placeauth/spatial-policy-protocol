@@ -74,6 +74,25 @@ __all__ = [
     "FacilityAccessDecision",
     "ReferenceDoorController",
     "map_profile_to_access",
+    "ADMISSION_ENVELOPE_TYPE",
+    "ADMISSION_ENVELOPE_VERSION",
+    "SignedAdmissionEnvelope",
+    "AdmissionEnvelopeVerification",
+    "admission_scope",
+    "sign_admission_profile",
+    "verify_signed_admission_envelope",
+    "PYTHON_JSON_PROFILE",
+    "JCS_PROFILE",
+    "JCSProfileError",
+    "JCSSignedAdmissionEnvelope",
+    "canonicalize_jcs",
+    "jcs_digest",
+    "jcs_restriction_identifier",
+    "jcs_restriction_profile_identifier",
+    "parse_jcs_json",
+    "sign_jcs_admission_profile",
+    "verify_jcs_admission_envelope",
+    "verify_profiled_admission_envelope",
 ]
 
 from .sufficiency import EvidenceRecord, Sufficiency, assess_sufficiency, derive_requalification_plan
@@ -134,3 +153,26 @@ from .vocabulary import (
     requirements_compatible,
 )
 from .facility_access import FacilityAccessDecision, ReferenceDoorController, map_profile_to_access
+from .admission_envelope import (
+    ADMISSION_ENVELOPE_TYPE,
+    ADMISSION_ENVELOPE_VERSION,
+    AdmissionEnvelopeVerification,
+    SignedAdmissionEnvelope,
+    admission_scope,
+    sign_admission_profile,
+    verify_signed_admission_envelope,
+)
+from .jcs_admission_envelope import (
+    JCS_PROFILE,
+    PYTHON_JSON_PROFILE,
+    JCSProfileError,
+    JCSSignedAdmissionEnvelope,
+    canonicalize_jcs,
+    jcs_digest,
+    jcs_restriction_identifier,
+    jcs_restriction_profile_identifier,
+    parse_jcs_json,
+    sign_jcs_admission_profile,
+    verify_jcs_admission_envelope,
+    verify_profiled_admission_envelope,
+)
