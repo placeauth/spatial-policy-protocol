@@ -1,0 +1,791 @@
+{
+  "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+  "status": "experimental",
+  "test_key_notice": "A deterministic test-only key was used to generate signatures. No private key is included.",
+  "vector_set": "spp-admission-trust-jcs-interop",
+  "vector_version": "0.1-experimental",
+  "vectors": [
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"café 🚀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiJjYWbDqSDwn5qAIiwicmVzdHJpY3Rpb25zIjpbXX0sInBsYWNlIjoiY2xpbmljIiwicG9saWN5X3ZlcnNpb24iOjcsInJlYXNvbl9jb2RlcyI6WyJqY3NfcmVmZXJlbmNlIl0sInJlc3RyaWN0aW9ucyI6W10sInNwYWNlIjoiY2xpbmljL2xvYmJ5Iiwic3RhdHVzIjoiQURNSVRURUQiLCJ1bnJlc29sdmVkIjpbXX0=",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "café 🚀",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "k4yAX8wYeUVOZ2qkCZnTRlJdBuA9x14kup7dQQANDdaynuwthOhYDGsVU9BjQ3YGQrw5oQEuTCPcGWLZ4OWfCw==",
+        "signed_payload_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": null,
+        "verified": true
+      },
+      "id": "jcs_admitted_valid",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1NjplYTZmMTQyNjQ3NzE3MWJlMDY4MzRmOTg5NzNmNDFiYTYzMjZmNTdhOWJlOTM2ZTU5OTljZWU2YTQzNDZjZDdmIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"café 🚀\",\"restrictions\":[\"movement.max_speed<=0.5@corridor\",\"recording_disabled@restricted_zone\"]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[\"recording_disabled@restricted_zone\",\"movement.max_speed<=0.5@corridor\"],\"space\":\"clinic/lobby\",\"status\":\"DEGRADED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiJjYWbDqSDwn5qAIiwicmVzdHJpY3Rpb25zIjpbIm1vdmVtZW50Lm1heF9zcGVlZDw9MC41QGNvcnJpZG9yIiwicmVjb3JkaW5nX2Rpc2FibGVkQHJlc3RyaWN0ZWRfem9uZSJdfSwicGxhY2UiOiJjbGluaWMiLCJwb2xpY3lfdmVyc2lvbiI6NywicmVhc29uX2NvZGVzIjpbImpjc19yZWZlcmVuY2UiXSwicmVzdHJpY3Rpb25zIjpbInJlY29yZGluZ19kaXNhYmxlZEByZXN0cmljdGVkX3pvbmUiLCJtb3ZlbWVudC5tYXhfc3BlZWQ8PTAuNUBjb3JyaWRvciJdLCJzcGFjZSI6ImNsaW5pYy9sb2JieSIsInN0YXR1cyI6IkRFR1JBREVEIiwidW5yZXNvbHZlZCI6W119",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:8cef09ec7025fa9928955dc4574decc3a70839cd85a62f47ff3f0523842cf906",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "café 🚀",
+            "restrictions": [
+              "movement.max_speed<=0.5@corridor",
+              "recording_disabled@restricted_zone"
+            ]
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [
+            "recording_disabled@restricted_zone",
+            "movement.max_speed<=0.5@corridor"
+          ],
+          "space": "clinic/lobby",
+          "status": "DEGRADED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "ocefmHd/QlmDH4DG8GlWYwuzZ/0iAW9rkkb+SG5W5k48LAUQio1i6xdqCP442IoKroi6yqszuTCxjwT5f9vtCg==",
+        "signed_payload_digest": "sha256:8cef09ec7025fa9928955dc4574decc3a70839cd85a62f47ff3f0523842cf906",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": null,
+        "verified": true
+      },
+      "id": "jcs_degraded_valid",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:8cef09ec7025fa9928955dc4574decc3a70839cd85a62f47ff3f0523842cf906\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1Njo4Y2VmMDllYzcwMjVmYTk5Mjg5NTVkYzQ1NzRkZWNjM2E3MDgzOWNkODVhNjJmNDdmZjNmMDUyMzg0MmNmOTA2Iiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"tampered\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiJ0YW1wZXJlZCIsInJlc3RyaWN0aW9ucyI6W119LCJwbGFjZSI6ImNsaW5pYyIsInBvbGljeV92ZXJzaW9uIjo3LCJyZWFzb25fY29kZXMiOlsiamNzX3JlZmVyZW5jZSJdLCJyZXN0cmljdGlvbnMiOltdLCJzcGFjZSI6ImNsaW5pYy9sb2JieSIsInN0YXR1cyI6IkFETUlUVEVEIiwidW5yZXNvbHZlZCI6W119",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:128bdaa894f04446b0f48d2cf9629d8e13382c3b757b632d498ba8f0d0c2d6dc",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "tampered",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "k4yAX8wYeUVOZ2qkCZnTRlJdBuA9x14kup7dQQANDdaynuwthOhYDGsVU9BjQ3YGQrw5oQEuTCPcGWLZ4OWfCw==",
+        "signed_payload_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": "signed_payload_digest_mismatch",
+        "verified": false
+      },
+      "id": "jcs_tampered_profile",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1NjplYTZmMTQyNjQ3NzE3MWJlMDY4MzRmOTg5NzNmNDFiYTYzMjZmNTdhOWJlOTM2ZTU5OTljZWU2YTQzNDZjZDdmIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"café 🚀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiJjYWbDqSDwn5qAIiwicmVzdHJpY3Rpb25zIjpbXX0sInBsYWNlIjoiY2xpbmljIiwicG9saWN5X3ZlcnNpb24iOjcsInJlYXNvbl9jb2RlcyI6WyJqY3NfcmVmZXJlbmNlIl0sInJlc3RyaWN0aW9ucyI6W10sInNwYWNlIjoiY2xpbmljL2xvYmJ5Iiwic3RhdHVzIjoiQURNSVRURUQiLCJ1bnJlc29sdmVkIjpbXX0=",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "café 🚀",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "k4yAX8wYeUVOZ2qkCZnTRlJdBuA9x14kup7dQQANDdaynuwthOhYDGsVU9BjQ3YGQrw5oQEuTCPcGWLZ4OWfCw==",
+        "signed_payload_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": "envelope_subject_mismatch",
+        "verified": false
+      },
+      "id": "jcs_wrong_subject",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1NjplYTZmMTQyNjQ3NzE3MWJlMDY4MzRmOTg5NzNmNDFiYTYzMjZmNTdhOWJlOTM2ZTU5OTljZWU2YTQzNDZjZDdmIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:other",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"café 🚀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiJjYWbDqSDwn5qAIiwicmVzdHJpY3Rpb25zIjpbXX0sInBsYWNlIjoiY2xpbmljIiwicG9saWN5X3ZlcnNpb24iOjcsInJlYXNvbl9jb2RlcyI6WyJqY3NfcmVmZXJlbmNlIl0sInJlc3RyaWN0aW9ucyI6W10sInNwYWNlIjoiY2xpbmljL2xvYmJ5Iiwic3RhdHVzIjoiQURNSVRURUQiLCJ1bnJlc29sdmVkIjpbXX0=",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "café 🚀",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "k4yAX8wYeUVOZ2qkCZnTRlJdBuA9x14kup7dQQANDdaynuwthOhYDGsVU9BjQ3YGQrw5oQEuTCPcGWLZ4OWfCw==",
+        "signed_payload_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": "envelope_place_mismatch",
+        "verified": false
+      },
+      "id": "jcs_wrong_place_space",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1NjplYTZmMTQyNjQ3NzE3MWJlMDY4MzRmOTg5NzNmNDFiYTYzMjZmNTdhOWJlOTM2ZTU5OTljZWU2YTQzNDZjZDdmIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "other-clinic",
+        "expected_space": "other-space",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"café 🚀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiJjYWbDqSDwn5qAIiwicmVzdHJpY3Rpb25zIjpbXX0sInBsYWNlIjoiY2xpbmljIiwicG9saWN5X3ZlcnNpb24iOjcsInJlYXNvbl9jb2RlcyI6WyJqY3NfcmVmZXJlbmNlIl0sInJlc3RyaWN0aW9ucyI6W10sInNwYWNlIjoiY2xpbmljL2xvYmJ5Iiwic3RhdHVzIjoiQURNSVRURUQiLCJ1bnJlc29sdmVkIjpbXX0=",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "café 🚀",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "k4yAX8wYeUVOZ2qkCZnTRlJdBuA9x14kup7dQQANDdaynuwthOhYDGsVU9BjQ3YGQrw5oQEuTCPcGWLZ4OWfCw==",
+        "signed_payload_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": "envelope_expired",
+        "verified": false
+      },
+      "id": "jcs_expired",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1NjplYTZmMTQyNjQ3NzE3MWJlMDY4MzRmOTg5NzNmNDFiYTYzMjZmNTdhOWJlOTM2ZTU5OTljZWU2YTQzNDZjZDdmIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:05:00Z"
+      }
+    },
+    {
+      "acknowledgements": [
+        {
+          "consumer_id": "test-jcs-adapter",
+          "enforcement_handler": "camera_suppression",
+          "profile_id": "urn:spp:jcs-restriction-profile:f216689a0b368f657e4cd35fc0aebedafcf108b86d1a060e96970a3b6f76ec82",
+          "restriction": "recording_disabled@restricted_zone",
+          "restriction_digest": "sha256:168846719908c226f40ac93b8917f6f3d6f94a16ba348ef3b267958f4a7e36e0"
+        },
+        {
+          "consumer_id": "test-jcs-adapter",
+          "enforcement_handler": "speed_limiter",
+          "profile_id": "urn:spp:jcs-restriction-profile:f216689a0b368f657e4cd35fc0aebedafcf108b86d1a060e96970a3b6f76ec82",
+          "restriction": "movement.max_speed<=0.5@corridor",
+          "restriction_digest": "sha256:fc163c09e0756a11373dbdd66a4fd6d4f0a5f5906c95c5500f456a3135643791"
+        }
+      ],
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "effective_restrictions": [
+        "movement.max_speed<=0.5@corridor",
+        "recording_disabled@restricted_zone"
+      ],
+      "enforcement_mappings": [
+        {
+          "enforcement_handler": "camera_suppression",
+          "restriction": "recording_disabled@restricted_zone",
+          "restriction_digest": "sha256:168846719908c226f40ac93b8917f6f3d6f94a16ba348ef3b267958f4a7e36e0"
+        },
+        {
+          "enforcement_handler": "speed_limiter",
+          "restriction": "movement.max_speed<=0.5@corridor",
+          "restriction_digest": "sha256:fc163c09e0756a11373dbdd66a4fd6d4f0a5f5906c95c5500f456a3135643791"
+        }
+      ],
+      "expected": {
+        "may_rely": true,
+        "outcome": "ACKNOWLEDGED"
+      },
+      "id": "jcs_restriction_acknowledgement",
+      "kind": "jcs_restriction_acknowledgement",
+      "profile": {
+        "actor_id": "robot:jcs:1",
+        "binding": {
+          "actor_id": "robot:jcs:1",
+          "build_fingerprint": "build:jcs:1",
+          "controller_fingerprint": "controller:jcs:1",
+          "environment_digest": "sha256:environment-jcs",
+          "plan_digest": "sha256:plan-jcs",
+          "policy_digest": "sha256:policy-jcs"
+        },
+        "evidence_digest": "sha256:jcs-evidence",
+        "operating_profile": {
+          "guarantees": [
+            {
+              "id": "movement.max_speed",
+              "value": 0.5
+            }
+          ],
+          "label": "café 🚀",
+          "restrictions": [
+            "movement.max_speed<=0.5@corridor",
+            "recording_disabled@restricted_zone"
+          ]
+        },
+        "place": "clinic",
+        "policy_version": 7,
+        "reason_codes": [
+          "jcs_reference"
+        ],
+        "restrictions": [
+          "recording_disabled@restricted_zone",
+          "movement.max_speed<=0.5@corridor"
+        ],
+        "space": "clinic/lobby",
+        "status": "DEGRADED",
+        "unresolved": []
+      },
+      "profile_binding": "urn:spp:jcs-restriction-profile:f216689a0b368f657e4cd35fc0aebedafcf108b86d1a060e96970a3b6f76ec82",
+      "restriction_digests": {
+        "movement.max_speed<=0.5@corridor": "sha256:fc163c09e0756a11373dbdd66a4fd6d4f0a5f5906c95c5500f456a3135643791",
+        "recording_disabled@restricted_zone": "sha256:168846719908c226f40ac93b8917f6f3d6f94a16ba348ef3b267958f4a7e36e0"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"café 🚀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiJjYWbDqSDwn5qAIiwicmVzdHJpY3Rpb25zIjpbXX0sInBsYWNlIjoiY2xpbmljIiwicG9saWN5X3ZlcnNpb24iOjcsInJlYXNvbl9jb2RlcyI6WyJqY3NfcmVmZXJlbmNlIl0sInJlc3RyaWN0aW9ucyI6W10sInNwYWNlIjoiY2xpbmljL2xvYmJ5Iiwic3RhdHVzIjoiQURNSVRURUQiLCJ1bnJlc29sdmVkIjpbXX0=",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "unknown-profile",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "café 🚀",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "k4yAX8wYeUVOZ2qkCZnTRlJdBuA9x14kup7dQQANDdaynuwthOhYDGsVU9BjQ3YGQrw5oQEuTCPcGWLZ4OWfCw==",
+        "signed_payload_digest": "sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": "unsupported_canonicalization_profile",
+        "verified": false
+      },
+      "id": "jcs_unsupported_profile",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"unknown-profile\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:ea6f1426477171be06834f98973f41ba6326f57a9be936e5999cee6a4346cd7f\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoidW5rbm93bi1wcm9maWxlIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1NjplYTZmMTQyNjQ3NzE3MWJlMDY4MzRmOTg5NzNmNDFiYTYzMjZmNTdhOWJlOTM2ZTU5OTljZWU2YTQzNDZjZDdmIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":1e-7}],\"label\":\"café 🚀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjoxZS03fV0sImxhYmVsIjoiY2Fmw6kg8J+agCIsInJlc3RyaWN0aW9ucyI6W119LCJwbGFjZSI6ImNsaW5pYyIsInBvbGljeV92ZXJzaW9uIjo3LCJyZWFzb25fY29kZXMiOlsiamNzX3JlZmVyZW5jZSJdLCJyZXN0cmljdGlvbnMiOltdLCJzcGFjZSI6ImNsaW5pYy9sb2JieSIsInN0YXR1cyI6IkFETUlUVEVEIiwidW5yZXNvbHZlZCI6W119",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:637570692ef9fc3bf76d88aad11aa97f2ab657cdcf203b70644c0f8d27d1e9de",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 1e-07
+              }
+            ],
+            "label": "café 🚀",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "N+znJYqQLps5t05YOIvwQ8pq1axw5IC87ENUTyjYCQTizzsOKwr0sLSW35IwmzEpITzRPfEZkhFdwMaeISpFAQ==",
+        "signed_payload_digest": "sha256:637570692ef9fc3bf76d88aad11aa97f2ab657cdcf203b70644c0f8d27d1e9de",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": null,
+        "verified": true
+      },
+      "id": "jcs_numeric_exponent",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:637570692ef9fc3bf76d88aad11aa97f2ab657cdcf203b70644c0f8d27d1e9de\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1Njo2Mzc1NzA2OTJlZjlmYzNiZjc2ZDg4YWFkMTFhYTk3ZjJhYjY1N2NkY2YyMDNiNzA2NDRjMGY4ZDI3ZDFlOWRlIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    },
+    {
+      "canonical_profile_jcs": "{\"actor_id\":\"robot:jcs:1\",\"binding\":{\"actor_id\":\"robot:jcs:1\",\"build_fingerprint\":\"build:jcs:1\",\"controller_fingerprint\":\"controller:jcs:1\",\"environment_digest\":\"sha256:environment-jcs\",\"plan_digest\":\"sha256:plan-jcs\",\"policy_digest\":\"sha256:policy-jcs\"},\"evidence_digest\":\"sha256:jcs-evidence\",\"operating_profile\":{\"guarantees\":[{\"id\":\"movement.max_speed\",\"value\":0.5}],\"label\":\"Ångström 😀\",\"restrictions\":[]},\"place\":\"clinic\",\"policy_version\":7,\"reason_codes\":[\"jcs_reference\"],\"restrictions\":[],\"space\":\"clinic/lobby\",\"status\":\"ADMITTED\",\"unresolved\":[]}",
+      "canonical_profile_utf8_base64": "eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYmluZGluZyI6eyJhY3Rvcl9pZCI6InJvYm90OmpjczoxIiwiYnVpbGRfZmluZ2VycHJpbnQiOiJidWlsZDpqY3M6MSIsImNvbnRyb2xsZXJfZmluZ2VycHJpbnQiOiJjb250cm9sbGVyOmpjczoxIiwiZW52aXJvbm1lbnRfZGlnZXN0Ijoic2hhMjU2OmVudmlyb25tZW50LWpjcyIsInBsYW5fZGlnZXN0Ijoic2hhMjU2OnBsYW4tamNzIiwicG9saWN5X2RpZ2VzdCI6InNoYTI1Njpwb2xpY3ktamNzIn0sImV2aWRlbmNlX2RpZ2VzdCI6InNoYTI1NjpqY3MtZXZpZGVuY2UiLCJvcGVyYXRpbmdfcHJvZmlsZSI6eyJndWFyYW50ZWVzIjpbeyJpZCI6Im1vdmVtZW50Lm1heF9zcGVlZCIsInZhbHVlIjowLjV9XSwibGFiZWwiOiLDhW5nc3Ryw7ZtIPCfmIAiLCJyZXN0cmljdGlvbnMiOltdfSwicGxhY2UiOiJjbGluaWMiLCJwb2xpY3lfdmVyc2lvbiI6NywicmVhc29uX2NvZGVzIjpbImpjc19yZWZlcmVuY2UiXSwicmVzdHJpY3Rpb25zIjpbXSwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdGF0dXMiOiJBRE1JVFRFRCIsInVucmVzb2x2ZWQiOltdfQ==",
+      "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+      "computed_profile_digest": "sha256:71fe9224b419d03d3a9ef55f68c206f2c454a8afdc7f2d25d056166f38e6883e",
+      "envelope": {
+        "algorithm": "Ed25519",
+        "canonicalization_profile": "rfc8785-jcs-v1-experimental",
+        "envelope_type": "spp:admission-envelope",
+        "envelope_version": "0.1-experimental",
+        "expires_at": "2030-01-01T12:05:00Z",
+        "issued_at": "2030-01-01T12:00:00Z",
+        "issuer_id": "test-jcs-admission-issuer",
+        "place": "clinic",
+        "profile": {
+          "actor_id": "robot:jcs:1",
+          "binding": {
+            "actor_id": "robot:jcs:1",
+            "build_fingerprint": "build:jcs:1",
+            "controller_fingerprint": "controller:jcs:1",
+            "environment_digest": "sha256:environment-jcs",
+            "plan_digest": "sha256:plan-jcs",
+            "policy_digest": "sha256:policy-jcs"
+          },
+          "evidence_digest": "sha256:jcs-evidence",
+          "operating_profile": {
+            "guarantees": [
+              {
+                "id": "movement.max_speed",
+                "value": 0.5
+              }
+            ],
+            "label": "Ångström 😀",
+            "restrictions": []
+          },
+          "place": "clinic",
+          "policy_version": 7,
+          "reason_codes": [
+            "jcs_reference"
+          ],
+          "restrictions": [],
+          "space": "clinic/lobby",
+          "status": "ADMITTED",
+          "unresolved": []
+        },
+        "scope": "clinic::clinic/lobby",
+        "signature": "78KgJxDPfO/J7DADWn5bRIljWE0WigXcELqI1hEiFfD28/WaUWl7Ldok0pBv8ADxizrcSkWTatV4OSjfuQQ7CA==",
+        "signed_payload_digest": "sha256:71fe9224b419d03d3a9ef55f68c206f2c454a8afdc7f2d25d056166f38e6883e",
+        "space": "clinic/lobby",
+        "subject_id": "robot:jcs:1"
+      },
+      "expected": {
+        "reason": null,
+        "verified": true
+      },
+      "id": "jcs_unicode",
+      "kind": "jcs_admission_envelope",
+      "signature_input_jcs": "{\"algorithm\":\"Ed25519\",\"canonicalization_profile\":\"rfc8785-jcs-v1-experimental\",\"envelope_type\":\"spp:admission-envelope\",\"envelope_version\":\"0.1-experimental\",\"expires_at\":\"2030-01-01T12:05:00Z\",\"issued_at\":\"2030-01-01T12:00:00Z\",\"issuer_id\":\"test-jcs-admission-issuer\",\"place\":\"clinic\",\"scope\":\"clinic::clinic/lobby\",\"signed_payload_digest\":\"sha256:71fe9224b419d03d3a9ef55f68c206f2c454a8afdc7f2d25d056166f38e6883e\",\"space\":\"clinic/lobby\",\"subject_id\":\"robot:jcs:1\"}",
+      "signature_input_utf8_base64": "eyJhbGdvcml0aG0iOiJFZDI1NTE5IiwiY2Fub25pY2FsaXphdGlvbl9wcm9maWxlIjoicmZjODc4NS1qY3MtdjEtZXhwZXJpbWVudGFsIiwiZW52ZWxvcGVfdHlwZSI6InNwcDphZG1pc3Npb24tZW52ZWxvcGUiLCJlbnZlbG9wZV92ZXJzaW9uIjoiMC4xLWV4cGVyaW1lbnRhbCIsImV4cGlyZXNfYXQiOiIyMDMwLTAxLTAxVDEyOjA1OjAwWiIsImlzc3VlZF9hdCI6IjIwMzAtMDEtMDFUMTI6MDA6MDBaIiwiaXNzdWVyX2lkIjoidGVzdC1qY3MtYWRtaXNzaW9uLWlzc3VlciIsInBsYWNlIjoiY2xpbmljIiwic2NvcGUiOiJjbGluaWM6OmNsaW5pYy9sb2JieSIsInNpZ25lZF9wYXlsb2FkX2RpZ2VzdCI6InNoYTI1Njo3MWZlOTIyNGI0MTlkMDNkM2E5ZWY1NWY2OGMyMDZmMmM0NTRhOGFmZGM3ZjJkMjVkMDU2MTY2ZjM4ZTY4ODNlIiwic3BhY2UiOiJjbGluaWMvbG9iYnkiLCJzdWJqZWN0X2lkIjoicm9ib3Q6amNzOjEifQ==",
+      "trusted_issuer": {
+        "allowed_envelope_types": [
+          "spp:admission-envelope"
+        ],
+        "allowed_scopes": [
+          "clinic::clinic/lobby"
+        ],
+        "enabled": true,
+        "issuer_id": "test-jcs-admission-issuer",
+        "public_key_base64": "5/FioQvsVZr+oZXk3OhLaVaNXSywlj60RsBoXisX8vA="
+      },
+      "verification": {
+        "expected_place": "clinic",
+        "expected_space": "clinic/lobby",
+        "expected_subject_id": "robot:jcs:1",
+        "now": "2030-01-01T12:00:00Z"
+      }
+    }
+  ]
+}
