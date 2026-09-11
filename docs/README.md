@@ -18,6 +18,7 @@ This index collects the public specifications, implementation notes, examples, a
 - [Facility access-control boundary](facility-access.md)
 - [Exact DEGRADED restriction acknowledgement (experimental)](degraded-restriction-acknowledgement.md)
 - [Experimental P0 signed-admission reliance pipeline](p0-trust-pipeline.md)
+- [Experimental admission-trust interoperability](admission-trust-interoperability.md)
 - [Explain an SPP decision and machine-readable trace](explain-trace.md)
 - [ROS 2 / Nav2 admission enforcement](../reference/ros2-enforcer/README.md)
 - [Open-RMF task admission adapter (boundary validation)](open-rmf.md)
