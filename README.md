@@ -113,6 +113,25 @@ Still planned or outside the current scope:
 
 SPP is an emerging open protocol implementation for pre-standardization technical review, not a finished industry standard. Certain technologies described in this project are patent pending.
 
+## Technical Peer Review
+
+PlaceAuth is seeking technical review of selected experimental SPP work. Review
+is organized into two independent tracks: **robotics / architecture** and
+**security / interoperability**. Reviewers do not need to understand the
+entire repository; the [technical peer-review entry point](docs/review/README.md)
+identifies the smallest relevant set of materials and specific questions for
+each track.
+
+Current materials include an Open-RMF and planner-aware architecture
+exploration, together with experimental admission-trust interoperability work.
+They are offered for criticism, not as normative protocol requirements,
+production-readiness claims, or evidence of Open-RMF endorsement or adoption.
+The review does not ask participants to decide whether SPP should become a
+standard or to validate a complete deployment.
+SPP 0.1 remains unchanged. Feedback that identifies a correctness issue,
+interoperability ambiguity, security concern, architecture disagreement, or
+unnecessary complexity is particularly useful.
+
 ## Explore the repository
 
 | Area | What it contains |
