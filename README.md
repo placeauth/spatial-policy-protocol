@@ -2,6 +2,9 @@
 
 SPP is an experimental, open protocol that lets a physical place express machine-operational requirements and lets an autonomous system determine whether and how it may operate there. A place can constrain movement, sensing, data handling, manipulation, infrastructure use, and human interaction without changing the robot application. The reference implementation evaluates the place's policy and, where evidence-based admission is used, produces an operating profile for that specific place and context.
 
+PlaceAuth and the Spatial Policy Protocol are stewarded by PlaceAuth Foundation, Inc., a Florida nonprofit corporation.
+
+
 [![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](CHANGELOG.md)
 [![Latest published: SPP v0.3.0 Experimental Preview](https://img.shields.io/badge/latest%20published-SPP%20v0.3.0%20Experimental%20Preview-blue.svg)](docs/releases/SPP-0.3.0-experimental-preview.md)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
@@ -10,6 +13,8 @@ SPP is an experimental, open protocol that lets a physical place express machine
 [Five-minute demo](#five-minute-demo) · [Specification](spec/SPP-0.1.md) · [Technical review](docs/technical-review.md) · [Whitepaper](docs/whitepaper.md) · [PDF Whitepaper](docs/whitepaper/PlaceAuth-SPP-White-Paper.pdf) · [Documentation](docs/README.md)
 
 > **Latest published release:** SPP v0.3.0 Experimental Preview. The normative protocol specification remains SPP 0.1.
+
+
 
 ## Why this exists
 
