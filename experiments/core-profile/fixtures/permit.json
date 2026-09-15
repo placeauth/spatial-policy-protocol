@@ -1,0 +1,11 @@
+{
+  "name": "permit",
+  "profile": {"authority": {"id": "urn:example:warehouse-authority"}, "policy_id": "urn:example:warehouse-policy", "policy_version": 1, "governed_scope": "site/warehouse"},
+  "request": {"request_id": "permit", "governed_scope": "site/warehouse/loading-bay", "subject": {"id": "robot:delivery-1", "type": "delivery_robot"}, "action": {"family": "movement", "name": "enter"}, "context": {"authorizations": []}},
+  "scope_chain": [
+    {"id": "site/warehouse/loading-bay", "rules": []},
+    {"id": "site/warehouse", "rules": [{"action": {"family": "movement", "name": "enter"}, "decision": "permit"}]}
+  ],
+  "deployment": {"supported_obligations": []},
+  "expected": {"decision": "PERMIT", "obligations": [], "reason_codes": ["matched_rule"]}
+}
