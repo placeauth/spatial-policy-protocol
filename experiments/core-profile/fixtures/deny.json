@@ -1,0 +1,11 @@
+{
+  "name": "deny",
+  "profile": {"authority": {"id": "urn:example:warehouse-authority"}, "policy_id": "urn:example:warehouse-policy", "policy_version": 1, "governed_scope": "site/warehouse"},
+  "request": {"request_id": "deny", "governed_scope": "site/warehouse/hazardous-store", "subject": {"id": "robot:delivery-1", "type": "delivery_robot"}, "action": {"family": "movement", "name": "enter"}, "context": {"authorizations": []}},
+  "scope_chain": [
+    {"id": "site/warehouse/hazardous-store", "rules": [{"action": {"family": "movement", "name": "enter"}, "decision": "deny"}]},
+    {"id": "site/warehouse", "rules": [{"action": {"family": "movement", "name": "enter"}, "decision": "permit"}]}
+  ],
+  "deployment": {"supported_obligations": []},
+  "expected": {"decision": "DENY", "obligations": [], "reason_codes": ["matched_rule"]}
+}

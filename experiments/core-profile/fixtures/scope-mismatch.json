@@ -1,0 +1,8 @@
+{
+  "name": "scope-mismatch",
+  "profile": {"authority": {"id": "urn:example:warehouse-authority"}, "policy_id": "urn:example:warehouse-policy", "policy_version": 1, "governed_scope": "site/warehouse"},
+  "request": {"request_id": "scope-mismatch", "governed_scope": "site/other-facility/loading-bay", "subject": {"id": "robot:delivery-1", "type": "delivery_robot"}, "action": {"family": "movement", "name": "enter"}, "context": {"authorizations": []}},
+  "scope_chain": [],
+  "deployment": {"supported_obligations": []},
+  "expected": {"decision": "DENY", "obligations": [], "reason_codes": ["scope_mismatch"]}
+}

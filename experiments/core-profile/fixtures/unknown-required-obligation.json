@@ -1,0 +1,11 @@
+{
+  "name": "unknown-required-obligation",
+  "profile": {"authority": {"id": "urn:example:warehouse-authority"}, "policy_id": "urn:example:warehouse-policy", "policy_version": 1, "governed_scope": "site/warehouse"},
+  "request": {"request_id": "unknown-required-obligation", "governed_scope": "site/warehouse/records-room", "subject": {"id": "robot:delivery-1", "type": "delivery_robot"}, "action": {"family": "sensing", "name": "video_capture"}, "context": {"authorizations": []}},
+  "scope_chain": [
+    {"id": "site/warehouse/records-room", "rules": [{"action": {"family": "sensing", "name": "video_capture"}, "decision": "conditional", "requires": ["recording.disabled"], "obligations": [{"type": "recording.disabled", "value": true}]}]},
+    {"id": "site/warehouse", "rules": []}
+  ],
+  "deployment": {"supported_obligations": []},
+  "expected": {"decision": "DENY", "obligations": [], "reason_codes": ["required_obligation_unsupported"]}
+}
