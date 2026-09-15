@@ -1,0 +1,1 @@
+{"name":"degraded","request":{"scenario":"degraded"},"expected":"DEGRADED / RELIABLE_DEGRADED with a lifecycle-current subject, explicit restriction, and exact local acknowledgement and mapping"}

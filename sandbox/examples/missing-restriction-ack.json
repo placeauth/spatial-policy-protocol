@@ -1,0 +1,1 @@
+{"name":"missing-restriction-ack","request":{"scenario":"missing-restriction-ack"},"expected":"DEGRADED profile, but BLOCKED because an exact restriction acknowledgement is missing"}
