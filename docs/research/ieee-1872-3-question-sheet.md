@@ -14,6 +14,8 @@
 
 - Existing ontology terms equivalent to SPP concepts
 - Applicability relations and scoped context
+- Policy decision (`permit` / `deny` / `conditional`) versus experimental admission
+- Physical place, policy `space`, governed scope, and any external spatial mapping
 - Affordance
 - Capability
 - Constraint / requirement
@@ -32,11 +34,11 @@
 
 ## D. Live meeting notes
 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+-
+-
+-
+-
+-
+-
+-
+-
