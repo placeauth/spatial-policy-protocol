@@ -21,4 +21,6 @@ Before opening a pull request:
 Open a pull request with a concise description, test results, and any
 compatibility impact. Please avoid unrelated formatting churn. Protocol
 changes should be discussed as experimental proposals until independently
-reviewed.
+reviewed. See the [SPP Technical Change Process](docs/governance/spp-change-process.md)
+for change classes and review expectations. A normative SPP change requires the
+separate process and Foundation-governance approval described there.

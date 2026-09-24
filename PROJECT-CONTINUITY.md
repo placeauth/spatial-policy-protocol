@@ -174,6 +174,9 @@ partnership, standards acceptance, or production readiness.
 - Make interoperability claims only when reproducible fixtures or validation
   evidence supports the exact claim.
 - Let external systems retain ownership of their respective domains.
+- Use the [SPP Technical Change Process](docs/governance/spp-change-process.md)
+  to keep ordinary maintenance, experimental work, and normative protocol
+  changes distinct.
 
 ## What a new maintainer should do first
 
