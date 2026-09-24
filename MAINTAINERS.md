@@ -30,7 +30,9 @@ Changes to normative SPP 0.1 require deliberate review: they must not be
 smuggled in as an implementation, adapter, documentation, or package-release
 change. Experimental and research documents must retain prominent status and
 scope labels and must not imply standards adoption, external endorsement, or
-production guarantees.
+production guarantees. Follow the [SPP Technical Change Process](docs/governance/spp-change-process.md)
+to classify a change, gather evidence, and distinguish technical review from
+Foundation-governance approval.
 
 ## Release-state stewardship
 
